@@ -32,9 +32,12 @@ useSeoMeta({
       >
         다음
       </button>
-      <button class="text-#646F7C underline text-xs">
-        처음 이용하시나요?
-      </button>
+      <NuxtLink
+        to="/registerEmail"  
+        class="text-gray-700 underline text-xs" 
+>
+  처음 이용하시나요?
+</NuxtLink>
     </div>
   </div>
   

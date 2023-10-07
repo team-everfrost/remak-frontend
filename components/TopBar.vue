@@ -1,31 +1,18 @@
 
 import { Script } from 'vm';
 <template>
-    <div class="top-bar">
-        <img src="~/assets/logo.svg" alt="logo" />
+    <div class="bg-topbar-background fixed top-0 left-0 w-full h-20 flex items-center pl-6 border-b border-gray-300">
+        <NuxtLink to="/">
+            <img src="~/assets/logo.svg" alt="logo" />
+        </NuxtLink>
     </div>
 </template>
 
-<Script>
+<script>
 export default {
     name: 'TopBar',
 }
-</Script>
-
-<style scoped>
-.top-bar {
-  background-color: #FEFEFE;
-  height: 80px;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center; /* 로고를 상단바의 중앙에 위치시킵니다 */
-  padding-left: 24px;  /* 로고가 왼쪽에서 24px만큼 떨어져 있도록 설정합니다 */
-  border-bottom: 1px solid #E6E8EB; 
-}
-</style>
+</script>
 
 
 
