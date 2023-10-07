@@ -2,7 +2,12 @@
 module.exports = {
   content: [],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'remak-blue': '#1F8CE6',
+      }
+    },
   },
+
   plugins: [],
 };
