@@ -5,19 +5,37 @@ useSeoMeta({
 </script>
 
 <template>
-  <TopBar />
-  <div class="min-h-screen pt-36 flex flex-col items-center bg-remak-background-gray">
-    <div class="mb-4 text-2xl font-bold">
-      <span class="text-gray-800">회원가입</span>
-    </div>
-    <div class="w-[480px] h-[254px] px-6 py-9 bg-white rounded-2xl border border-gray-200 flex flex-col">
-      <div class="text-netural-900 text-sm font-medium leading-[14px] text-left items-start">이메일</div>
-      <input type="email" placeholder="이메일 주소를 입력하세요" v-model="email" @input="checkEmail"
-        class="mt-3 w-[432px] h-14 px-4 bg-white rounded-xl border border-gray-200 justify-start items-center gap-2 inline-flex" />
-      <button :class="emailClass" :disabled="!isValidEmail(email)"
-        class="mt-12 w-[432px] h-[52px] px-2 py-4 rounded-xl justify-center items-center inline-flex">
-        다음으로
-      </button>
+  <div>
+    <TopBar />
+    <div
+      class="flex min-h-screen flex-col items-center bg-remak-background-gray pt-36"
+    >
+      <div class="mb-4 text-2xl font-bold">
+        <span class="text-gray-800">회원가입</span>
+      </div>
+      <div
+        class="flex h-[254px] w-[480px] flex-col rounded-2xl border border-gray-200 bg-white px-6 py-9"
+      >
+        <div
+          class="text-netural-900 items-start text-left text-sm font-medium leading-[14px]"
+        >
+          이메일
+        </div>
+        <input
+          v-model="email"
+          type="email"
+          placeholder="이메일 주소를 입력하세요"
+          class="mt-3 inline-flex h-14 w-[432px] items-center justify-start gap-2 rounded-xl border border-gray-200 bg-white px-4"
+          @input="checkEmail"
+        />
+        <button
+          :class="emailClass"
+          :disabled="!isValidEmail(email)"
+          class="mt-12 inline-flex h-[52px] w-[432px] items-center justify-center rounded-xl px-2 py-4"
+        >
+          다음으로
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -46,7 +64,6 @@ export default {
       const regex = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
       return regex.test(email);
     },
-
-  }
-}
+  },
+};
 </script>

@@ -7,8 +7,8 @@ module.exports = {
       colors: {
         'remak-blue': '#1F8CE6',
         'remak-background-gray': '#F4F6F8',
-        'topbar-background': '#FEFEFE'
-      }
+        'topbar-background': '#FEFEFE',
+      },
     },
   },
 
