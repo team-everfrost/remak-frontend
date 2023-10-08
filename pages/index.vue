@@ -20,5 +20,7 @@ useSeoMeta({
     <NuxtLink to="/registerPasswordRepeat">회원가입4</NuxtLink>
     <br />
     <NuxtLink to="/main">메인페이지</NuxtLink>
+    <br />
+    <NuxtLink to="/testPage">테스트페이지</NuxtLink>
   </div>
 </template>
