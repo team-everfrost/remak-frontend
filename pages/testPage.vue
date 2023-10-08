@@ -6,6 +6,8 @@ useSeoMeta({
 
 <template>
   <div class="flex h-screen flex-col bg-black">
-    <DocumentCard />
+    <div class="flex-none">
+      <AddDocumentInCollectionDialog />
+    </div>
   </div>
 </template>
