@@ -1,11 +1,7 @@
 <template>
-  <div class="relative flex w-[480px] flex-col rounded-2xl bg-white">
+  <div class="relative flex w-[480px] flex-col rounded-[20px] bg-white">
     <div class="flex flex-row items-center justify-between pl-5 pr-3 pt-5">
-      <p
-        class="leading-18 text-lg font-bold font-bold text-[#1b1c1f] text-neutral-900"
-      >
-        컬렉션 추가
-      </p>
+      <p class="leading-18 text-lg font-bold text-[#1b1c1f]">컬렉션 추가</p>
       <button>
         <svg
           width="24"

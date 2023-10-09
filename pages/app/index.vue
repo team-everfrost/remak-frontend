@@ -12,7 +12,7 @@
           <div class="flex flex-row items-center justify-between">
             <p class="text-2xl font-bold text-[#1b1c1f]">메인</p>
             <button
-              class="h-8 w-[78px] rounded rounded-md bg-gray-600 text-base font-medium text-white"
+              class="h-8 w-[78px] rounded-md bg-gray-600 text-base font-medium text-white"
             >
               편집하기
             </button>

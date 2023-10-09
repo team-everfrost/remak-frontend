@@ -60,7 +60,6 @@ export default {
       this.isValidEmail(this.email);
     },
     isValidEmail(email) {
-      console.log('checkEmail');
       const regex = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
       return regex.test(email);
     },
