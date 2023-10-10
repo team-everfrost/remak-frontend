@@ -2,21 +2,22 @@
   <div>
     <div class="relative flex flex-col items-start justify-start">
       <div
-        class="relative h-20 w-full flex-shrink-0 flex-grow-0 overflow-hidden border-b border-[#e6e8eb] border-l-0 border-r-0 border-t-0 bg-[#fefefe]"
+        class="relative flex h-20 w-full flex-shrink-0 flex-grow-0 overflow-hidden border-b border-[#e6e8eb] border-l-0 border-r-0 border-t-0 bg-[#fefefe]"
       >
         <div
-          class="fixed left-0 top-0 flex h-20 w-full items-center border-b border-gray-300 bg-topbar-background pl-6"
+          class="ml-6 flex h-20 items-center border-b border-gray-300 bg-topbar-background"
         >
           <NuxtLink to="/">
             <img src="~/assets/logo.svg" alt="logo" />
           </NuxtLink>
         </div>
-        <div class="fixed right-4 top-6 flex items-start justify-start gap-6">
+        <div class="flex-grow"></div>
+        <div class="mr-6 flex h-20 items-center justify-start gap-6">
           <div
-            class="flex flex-shrink-0 flex-grow-0 items-start justify-start gap-3"
+            class="flex flex-shrink-0 flex-grow-0 items-start justify-start gap-2"
           >
             <div
-              class="relative flex flex-shrink-0 flex-grow-0 items-center justify-center gap-2 rounded-md"
+              class="relative flex h-10 flex-shrink-0 flex-grow-0 items-center justify-center rounded-md px-4 hover:cursor-pointer hover:bg-slate-100"
             >
               <p
                 class="flex-shrink-0 flex-grow-0 text-center text-base font-medium text-[#28323c]"
@@ -25,11 +26,9 @@
               </p>
             </div>
           </div>
-          <div
-            class="flex flex-shrink-0 flex-grow-0 items-start justify-start gap-3"
-          >
+          <div class="flex flex-shrink-0 flex-grow-0 items-start justify-start">
             <div
-              class="w-22 relative flex h-8 flex-shrink-0 flex-grow-0 items-center justify-center gap-2 rounded-md bg-[#1f8ce6] px-2"
+              class="relative flex h-10 flex-shrink-0 flex-grow-0 items-center justify-center rounded-md bg-[#1f8ce6] px-4"
             >
               <p
                 class="flex-shrink-0 flex-grow-0 text-center text-base font-medium text-white"
@@ -264,27 +263,4 @@
   </div>
 </template>
 
-<script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
-import MainMovingCard from '~/components/MainMovingCard.vue';
-
-const offsetX = ref(0);
-const intervalId = ref(null);
-
-const updatePosition = () => {
-  offsetX.value -= 1; // Adjust speed here
-  // Assuming each card and gap sum up to 1000px wide and there are 6 cards in total
-  // Reset position at the end of the first copy to create an infinite loop effect
-  if (offsetX.value <= -6000) {
-    offsetX.value += 6000;
-  }
-};
-
-onMounted(() => {
-  intervalId.value = setInterval(updatePosition, 16); // Update every 16ms for smooth animation
-});
-
-onUnmounted(() => {
-  clearInterval(intervalId.value);
-});
-</script>
+<script setup></script>
