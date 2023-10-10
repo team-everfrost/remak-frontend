@@ -85,319 +85,146 @@ useSeoMeta({
         </div>
       </div>
       <div
-        class="relative h-[1566px] w-[1440px] flex-shrink-0 flex-grow-0 overflow-hidden bg-[#f4f6f8]"
+        class="relative flex w-full flex-shrink-0 flex-grow-0 flex-col items-start justify-start bg-[#f4f6f8]"
       >
-        <p
-          class="absolute left-[180px] top-[200px] text-left text-[32px] font-bold text-[#111]"
-        >
-          <span class="text-left text-[32px] font-bold text-[#111]"
-            >클릭 한번으로 저장하면</span
-          ><br /><span class="text-left text-[32px] font-bold text-[#111]"
-            >AI가 자료 분류부터 요약까지</span
-          ><br /><span class="text-left text-[32px] font-bold text-[#111]"
-            >REMAK와 함께라면 당신의 일상이 새로워질 거예요</span
-          >
-        </p>
         <div
-          class="absolute left-[180px] top-[415px] flex flex-col items-start justify-start gap-[60px]"
+          class="relative mx-auto mt-[200px] flex flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
         >
+          <p class="text-left text-[32px] font-bold text-[#111]">
+            <span class="text-left text-[32px] font-bold text-[#111]"
+              >클릭 한번으로 저장하면</span
+            ><br /><span class="text-left text-[32px] font-bold text-[#111]"
+              >AI가 자료 분류부터 요약까지</span
+            ><br /><span class="text-left text-[32px] font-bold text-[#111]"
+              >REMAK와 함께라면 당신의 일상이 새로워질 거예요</span
+            >
+          </p>
           <div
-            class="relative flex flex-shrink-0 flex-grow-0 items-start justify-start gap-10"
+            class="mb-52 mt-10 grid w-full grid-cols-1 content-between items-center justify-center gap-10 lg:grid-cols-2"
           >
             <div
-              class="relative h-[277px] w-[520px] flex-shrink-0 flex-grow-0 overflow-hidden"
+              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
             >
-              <div
-                class="absolute left-0 top-0 flex flex-col items-start justify-start gap-9"
+              <img src="/assets/icons/main/icon_folder.svg" />
+              <p
+                class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
               >
-                <svg
-                  width="120"
-                  height="120"
-                  viewBox="0 0 120 120"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="relative h-[120px] w-[120px] flex-shrink-0 flex-grow-0"
-                  preserveAspectRatio="xMidYMid meet"
-                >
-                  <path
-                    d="M25.5122 22.8582C23.0607 22.8582 20.7095 23.8322 18.9759 25.5657C17.2424 27.2992 16.2686 29.6502 16.2686 32.1018V43.98H104.083V41.3455C104.083 38.8939 103.109 36.5429 101.376 34.8094C99.6427 33.0758 97.2915 32.1018 94.8396 32.1018H53.2431L46.6803 25.5389C44.9472 23.8199 42.6044 22.8562 40.1635 22.8582H25.5122Z"
-                    fill="#5096FF"
-                  ></path>
-                  <path
-                    d="M16.083 44.0715H103.898V83.3572C103.898 85.8086 102.924 88.1597 101.19 89.8934C99.4573 91.627 97.1057 92.6008 94.6543 92.6008H25.3267C22.8751 92.6008 20.5241 91.627 18.7906 89.8934C17.057 88.1597 16.083 85.8086 16.083 83.3572V44.0715Z"
-                    fill="#A7D0FF"
-                  ></path>
-                </svg>
-                <div
-                  class="relative flex flex-shrink-0 flex-grow-0 flex-col items-start justify-start gap-5"
-                >
-                  <p
-                    class="flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
-                  >
-                    쉬운 자료저장
-                  </p>
-                  <p
-                    class="w-[520px] flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
-                  >
-                    브라우저에서 클릭 한번, 스마트폰에서 공유 버튼 한번만에
-                    저장해요.
-                  </p>
-                </div>
-              </div>
+                쉬운 자료저장
+              </p>
+              <p
+                class="mt-5 flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
+              >
+                브라우저에서 클릭 한번, 스마트폰에서 공유 버튼 한번만에
+                저장해요.
+              </p>
             </div>
             <div
-              class="relative h-[277px] w-[520px] flex-shrink-0 flex-grow-0 overflow-hidden"
+              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
             >
-              <div
-                class="absolute left-0 top-0 flex flex-col items-start justify-start gap-9"
+              <img src="/assets/icons/main/icon_scrap.svg" />
+              <p
+                class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
               >
-                <svg
-                  width="120"
-                  height="120"
-                  viewBox="0 0 120 120"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="relative h-[120px] w-[120px] flex-shrink-0 flex-grow-0"
-                  preserveAspectRatio="xMidYMid meet"
-                >
-                  <path
-                    d="M85.0448 26.6666H30.8783C26.2759 26.6666 22.5449 30.3976 22.5449 35V89.1666C22.5449 93.7691 26.2759 97.5 30.8783 97.5H85.0448C89.6473 97.5 93.3781 93.7691 93.3781 89.1666V35C93.3781 30.3976 89.6473 26.6666 85.0448 26.6666Z"
-                    fill="#CBDFFF"
-                  ></path>
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M64.252 25.4584C64.252 23.2492 66.0428 21.4584 68.252 21.4584H94.5853C96.7944 21.4584 98.5853 23.2492 98.5853 25.4584V51.75C98.5853 53.9592 96.7944 55.75 94.5853 55.75H92.1686C89.9595 55.75 88.1686 53.9592 88.1686 51.75V35.875C88.1686 33.6659 86.3778 31.875 84.1686 31.875H68.2519C66.0428 31.875 64.252 30.0842 64.252 27.875V25.4584Z"
-                    fill="#5096FF"
-                  ></path>
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M64.2116 55.8752C62.176 53.8427 62.1736 50.5448 64.2062 48.5093L86.0123 26.6719C88.0449 24.6365 91.3426 24.6341 93.3781 26.6666C95.4136 28.6991 95.416 31.997 93.3834 34.0325L71.5773 55.8699C69.5448 57.9053 66.2471 57.9077 64.2116 55.8752Z"
-                    fill="#5096FF"
-                  ></path>
-                </svg>
-                <div
-                  class="relative flex flex-shrink-0 flex-grow-0 flex-col items-start justify-start gap-5"
-                >
-                  <p
-                    class="flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
-                  >
-                    웹 페이지 영구 스크랩
-                  </p>
-                  <p
-                    class="w-[520px] flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
-                  >
-                    웹 페이지의 본문을 저장해 사라질 걱정 없이 언제든지 찾아볼
-                    수 있어요.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="relative flex flex-shrink-0 flex-grow-0 items-start justify-start gap-10"
-          >
-            <div
-              class="relative h-[277px] w-[520px] flex-shrink-0 flex-grow-0 overflow-hidden"
-            >
-              <div
-                class="absolute left-0 top-0 flex flex-col items-start justify-start gap-9"
+                웹 페이지 영구 스크랩
+              </p>
+              <p
+                class="mt-5 flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
               >
-                <svg
-                  width="120"
-                  height="120"
-                  viewBox="0 0 120 120"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="relative h-[120px] w-[120px] flex-shrink-0 flex-grow-0"
-                  preserveAspectRatio="xMidYMid meet"
-                >
-                  <path
-                    d="M96.2181 58.9284L48.9681 109.553C48.4674 110.088 47.8064 110.445 47.085 110.571C46.3636 110.696 45.6208 110.584 44.9688 110.251C44.3168 109.917 43.7909 109.381 43.4705 108.722C43.1501 108.064 43.0526 107.319 43.1926 106.6L49.3773 75.6642L25.0646 66.5348C24.5425 66.3395 24.0769 66.0179 23.7093 65.5987C23.3418 65.1796 23.0839 64.6759 22.9585 64.1327C22.8331 63.5895 22.8443 63.0236 22.991 62.4858C23.1376 61.948 23.4153 61.4548 23.799 61.0505L71.049 10.4255C71.5497 9.8911 72.2107 9.53409 72.9321 9.40831C73.6535 9.28253 74.3963 9.39481 75.0483 9.7282C75.7003 10.0616 76.2262 10.598 76.5466 11.2565C76.867 11.915 76.9645 12.6598 76.8245 13.3786L70.6229 44.3484L94.9356 53.4652C95.4539 53.6618 95.9158 53.983 96.2804 54.4006C96.6451 54.8181 96.9013 55.319 97.0264 55.859C97.1515 56.3991 97.1417 56.9616 96.9977 57.497C96.8538 58.0323 96.5802 58.5239 96.2012 58.9284H96.2181Z"
-                    fill="#5096FF"
-                  ></path>
-                </svg>
-                <div
-                  class="relative flex flex-shrink-0 flex-grow-0 flex-col items-start justify-start gap-5"
-                >
-                  <p
-                    class="flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
-                  >
-                    강력한 자료 검색기능
-                  </p>
-                  <p
-                    class="w-[520px] flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
-                  >
-                    제목이 기억나지 않아도, 정확한 단어가 기억나지 않아도 유사한
-                    문서를 찾을 수 있어요.
-                  </p>
-                </div>
-              </div>
+                웹 페이지의 본문을 저장해 사라질 걱정 없이 언제든지 찾아볼 수
+                있어요.
+              </p>
             </div>
             <div
-              class="relative h-[277px] w-[520px] flex-shrink-0 flex-grow-0 overflow-hidden"
+              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
             >
-              <div
-                class="absolute left-0 top-0 flex flex-col items-start justify-start gap-9"
+              <img src="/assets/icons/main/icon_search.svg" />
+              <p
+                class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
               >
-                <svg
-                  width="120"
-                  height="120"
-                  viewBox="0 0 120 120"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="relative h-[120px] w-[120px] flex-shrink-0 flex-grow-0"
-                  preserveAspectRatio="xMidYMid meet"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M65.6733 25.6655V70.1254H54.4233V25.6655H65.6733Z"
-                    fill="#CBDFFF"
-                  ></path>
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M67.8489 66.0602L31.4884 90.3003L25.248 80.9399L61.6088 56.6997L67.8489 66.0602Z"
-                    fill="#CBDFFF"
-                  ></path>
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M58.4886 56.6997L94.8491 80.9399L88.6089 90.3003L52.248 66.0602L58.4886 56.6997Z"
-                    fill="#CBDFFF"
-                  ></path>
-                  <path
-                    d="M73.5482 42V24C73.5482 21.5147 71.5335 19.5 69.0482 19.5H51.0482C48.5631 19.5 46.5483 21.5147 46.5483 24V42C46.5483 44.4853 48.5631 46.5 51.0482 46.5H69.0482C71.5335 46.5 73.5482 44.4853 73.5482 42Z"
-                    fill="#5096FF"
-                  ></path>
-                  <path
-                    d="M46.5483 96V78C46.5483 75.5147 44.5336 73.5 42.0483 73.5H24.0483C21.5631 73.5 19.5483 75.5147 19.5483 78V96C19.5483 98.4853 21.5631 100.5 24.0483 100.5H42.0483C44.5336 100.5 46.5483 98.4853 46.5483 96Z"
-                    fill="#5096FF"
-                  ></path>
-                  <path
-                    d="M100.548 96V78C100.548 75.5147 98.5337 73.5 96.0483 73.5H78.0483C75.5634 73.5 73.5483 75.5147 73.5483 78V96C73.5483 98.4853 75.5634 100.5 78.0483 100.5H96.0483C98.5337 100.5 100.548 98.4853 100.548 96Z"
-                    fill="#5096FF"
-                  ></path>
-                </svg>
-                <div
-                  class="relative flex flex-shrink-0 flex-grow-0 flex-col items-start justify-start gap-5"
-                >
-                  <p
-                    class="flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
-                  >
-                    자동화된 자료 분류, 요약
-                  </p>
-                  <p
-                    class="w-[520px] flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
-                  >
-                    AI가 생성하는 자동 태그와 요약, 사용자가 생성한 기준을 통한
-                    컬렉션 기능까지.
-                  </p>
-                </div>
-              </div>
+                강력한 자료 검색기능
+              </p>
+              <p
+                class="mt-5 flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
+              >
+                제목이 기억나지 않아도, 정확한 단어가 기억나지 않아도 유사한
+                문서를 찾을 수 있어요.
+              </p>
             </div>
-          </div>
-          <div
-            class="relative h-[277px] w-[520px] flex-shrink-0 flex-grow-0 overflow-hidden"
-          >
             <div
-              class="absolute left-0 top-0 flex flex-col items-start justify-start gap-9"
+              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
             >
-              <svg
-                width="120"
-                height="120"
-                viewBox="0 0 120 120"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                class="relative h-[120px] w-[120px] flex-shrink-0 flex-grow-0"
-                preserveAspectRatio="xMidYMid meet"
+              <img src="/assets/icons/main/icon_summary.svg" />
+              <p
+                class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
               >
-                <path
-                  d="M98.9527 31.1343C97.7127 34.5244 98.0112 37.7331 99.6048 40.9473C102.552 46.8901 103.95 53.2159 103.999 59.8459C104.023 63.5897 103.572 67.2785 102.644 70.8995C96.7528 93.8534 73.7191 108.066 50.5772 102.963C39.739 100.573 30.9779 94.8338 24.4607 85.8619C17.1998 75.8656 14.6427 64.636 16.6723 52.4847C18.4728 41.7041 23.7885 32.8257 32.2491 25.9281C41.6623 18.2536 52.5079 15.0871 64.5807 16.225C69.7223 16.7088 74.6313 18.1455 79.2527 20.4636C82.3757 22.0304 85.5208 22.2338 88.8069 21.0537C91.3859 20.1264 94.0034 19.3091 96.599 18.4295C98.1724 17.8963 99.625 18.0154 100.823 19.2542C101.993 20.4636 102.067 21.893 101.545 23.4268C100.671 25.9941 99.8851 28.5908 98.9527 31.1361L98.9527 31.1343Z"
-                  fill="#66BAFF"
-                ></path>
-                <path
-                  d="M47.0037 51.5657C49.7351 51.5657 51.9493 55.3807 51.9493 60.0868C51.9493 64.7929 49.7351 68.6079 47.0037 68.6079C44.2723 68.6079 42.0581 64.7929 42.0581 60.0868C42.0581 55.3807 44.2723 51.5657 47.0037 51.5657Z"
-                  fill="#28323C"
-                ></path>
-                <path
-                  d="M73.1985 51.5653C75.9299 51.5653 78.1442 55.3803 78.1442 60.0864C78.1442 64.7925 75.9299 68.6075 73.1985 68.6075C70.4672 68.6075 68.2529 64.7925 68.2529 60.0864C68.2529 55.3803 70.4672 51.5653 73.1985 51.5653Z"
-                  fill="#28323C"
-                ></path>
-              </svg>
-              <div
-                class="relative flex flex-shrink-0 flex-grow-0 flex-col items-start justify-start gap-5"
+                자동화된 자료 분류, 요약
+              </p>
+              <p
+                class="mt-5 flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
               >
-                <p
-                  class="flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
-                >
-                  내 자료와 대화하는 AI 채팅
-                </p>
-                <p
-                  class="w-[520px] flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
-                >
-                  내가 저장한 자료들을 통한 답변을 받거나, 문서에 대해 AI에게
-                  물어보세요.
-                </p>
-              </div>
+                AI가 생성하는 자동 태그와 요약, 사용자가 생성한 기준을 통한
+                컬렉션 기능까지.
+              </p>
+            </div>
+            <div
+              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
+            >
+              <img src="/assets/icons/main/icon_chat.svg" />
+              <p
+                class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
+              >
+                내 자료와 대화하는 AI 채팅
+              </p>
+              <p
+                class="mt-5 flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
+              >
+                내가 저장한 자료들을 통한 답변을 받거나, 문서에 대해 AI에게
+                물어보세요.
+              </p>
             </div>
           </div>
         </div>
       </div>
       <div
-        class="relative flex w-[1440px] flex-shrink-0 flex-grow-0 flex-col items-center justify-start gap-8 bg-[#cce8ff] py-[200px]"
+        class="relative flex h-[540px] w-full flex-shrink-0 flex-grow-0 flex-col items-center justify-center bg-[#CCE8FF]"
       >
         <p
           class="flex-shrink-0 flex-grow-0 text-center text-[32px] font-bold text-[#28323c]"
         >
           번거로운 자료 관리는 이제 그만
         </p>
-        <div
-          class="relative flex h-16 w-60 flex-shrink-0 flex-grow-0 items-center justify-center gap-2 rounded-xl bg-[#1f8ce6] px-4 py-2.5"
+        <button
+          class="relative mt-8 flex h-16 w-60 flex-shrink-0 flex-grow-0 items-center justify-center gap-2 rounded-xl bg-[#1f8ce6] px-4 py-2.5"
         >
           <p
             class="flex-shrink-0 flex-grow-0 text-center text-2xl font-medium text-white"
           >
             무료로 시작하기
           </p>
-        </div>
+        </button>
       </div>
-      <div
-        class="flex w-[1440px] flex-shrink-0 flex-grow-0 flex-col items-center justify-center gap-2.5 overflow-hidden bg-[#222] px-[336px] py-[100px]"
-      >
-        <div
-          class="flex flex-shrink-0 flex-grow-0 flex-col items-center justify-center gap-3"
+    </div>
+    <div
+      class="relative flex h-[240px] w-full flex-shrink-0 flex-grow-0 flex-col items-center justify-center bg-black"
+    >
+      <p class="flex-shrink-0 flex-grow-0 text-center text-sm">
+        <span
+          class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
+          >개인정보 처리방침</span
+        ><span
+          class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#464749]"
         >
-          <div
-            class="relative flex flex-shrink-0 flex-grow-0 items-center justify-center gap-2.5"
-          >
-            <p class="flex-shrink-0 flex-grow-0 text-center text-sm">
-              <span
-                class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
-                >개인정보 처리방침</span
-              ><span
-                class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#464749]"
-              >
-                ㅣ </span
-              ><span
-                class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
-                >이용약관</span
-              >
-            </p>
-          </div>
-          <div
-            class="relative flex flex-shrink-0 flex-grow-0 items-center justify-center gap-2.5"
-          >
-            <p
-              class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
-            >
-              Copyright © 2023 Team Everfrost All rights reserved.
-            </p>
-          </div>
-        </div>
-      </div>
+          ㅣ </span
+        ><span
+          class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
+          >이용약관</span
+        >
+      </p>
+      <p
+        class="mt-3 flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
+      >
+        Copyright © 2023 Team Everfrost All rights reserved.
+      </p>
     </div>
   </div>
 </template>
