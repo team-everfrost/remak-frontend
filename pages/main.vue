@@ -1,8 +1,4 @@
-<script setup>
-useSeoMeta({
-  title: 'Remak',
-});
-</script>
+<script setup></script>
 <template>
   <div>
     <div class="relative flex flex-col items-start justify-start">
@@ -76,12 +72,14 @@ useSeoMeta({
             </p>
           </div>
         </div>
-        <div
-          class="relative mb-40 mt-[60px] flex items-start justify-start gap-[25px]"
-        >
-          <MainMovingCard />
-          <MainMovingCard />
-          <MainMovingCard />
+        <div class="relative mb-40 mt-[60px] overflow-hidden">
+          <div
+            :style="{ transform: `translateX(${offsetX}px)` }"
+            class="flex items-start justify-start gap-[25px] transition-transform duration-200"
+          >
+            <!-- Triplet of cards for infinite animation -->
+            <MainMovingCard v-for="i in 18" :key="i" />
+          </div>
         </div>
       </div>
       <div
@@ -228,3 +226,28 @@ useSeoMeta({
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue';
+import MainMovingCard from '~/components/MainMovingCard.vue';
+
+const offsetX = ref(0);
+const intervalId = ref(null);
+
+const updatePosition = () => {
+  offsetX.value -= 1; // Adjust speed here
+  // Assuming each card and gap sum up to 1000px wide and there are 6 cards in total
+  // Reset position at the end of the first copy to create an infinite loop effect
+  if (offsetX.value <= -6000) {
+    offsetX.value += 6000;
+  }
+};
+
+onMounted(() => {
+  intervalId.value = setInterval(updatePosition, 16); // Update every 16ms for smooth animation
+});
+
+onUnmounted(() => {
+  clearInterval(intervalId.value);
+});
+</script>
