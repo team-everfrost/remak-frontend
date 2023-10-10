@@ -7,7 +7,7 @@ useSeoMeta({
 <template>
   <div class="flex h-screen flex-col bg-black">
     <div class="flex-none">
-      <AddAndViewMemoDetail />
+      <TagAndCollectionBox />
     </div>
   </div>
 </template>
