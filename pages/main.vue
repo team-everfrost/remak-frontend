@@ -1,4 +1,3 @@
-<script setup></script>
 <template>
   <div>
     <div class="relative flex flex-col items-start justify-start">
@@ -52,9 +51,7 @@
             >Remak</span
           >
         </p>
-        <p
-          class="relative mt-5 mt-5 text-center text-xl font-medium text-[#646f7c]"
-        >
+        <p class="relative mt-5 text-center text-xl font-medium text-[#646f7c]">
           <span class="text-center text-xl font-medium text-[#646f7c]"
             >그때 읽었던 그 내용 어디있지?</span
           ><br /><span class="text-center text-xl font-medium text-[#646f7c]"
@@ -72,14 +69,54 @@
             </p>
           </div>
         </div>
-        <div class="relative mb-40 mt-[60px] overflow-hidden">
-          <div
-            :style="{ transform: `translateX(${offsetX}px)` }"
-            class="flex items-start justify-start gap-[25px] transition-transform duration-200"
+        <div
+          class="mb-40 mt-14 inline-flex w-full flex-nowrap [mask-image:_linear-gradient(to_right,transparent_0,_white_128px,_white_calc(100%-200px),transparent_100%)]"
+        >
+          <ul
+            class="flex animate-infinite-flow items-center justify-center md:justify-start [&_li]:mx-6"
           >
-            <!-- Triplet of cards for infinite animation -->
-            <MainMovingCard v-for="i in 18" :key="i" />
-          </div>
+            <li>
+              <MainMovingCard />
+            </li>
+            <li>
+              <MainMovingCard />
+            </li>
+            <li>
+              <MainMovingCard />
+            </li>
+            <li>
+              <MainMovingCard />
+            </li>
+            <li>
+              <MainMovingCard />
+            </li>
+            <li>
+              <MainMovingCard />
+            </li>
+          </ul>
+          <ul
+            class="flex animate-infinite-flow items-center justify-center md:justify-start [&_li]:mx-6"
+            aria-hidden="true"
+          >
+            <li>
+              <MainMovingCard />
+            </li>
+            <li>
+              <MainMovingCard />
+            </li>
+            <li>
+              <MainMovingCard />
+            </li>
+            <li>
+              <MainMovingCard />
+            </li>
+            <li>
+              <MainMovingCard />
+            </li>
+            <li>
+              <MainMovingCard />
+            </li>
+          </ul>
         </div>
       </div>
       <div
@@ -228,7 +265,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import MainMovingCard from '~/components/MainMovingCard.vue';
 
 const offsetX = ref(0);

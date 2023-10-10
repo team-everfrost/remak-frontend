@@ -9,6 +9,15 @@ module.exports = {
         'remak-background-gray': '#F4F6F8',
         'topbar-background': '#FEFEFE',
       },
+      animation: {
+        'infinite-flow': 'infinite-flow 40s linear infinite',
+      },
+      keyframes: {
+        'infinite-flow': {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-100%)' },
+        },
+      },
     },
   },
 
