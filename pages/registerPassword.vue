@@ -6,7 +6,7 @@ useSeoMeta({
 
 <template>
   <div>
-    <TopBar />
+    <TopBarBase />
     <div
       class="flex min-h-screen flex-col items-center bg-remak-background-gray pt-36"
     >

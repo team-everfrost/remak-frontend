@@ -1,8 +1,8 @@
 <template>
   <div class="flex h-screen flex-col">
-    <TopBar />
+    <TopBarBase />
     <div class="flex flex-grow flex-row">
-      <!-- mt-16을 추가하여 TopBar 아래에 공간을 제공 -->
+      <!-- mt-16을 추가하여 TopBarBase 아래에 공간을 제공 -->
       <SideNavigation class="mt-20" />
       <!-- 나머지 콘텐츠는 이 공간에 배치 -->
       <div class="mt-20 flex-grow bg-[#F4F6F8] pl-48">
