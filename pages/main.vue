@@ -130,7 +130,7 @@
             ><br /><span class="text-left text-[32px] font-bold text-[#111]"
               >AI가 자료 분류부터 요약까지</span
             ><br /><span class="text-left text-[32px] font-bold text-[#111]"
-              >REMAK와 함께라면 당신의 일상이 새로워질 거예요</span
+              >Remak와 함께라면 당신의 일상이 새로워질 거예요</span
             >
           </p>
           <div
