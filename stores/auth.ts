@@ -19,7 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const signIn = async (email: string, password: string) => {
-    if (!email || !password) return;
+    if (!email || !password) return false;
 
     const { data, error }: any = await useFetch('/auth/local/login', {
       baseURL: apiBaseUrl,
