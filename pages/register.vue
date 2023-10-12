@@ -12,8 +12,8 @@ const authStore = useAuthStore();
 const RegisterEmail = defineAsyncComponent(
   () => import('@/components/Register/Email.vue'),
 );
-const RegisterValidCode = defineAsyncComponent(
-  () => import('@/components/Register/ValidCode.vue'),
+const RegisterVerifiCode = defineAsyncComponent(
+  () => import('@/components/Register/VerifiCode.vue'),
 );
 const RegisterPassword = defineAsyncComponent(
   () => import('@/components/Register/Password.vue'),
@@ -27,7 +27,7 @@ const currenComponent = computed(() => {
     case 1:
       return RegisterEmail;
     case 2:
-      return RegisterValidCode;
+      return RegisterVerifiCode;
     case 3:
       return RegisterPassword;
     case 4:

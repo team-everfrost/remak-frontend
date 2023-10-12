@@ -1,9 +1,3 @@
-<script setup>
-useSeoMeta({
-  title: '회원가입 - Remak',
-});
-</script>
-
 <template>
   <div>
     <TopBarBase />
@@ -59,44 +53,39 @@ useSeoMeta({
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      password: '',
-    };
-  },
-  computed: {
-    passwordClass() {
-      if (this.isValidPassword(this.password)) {
-        return 'bg-remak-blue text-white';
-      }
-      return 'bg-gray-200 text-gray-500';
-    },
-    lengthCheckImg() {
-      return this.password.length >= 9
-        ? '/assets/check.svg'
-        : '/assets/uncheck.svg';
-    },
-    numberCheckImg() {
-      return /\d/.test(this.password)
-        ? 'assets/check.svg'
-        : 'assets/uncheck.svg';
-    },
-    letterCheckImg() {
-      return /[A-Za-z]/.test(this.password)
-        ? 'assets/check.svg'
-        : 'assets/uncheck.svg';
-    },
-  },
-  methods: {
-    checkPassword() {
-      this.isValidPassword(this.email);
-    },
-    isValidPassword(password) {
-      const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{9,}$/;
-      return regex.test(password);
-    },
-  },
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+
+const password = ref('');
+
+const passwordClass = computed(() => {
+  return isValidPassword(password.value)
+    ? 'bg-remak-blue text-white'
+    : 'bg-gray-200 text-gray-500';
+});
+
+const lengthCheckImg = computed(() => {
+  return password.value.length >= 9
+    ? '/assets/check.svg'
+    : '/assets/uncheck.svg';
+});
+
+const numberCheckImg = computed(() => {
+  return /\d/.test(password.value) ? 'assets/check.svg' : 'assets/uncheck.svg';
+});
+
+const letterCheckImg = computed(() => {
+  return /[A-Za-z]/.test(password.value)
+    ? 'assets/check.svg'
+    : 'assets/uncheck.svg';
+});
+
+const checkPassword = () => {
+  isValidPassword(password.value);
 };
+
+function isValidPassword(password: string): boolean {
+  const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{9,}$/;
+  return regex.test(password);
+}
 </script>

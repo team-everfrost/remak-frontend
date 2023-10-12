@@ -23,6 +23,7 @@
           'border-red-500 focus:outline-red-500': !emailAvailable,
         }"
         @input="checkEmail"
+        @keyup.enter="handleNextClick"
       />
       <div class="h-4">
         <span v-if="!emailAvailable" class="text-xs text-red-500"
@@ -53,7 +54,6 @@ const handleNextClick = async () => {
   if (await authStore.getSignUpCode(email.value)) {
     emailAvailable.value = true;
     authStore.registerEmail = email.value;
-    console.log(authStore.registerPage);
   } else {
     emailAvailable.value = false;
   }
