@@ -37,7 +37,9 @@ const currenComponent = computed(() => {
   }
 });
 
-useSeoMeta({
-  title: '회원가입 - Remak',
-});
+window.onbeforeunload = () => {
+  if (authStore.registerPage !== 1) {
+    authStore.registerPage -= 1;
+  }
+};
 </script>

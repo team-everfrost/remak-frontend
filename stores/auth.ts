@@ -8,6 +8,7 @@ export const useAuthStore = defineStore('auth', () => {
   const registerEmail = ref('');
   const registerPage = ref(1);
   const registerPassword = ref('');
+  const allowNavigationToHome = ref(false);
 
   const checkEmail = async (email: string) => {
     if (!email) return false;
@@ -85,22 +86,27 @@ export const useAuthStore = defineStore('auth', () => {
     const email = registerEmail.value;
     if (!email || !password) return false;
 
-    const { data, error }: any = await useFetch('/signup', {
+    if (password !== registerPassword.value) {
+      return false;
+    }
+
+    const { data, error }: any = await useFetch('/auth/local/signup', {
       baseURL: apiBaseUrl,
       method: 'POST',
       body: { email, password },
     });
 
     if (data.value && !error.value) {
-      console.log('success');
       accessToken.value = data.value.data.accessToken;
       return true;
     }
+    return false;
   };
 
-  const setPassword = (newPassword: string) => {
-    password.value = newPassword;
-  };
+  function setPassword(newPassword: string) {
+    registerPassword.value = newPassword;
+    registerPage.value = 4;
+  }
 
   return {
     accessToken,
@@ -108,9 +114,12 @@ export const useAuthStore = defineStore('auth', () => {
     getSignUpCode,
     registerEmail,
     registerPage,
+    allowNavigationToHome,
+    setPassword,
     checkSignUpCode,
     checkEmail,
     signIn,
     signOut,
+    signUp,
   };
 });

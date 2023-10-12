@@ -8,7 +8,7 @@
         <span class="text-gray-800">회원가입</span>
       </div>
       <div
-        class="flex h-[282px] w-[480px] flex-col rounded-2xl border border-gray-200 bg-white px-6 py-9"
+        class="flex min-h-[282px] w-[480px] flex-col rounded-2xl border border-gray-200 bg-white px-6 py-9"
       >
         <div
           class="text-netural-900 items-start text-left text-sm font-medium leading-[14px]"
@@ -45,6 +45,7 @@
           :class="passwordClass"
           :disabled="!isValidPassword(password)"
           class="mt-12 inline-flex h-[52px] w-[432px] items-center justify-center rounded-xl px-2 py-4"
+          @click="handleNextClick"
         >
           다음으로
         </button>
@@ -55,9 +56,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useAuthStore } from '~/stores/auth';
 
+const authStore = useAuthStore();
 const password = ref('');
-
 const passwordClass = computed(() => {
   return isValidPassword(password.value)
     ? 'bg-remak-blue text-white'
@@ -88,4 +90,9 @@ function isValidPassword(password: string): boolean {
   const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{9,}$/;
   return regex.test(password);
 }
+
+const handleNextClick = () => {
+  console.log('clicked');
+  authStore.setPassword(password.value);
+};
 </script>
