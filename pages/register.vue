@@ -9,18 +9,31 @@
 import { useAuthStore } from '~/stores/auth';
 
 const authStore = useAuthStore();
+const RegisterEmail = defineAsyncComponent(
+  () => import('@/components/Register/Email.vue'),
+);
+const RegisterValidCode = defineAsyncComponent(
+  () => import('@/components/Register/ValidCode.vue'),
+);
+const RegisterPassword = defineAsyncComponent(
+  () => import('@/components/Register/Password.vue'),
+);
+const RegisterPasswordRepeat = defineAsyncComponent(
+  () => import('@/components/Register/PasswordRepeat.vue'),
+);
+
 const currenComponent = computed(() => {
   switch (authStore.registerPage) {
     case 1:
-      return 'RegisterEmail';
+      return RegisterEmail;
     case 2:
-      return 'RegisterValidCode';
+      return RegisterValidCode;
     case 3:
-      return 'RegisterPassword';
+      return RegisterPassword;
     case 4:
-      return 'RegisterPasswordRepeat';
+      return RegisterPasswordRepeat;
     default:
-      return 'RegisterEmail';
+      return RegisterEmail;
   }
 });
 
