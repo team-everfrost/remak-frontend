@@ -5,6 +5,9 @@ export const useAuthStore = defineStore('auth', () => {
   const config = useRuntimeConfig();
   const apiBaseUrl = config.public.apiBaseUrl;
 
+  const registerEmail = ref('');
+  const registerPage = ref(1);
+
   const checkEmail = async (email: string) => {
     if (!email) return false;
 
@@ -43,7 +46,32 @@ export const useAuthStore = defineStore('auth', () => {
     accessToken.value = '';
   };
 
+  const getSignUpCode = async (email: string) => {
+    if (!email) return false;
+
+    const { data, error }: any = await useFetch('/auth/signup-code', {
+      baseURL: apiBaseUrl,
+      method: 'POST',
+      body: { email },
+    });
+
+    if (data.value && !error.value) {
+      registerPage.value = 2;
+      return true;
+    }
+    return false;
+  };
+
   // TODO: Add signup
 
-  return { accessToken, isSignedIn, checkEmail, signIn, signOut };
+  return {
+    accessToken,
+    isSignedIn,
+    getSignUpCode,
+    registerEmail,
+    registerPage,
+    checkEmail,
+    signIn,
+    signOut,
+  };
 });
