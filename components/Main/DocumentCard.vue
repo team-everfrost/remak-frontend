@@ -9,40 +9,33 @@
     "
   >
     <div class="w-full bg-[#F4F6F8]">
-      <img
+      <NuxtImg
         v-if="imageUrl"
-        class="h-40 mx-auto"
-        src="~/assets/imageHolder.svg"
-        alt="image placeholder"
+        sizes="100vw"
+        class="object-cover h-40 w-full mx-auto"
+        :src="imageUrl"
+        :alt="title || 'image placeholder'"
+        placeholder="/images/imageHolder.svg"
+        loading="lazy"
       />
     </div>
-    <div
-      class="flex flex-shrink-0 flex-grow-1 flex-col items-start justify-start gap-5 px-3.5"
-    >
-      <div
-        class="flex flex-shrink-0 flex-grow-1 flex-col items-start justify-start gap-3"
-      >
-        <p
-          class="line-clamp-2 flex-shrink-1 flex-grow-1 text-left text-base font-bold text-[#111]"
-        >
+    <div class="flex flex-col items-start justify-start gap-5 mx-3.5 break-all">
+      <div class="flex flex-col items-start justify-start gap-3">
+        <p class="line-clamp-2 text-left text-base font-bold text-[#111]">
           {{ title }}
         </p>
-        <p
-          class="line-clamp-3 flex-shrink-0 flex-grow-1 text-left text-sm text-[#646f7c]"
-        >
-          <span
-            class="flex-shrink-0 flex-grow-1 text-left text-sm text-[#646f7c]"
-          >
+        <p class="line-clamp-3 text-left text-sm text-[#646f7c]">
+          <span class="text-left text-sm text-[#646f7c]">
             {{ summary }}
           </span>
         </p>
       </div>
-      <div class="flex flex-shrink-0 flex-grow-1 items-end justify-start gap-2">
-        <p class="flex-shrink-0 flex-grow-1 text-left text-xs text-[#646f7c]">
+      <div class="flex items-end justify-start gap-2">
+        <p class="text-left text-xs text-[#646f7c]">
           {{ typeKorean }}
         </p>
-        <div class="h-3 w-px flex-shrink-0 flex-grow-1 bg-[#646f7c]"></div>
-        <p class="flex-shrink-0 flex-grow-1 text-left text-xs text-[#646f7c]">
+        <div class="h-3 w-px bg-[#646f7c]"></div>
+        <p class="text-left text-xs text-[#646f7c]">
           {{ date }}
         </p>
       </div>
@@ -53,10 +46,10 @@
 <script setup lang="ts">
 const props = defineProps<{
   type: string;
-  imageUrl: string;
+  imageUrl: string | null;
   url: string;
-  title: string;
-  summary: string;
+  title: string | null;
+  summary: string | null;
   date: string;
 }>();
 
@@ -71,7 +64,7 @@ const typeKorean = computed(() => {
     case 'FILE':
       return '파일';
     default:
-      return '메모';
+      return '';
   }
 });
 </script>

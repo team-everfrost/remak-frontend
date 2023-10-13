@@ -20,6 +20,7 @@
     "@nuxt/test-utils": "^3.7.4",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@nuxtjs/tailwindcss": "^6.8.0",
+    "@pinia-plugin-persistedstate/nuxt": "^1.1.2",
     "@types/node": "^20.8.4",
     "@typescript-eslint/parser": "^6.7.5",
     "commitlint-config-git-commit-emoji": "^1.0.0",
@@ -37,6 +38,7 @@
     "vue": "latest"
   },
   "dependencies": {
+    "@nuxt/image": "^1.0.0-rc.3",
     "@pinia/nuxt": "^0.4.11",
     "@yeger/vue-masonry-wall": "^5.0.2",
     "pinia": "^2.1.6"

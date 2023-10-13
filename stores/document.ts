@@ -18,18 +18,21 @@ export const useDocumentStore = defineStore('document', () => {
     },
   ]);
 
-  const reset = () => {
-    documents.value = [];
-  };
+  const getDocuments = computed(() => () => {
+    return documents.value;
+  });
 
   const config = useRuntimeConfig();
   const apiBaseUrl = config.public.apiBaseUrl;
 
-  const getDocument = async (
+  const fetchDocuments = async (
     cursor?: string,
     docId?: string,
     limit?: number,
   ) => {
+    if (!authStore.isSignedIn) return false;
+    if (!cursor) documents.value = [];
+
     const { data, error }: any = await useFetch('/document', {
       baseURL: apiBaseUrl,
       method: 'GET',
@@ -47,5 +50,5 @@ export const useDocumentStore = defineStore('document', () => {
     return false;
   };
 
-  return { documents, reset, getDocument };
+  return { getDocuments, fetchDocuments };
 });
