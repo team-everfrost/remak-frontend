@@ -2,7 +2,7 @@
   <div class="flex h-screen flex-col">
     <TopBarBase />
     <div class="flex flex-grow flex-row">
-      <SideNavigation class="mt-20" />
+      <SideNavigation :active-button="0" class="mt-20" />
       <div class="mt-20 flex-grow bg-[#F4F6F8] ml-48">
         <div class="flex flex-col m-20">
           <div class="flex items-center justify-between mb-4">
