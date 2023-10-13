@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex w-full flex-shrink-0 flex-grow-0 flex-col items-start justify-start overflow-hidden rounded-2xl border border-[#e6e8eb] bg-[#fefefe] pb-4"
+    class="flex w-full flex-col items-start justify-start overflow-hidden rounded-2xl border border-[#e6e8eb] bg-[#fefefe] pb-4"
     :class="!imageUrl ? 'gap-0 pt-4' : 'gap-4 pt-0'"
     style="
       box-shadow:
@@ -9,26 +9,12 @@
     "
   >
     <div class="w-full bg-[#F4F6F8]">
-      <svg
+      <img
         v-if="imageUrl"
-        width="258"
-        height="160"
-        viewBox="0 0 258 160"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-40 flex-shrink-0 flex-grow-0 mx-auto"
-        preserveAspectRatio="none"
-      >
-        <rect width="258" height="160" fill="#F4F6F8"></rect>
-        <path
-          d="M104.7 75.0778V56.4539C104.7 55.2919 105.639 54.35 106.801 54.35H134.674C145.776 54.35 153.3 64.1811 153.3 73.39C153.3 80.7571 148.869 84.4725 145.498 88.3303L151.871 101.743C152.535 103.139 151.517 104.75 149.971 104.75H133.638C133.354 104.75 133.082 104.635 132.884 104.432L104.998 75.8119C104.807 75.6155 104.7 75.3521 104.7 75.0778Z"
-          fill="#E0E0E0"
-        ></path>
-        <path
-          d="M104.7 102.646V84.4198C104.7 83.9512 105.267 83.7166 105.598 84.0479L125.402 103.852C125.733 104.183 125.499 104.75 125.03 104.75H106.804C105.642 104.75 104.7 103.808 104.7 102.646Z"
-          fill="#E0E0E0"
-        ></path>
-      </svg>
+        class="h-40 mx-auto"
+        src="~/assets/imageHolder.svg"
+        alt="image placeholder"
+      />
     </div>
     <div
       class="flex flex-shrink-0 flex-grow-1 flex-col items-start justify-start gap-5 px-3.5"
