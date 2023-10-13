@@ -6,7 +6,7 @@ export const useAuthStore = defineStore('auth', () => {
   const apiBaseUrl = config.public.apiBaseUrl;
 
   const registerEmail = ref('');
-  const registerPage = ref(2);
+  const registerPage = ref(1);
   const registerPassword = ref('');
   const allowNavigationToHome = ref(false);
 
