@@ -1,5 +1,6 @@
 <template>
   <div class="flex h-screen flex-col">
+    <ModalsContainer />
     <TopBarBase />
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="0" class="mt-20" />
@@ -72,6 +73,7 @@
 
 <script setup lang="ts">
 import MasonryWall from '@yeger/vue-masonry-wall';
+import { ModalsContainer } from 'vue-final-modal';
 import { useDocumentStore } from '~/stores/document';
 
 defineComponent({

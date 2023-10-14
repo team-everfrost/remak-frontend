@@ -2,7 +2,8 @@
   <div
     class="relative h-[124px] max-w-[258px] flex-shrink-0 flex-grow-0 flex-col overflow-hidden rounded-2xl border border-[#e6e8eb] bg-white"
     style="
-      box-shadow: 0px 0px 1px 0 rgba(65, 74, 82, 0.04),
+      box-shadow:
+        0px 0px 1px 0 rgba(65, 74, 82, 0.04),
         0px 2px 4px 0 rgba(102, 110, 119, 0.16);
     "
   >

@@ -26,7 +26,7 @@
     </button>
     <button
       :class="buttonClass(4)"
-      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm text-gray-500"
+      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm"
       @click="handleAccountClick"
     >
       <img src="~/assets/icons/icon_profile.svg" alt="내 정보" />
@@ -46,7 +46,7 @@ const handleAccountClick = () => {
 
 const buttonClass = (buttonNumber: number) => {
   return props.activeButton === buttonNumber
-    ? 'text-[#1F8CE6] bg-[#CCE8FF]'
+    ? ' bg-[#CCE8FF] text-[#1F8CE6]   '
     : 'text-gray-500';
 };
 </script>

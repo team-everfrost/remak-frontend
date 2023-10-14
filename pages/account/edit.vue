@@ -8,7 +8,7 @@
             <div>
               <button
                 class="flex flex-row justify-center items-center"
-                @click="navigateTo('/app/account')"
+                @click="navigateTo('/account')"
               >
                 <svg
                   width="20"
@@ -42,7 +42,7 @@
                 <div class="flex flex-col justify-start items-start gap-1">
                   <p class="text-sm text-center text-[#646f7c]">이메일</p>
                   <p class="text-base font-medium text-center">
-                    example@example.com
+                    {{ userEmail }}
                   </p>
                 </div>
               </div>
@@ -67,3 +67,17 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useAccountStore } from '~/stores/account';
+
+const accountStore = useAccountStore();
+
+onMounted(() => {
+  accountStore.fetchUserInfo();
+});
+
+const userEmail = computed(() => {
+  return accountStore.userInfo.email;
+});
+</script>
