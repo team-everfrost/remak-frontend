@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: false,
   css: ['vue-final-modal/style.css'],
   devtools: { enabled: true },
   modules: [

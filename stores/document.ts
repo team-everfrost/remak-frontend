@@ -18,9 +18,14 @@ export const useDocumentStore = defineStore('document', () => {
       tags: [],
     },
   ]);
+  const endOfDocuments = ref(false);
 
   const getDocuments = computed(() => () => {
     return documents.value;
+  });
+
+  const getEndOfDocuments = computed(() => () => {
+    return endOfDocuments.value;
   });
 
   const config = useRuntimeConfig();
@@ -44,6 +49,7 @@ export const useDocumentStore = defineStore('document', () => {
     limit?: number,
   ) => {
     if (!authStore.isSignedIn) return false;
+    if (endOfDocuments.value) return false;
 
     const { data, error }: any = await useFetch('/document', {
       baseURL: apiBaseUrl,
@@ -59,8 +65,14 @@ export const useDocumentStore = defineStore('document', () => {
       documents.value.push(...data.value.data);
       return true;
     }
+
+    if (!error.value && data.value.data.length === 0) {
+      endOfDocuments.value = true;
+      return true;
+    }
+
     return false;
   };
 
-  return { getDocuments, initialFetch, fetchMore };
+  return { getDocuments, getEndOfDocuments, initialFetch, fetchMore };
 });

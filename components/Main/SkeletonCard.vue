@@ -9,13 +9,13 @@
     "
   >
     <div class="w-full bg-[#F4F6F8]">
-      <NuxtImg
+      <img
         v-if="image"
         sizes="100vw"
         class="object-cover h-40 w-full mx-auto"
-        src="/images/imageHolder.svg"
+        src="assets/imageHolder.svg"
         alt="image placeholder"
-        placeholder="/images/imageHolder.svg"
+        placeholder="assets/imageHolder.svg"
         loading="lazy"
       />
     </div>

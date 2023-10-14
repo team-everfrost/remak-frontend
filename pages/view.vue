@@ -10,7 +10,10 @@
           >
             <div class="flex flex-col">
               <div class="flex justify-start items-start w-full">
-                <button class="flex flex-row justify-start items-start">
+                <button
+                  class="flex flex-row justify-start items-center h-8 pl-2 pr-4"
+                  @click="$router.back()"
+                >
                   <svg
                     width="20"
                     height="20"

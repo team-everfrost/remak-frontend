@@ -65,6 +65,31 @@
               </template>
             </MasonryWall>
           </div>
+          <div
+            v-if="!isEndOfDocuments"
+            ref="loadObserverTarget"
+            class="bottom-0 -z-50 h-96 w-full -mt-96"
+          ></div>
+          <div class="fixed bottom-4 right-4 z-10">
+            <button
+              onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+              class="h-10 w-10 bg-white border border-gray-200 text-gray-500 rounded-full flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class=""
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -83,8 +108,69 @@ defineComponent({
 });
 
 const isInitialLoad = ref('true');
-const loading = ref(false);
+const isEndOfDocuments = computed(() => {
+  return documentStore.getEndOfDocuments();
+});
+const loadObserverTarget = ref<HTMLElement | null>(null);
+const loadObserver = ref<IntersectionObserver | null>(null);
+const isLoading = ref(false);
 const documentStore = useDocumentStore();
+
+onMounted(() => {
+  initFetch();
+});
+
+onMounted(() => {
+  loadObserver.value = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        loadMore();
+      }
+    },
+    {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1,
+    },
+  );
+  loadObserver.value?.observe(loadObserverTarget.value!);
+});
+
+onUnmounted(() => {
+  loadObserver.value?.disconnect();
+});
+
+const initFetch = async () => {
+  isLoading.value = true;
+  isInitialLoad.value = (await documentStore.initialFetch())
+    ? 'false'
+    : 'error';
+  isLoading.value = false;
+};
+
+const loadMore = async () => {
+  if (isLoading.value || isEndOfDocuments.value) return;
+
+  isLoading.value = true;
+  await documentStore.fetchMore();
+  isLoading.value = false;
+};
+
+const documentCards = computed(() => {
+  return documentStore.getDocuments().map((document) => ({
+    type: document.type,
+    imageUrl: document.thumbnailUrl,
+    docId: document.docId,
+    title: title(document.type, document.content, document.title, document.url),
+    summary: summary(
+      document.type,
+      document.status,
+      document.content,
+      document.summary,
+    ),
+    info: info(document.type, document.url, document.updatedAt),
+  }));
+});
 
 const summary = (
   type: string,
@@ -106,6 +192,12 @@ const summary = (
     }
   }
   switch (status) {
+    case 'SCRAPE_PENDING':
+      return '스크랩 대기중이에요.';
+    case 'SCRAPE_PROCESSING':
+      return '스크랩이 진행중이에요!';
+    case 'SCRAPE_REJECTED':
+      return '스크랩에 실패했어요.';
     case 'EMBED_PENDING':
       return 'AI가 곧 자료를 요약할거에요.';
     case 'EMBED_PROCESSING':
@@ -129,32 +221,9 @@ const info = (type: string, url: string, updatedAt: string) => {
     .slice(0, -1);
 };
 
-const initFetch = async () => {
-  isInitialLoad.value = (await documentStore.initialFetch())
-    ? 'false'
-    : 'error';
+const title = (type: string, content: string, title: string, url: string) => {
+  if (type === 'MEMO') return content.split('\n')[0];
+  if (type === 'WEBPAGE' && !title.trim()) return url;
+  return title;
 };
-
-onMounted(() => {
-  initFetch();
-});
-
-const documentCards = computed(() => {
-  return documentStore.getDocuments().map((document) => ({
-    type: document.type,
-    imageUrl: document.thumbnailUrl,
-    docId: document.docId,
-    title:
-      document.type === 'MEMO'
-        ? document.content.split('\n')[0]
-        : document.title,
-    summary: summary(
-      document.type,
-      document.status,
-      document.content,
-      document.summary,
-    ),
-    info: info(document.type, document.url, document.updatedAt),
-  }));
-});
 </script>

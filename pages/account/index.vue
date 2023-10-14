@@ -59,16 +59,16 @@
 
 <script setup lang="ts">
 import { ModalsContainer, useModal } from 'vue-final-modal';
-import { useAuthStore } from '~/stores/auth';
-import { useAccountStore } from '~/stores/account';
 import DeleteAlert from '~/components/DeleteAlert.vue';
+import { useAccountStore } from '~/stores/account';
+import { useAuthStore } from '~/stores/auth';
 
 const authStore = useAuthStore();
 const accountStore = useAccountStore();
 
 const progress = ref(0);
 const usedUsage = ref(0);
-const totalUsage = ref(20);
+const totalUsage = ref(1);
 const usedPercentage = computed(() => {
   const percentage = (usedUsage.value / totalUsage.value) * 100;
   const roundedPercentage = Math.round(percentage * 10) / 10; // 소수점 첫째 자리까지 반올림
