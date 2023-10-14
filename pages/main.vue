@@ -1,266 +1,158 @@
 <template>
-  <div>
-    <div class="relative flex flex-col items-start justify-start">
-      <div
-        class="relative flex h-20 w-full flex-shrink-0 flex-grow-0 overflow-hidden border-b border-[#e6e8eb] border-l-0 border-r-0 border-t-0 bg-[#fefefe]"
-      >
-        <div
-          class="ml-6 flex h-20 items-center border-b border-gray-300 bg-topbar-background"
-        >
-          <NuxtLink to="/">
-            <img src="~/assets/logo.svg" alt="logo" />
-          </NuxtLink>
-        </div>
-        <div class="flex-grow"></div>
-        <div class="mr-6 flex h-20 items-center justify-start gap-6">
-          <div
-            class="flex flex-shrink-0 flex-grow-0 items-start justify-start gap-2"
-          >
-            <div
-              class="relative flex h-10 flex-shrink-0 flex-grow-0 items-center justify-center rounded-md px-4 hover:cursor-pointer hover:bg-slate-100"
-            >
-              <p
-                class="flex-shrink-0 flex-grow-0 text-center text-base font-medium text-[#28323c]"
-              >
-                로그인
-              </p>
-            </div>
-          </div>
-          <div class="flex flex-shrink-0 flex-grow-0 items-start justify-start">
-            <div
-              class="relative flex h-10 flex-shrink-0 flex-grow-0 items-center justify-center rounded-md bg-[#1f8ce6] px-4"
-            >
-              <p
-                class="flex-shrink-0 flex-grow-0 text-center text-base font-medium text-white"
-              >
-                무료로 시작하기
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="relative mt-40 flex w-full flex-shrink-0 flex-grow-0 flex-col justify-center overflow-hidden bg-white"
-      >
-        <p class="relative text-center text-5xl font-bold text-[#111]">
-          <span class="text-center text-5xl font-bold text-[#111]"
-            >Your Personal AI Knowledge Base,</span
-          ><br /><span class="text-center text-5xl font-bold text-[#111]"
-            >Remak</span
-          >
-        </p>
-        <p class="relative mt-5 text-center text-xl font-medium text-[#646f7c]">
-          <span class="text-center text-xl font-medium text-[#646f7c]"
-            >그때 읽었던 그 내용 어디있지?</span
-          ><br /><span class="text-center text-xl font-medium text-[#646f7c]"
-            >더 이상 헤매지 마세요</span
-          >
-        </p>
-        <div class="mt-10 flex w-full items-center justify-center">
-          <div
-            class="relatvie flex h-16 w-60 items-center justify-center gap-2 rounded-xl bg-[#1f8ce6]"
-          >
-            <p
-              class="flex-shrink-0 flex-grow-0 text-center text-2xl font-medium text-white"
-            >
-              무료로 시작하기
+  <div class="flex h-screen flex-col">
+    <TopBarBase />
+    <div class="flex flex-grow flex-row">
+      <SideNavigation :active-button="0" class="mt-20" />
+      <div class="mt-20 flex-grow bg-[#F4F6F8] ml-48">
+        <div class="flex flex-col m-20">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-neutral-900 text-[32px] font-bold leading-[44.80px]">
+              메인
             </p>
-          </div>
-        </div>
-        <div
-          class="mb-40 mt-14 inline-flex w-full flex-nowrap [mask-image:_linear-gradient(to_right,transparent_0,_white_128px,_white_calc(100%-200px),transparent_100%)]"
-        >
-          <ul
-            class="flex animate-infinite-flow items-center justify-center md:justify-start [&_li]:mx-6"
-          >
-            <li>
-              <MainMovingCard />
-            </li>
-            <li>
-              <MainMovingCard />
-            </li>
-            <li>
-              <MainMovingCard />
-            </li>
-            <li>
-              <MainMovingCard />
-            </li>
-            <li>
-              <MainMovingCard />
-            </li>
-            <li>
-              <MainMovingCard />
-            </li>
-          </ul>
-          <ul
-            class="flex animate-infinite-flow items-center justify-center md:justify-start [&_li]:mx-6"
-            aria-hidden="true"
-          >
-            <li>
-              <MainMovingCard />
-            </li>
-            <li>
-              <MainMovingCard />
-            </li>
-            <li>
-              <MainMovingCard />
-            </li>
-            <li>
-              <MainMovingCard />
-            </li>
-            <li>
-              <MainMovingCard />
-            </li>
-            <li>
-              <MainMovingCard />
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div
-        class="relative flex w-full flex-shrink-0 flex-grow-0 flex-col items-start justify-start bg-[#f4f6f8]"
-      >
-        <div
-          class="relative mx-auto mt-[200px] flex flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
-        >
-          <p class="text-left text-[32px] font-bold text-[#111]">
-            <span class="text-left text-[32px] font-bold text-[#111]"
-              >클릭 한번으로 저장하면</span
-            ><br /><span class="text-left text-[32px] font-bold text-[#111]"
-              >AI가 자료 분류부터 요약까지</span
-            ><br /><span class="text-left text-[32px] font-bold text-[#111]"
-              >Remak과 함께라면 당신의 일상이 새로워질 거예요</span
+            <button
+              class="h-8 w-[78px] rounded-md bg-gray-600 text-base font-medium text-white"
             >
-          </p>
+              편집하기
+            </button>
+          </div>
           <div
-            class="mb-52 mt-10 grid w-full grid-cols-1 content-between items-center justify-center gap-10 lg:grid-cols-2"
+            v-if="isInitialLoad === 'error'"
+            class="text-neutral-900 text-xl leading-normal my-7 mx-auto items-center justify-center flex flex-col gap-4"
           >
-            <div
-              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
+            <p>문서를 불러오는데 오류가 발생했습니다.</p>
+            <button
+              class="relatvie flex h-12 w-32 items-center justify-center rounded-xl bg-[#1f8ce6]"
+              @click="reloadNuxtApp()"
             >
-              <img src="/assets/icons/main/icon_folder.svg" />
               <p
-                class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
+                class="flex-shrink-0 flex-grow-0 text-center text-xl font-medium text-white"
               >
-                쉬운 자료저장
+                새로고침
               </p>
-              <p
-                class="mt-5 flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
-              >
-                브라우저에서 클릭 한번, 스마트폰에서 공유 버튼 한번만에
-                저장해요.
-              </p>
-            </div>
+            </button>
+          </div>
+          <div v-else-if="isInitialLoad === 'true'">
             <div
-              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
+              class="animate-pulse bg-[#e6e8eb] h-9 mb-7 w-24 rounded-lg"
+            ></div>
+            <MasonryWall
+              :items="Array(20).fill({})"
+              :column-width="258"
+              :gap="16"
             >
-              <img src="/assets/icons/main/icon_scrap.svg" />
-              <p
-                class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
-              >
-                웹 페이지 영구 스크랩
-              </p>
-              <p
-                class="mt-5 flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
-              >
-                웹 페이지의 본문을 저장해 사라질 걱정 없이 언제든지 찾아볼 수
-                있어요.
-              </p>
-            </div>
+              <template #default="{ index }">
+                <MainSkeletonCard :image="index % 5 ? true : false" />
+              </template>
+            </MasonryWall>
+          </div>
+          <div v-else class="">
             <div
-              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
+              class="text-neutral-900 text-2xl font-bold leading-normal mb-7"
             >
-              <img src="/assets/icons/main/icon_search.svg" />
-              <p
-                class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
-              >
-                강력한 자료 검색기능
-              </p>
-              <p
-                class="mt-5 flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
-              >
-                제목이 기억나지 않아도, 정확한 단어가 기억나지 않아도 유사한
-                문서를 찾을 수 있어요.
-              </p>
+              오늘
             </div>
-            <div
-              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
-            >
-              <img src="/assets/icons/main/icon_summary.svg" />
-              <p
-                class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
-              >
-                자동화된 자료 분류, 요약
-              </p>
-              <p
-                class="mt-5 flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
-              >
-                AI가 생성하는 자동 태그와 요약, 사용자가 생성한 기준을 통한
-                컬렉션 기능까지.
-              </p>
-            </div>
-            <div
-              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
-            >
-              <img src="/assets/icons/main/icon_chat.svg" />
-              <p
-                class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
-              >
-                내 자료와 대화하는 AI 채팅
-              </p>
-              <p
-                class="mt-5 flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
-              >
-                내가 저장한 자료들을 통한 답변을 받거나, 문서에 대해 AI에게
-                물어보세요.
-              </p>
-            </div>
+            <MasonryWall :items="documentCards" :column-width="258" :gap="16">
+              <template #default="{ item }">
+                <MainDocumentCard
+                  :type="item.type"
+                  :image-url="item.imageUrl"
+                  :doc-id="item.docId"
+                  :title="item.title"
+                  :summary="item.summary"
+                  :info="item.info"
+                />
+              </template>
+            </MasonryWall>
           </div>
         </div>
       </div>
-      <div
-        class="relative flex h-[540px] w-full flex-shrink-0 flex-grow-0 flex-col items-center justify-center bg-[#CCE8FF]"
-      >
-        <p
-          class="flex-shrink-0 flex-grow-0 text-center text-[32px] font-bold text-[#28323c]"
-        >
-          번거로운 자료 관리는 이제 그만
-        </p>
-        <button
-          class="relative mt-8 flex h-16 w-60 flex-shrink-0 flex-grow-0 items-center justify-center gap-2 rounded-xl bg-[#1f8ce6] px-4 py-2.5"
-        >
-          <p
-            class="flex-shrink-0 flex-grow-0 text-center text-2xl font-medium text-white"
-          >
-            무료로 시작하기
-          </p>
-        </button>
-      </div>
-    </div>
-    <div
-      class="relative flex h-[240px] w-full flex-shrink-0 flex-grow-0 flex-col items-center justify-center bg-black"
-    >
-      <p class="flex-shrink-0 flex-grow-0 text-center text-sm">
-        <span
-          class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
-          >개인정보 처리방침</span
-        ><span
-          class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#464749]"
-        >
-          ㅣ </span
-        ><span
-          class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
-          >이용약관</span
-        >
-      </p>
-      <p
-        class="mt-3 flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
-      >
-        Copyright © 2023 Team Everfrost All rights reserved.
-      </p>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup lang="ts">
+import MasonryWall from '@yeger/vue-masonry-wall';
+import { useDocumentStore } from '~/stores/document';
+
+defineComponent({
+  components: {
+    MasonryWall,
+  },
+});
+
+const isInitialLoad = ref('true');
+const loading = ref(false);
+const documentStore = useDocumentStore();
+
+const summary = (
+  type: string,
+  status: string,
+  content: string,
+  summary: string,
+) => {
+  if (type === 'MEMO') return content.split('\n')[1] ?? '';
+  if (type === 'IMAGE') {
+    switch (status) {
+      case 'EMBED_PENDING':
+        return 'AI가 곧 이미지를 분석할거에요.';
+      case 'EMBED_PROCESSING':
+        return 'AI가 이미지를 분석중이에요!';
+      case 'EMBED_REJECTED':
+        return 'AI가 이미지 분석에 실패했어요.';
+      default:
+        return summary?.split('\n')[0] ?? '';
+    }
+  }
+  switch (status) {
+    case 'EMBED_PENDING':
+      return 'AI가 곧 자료를 요약할거에요.';
+    case 'EMBED_PROCESSING':
+      return 'AI가 자료를 요약중이에요!';
+    case 'EMBED_REJECTED':
+      return 'AI가 자료를 요약하지 못했어요.';
+    default:
+      return summary?.split('\n')[0] ?? '';
+  }
+};
+
+const info = (type: string, url: string, updatedAt: string) => {
+  if (type === 'WEBPAGE') return new URL(url).hostname;
+  return new Date(Date.parse(updatedAt))
+    .toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    .replace(/. /g, '.')
+    .slice(0, -1);
+};
+
+const initFetch = async () => {
+  isInitialLoad.value = (await documentStore.initialFetch())
+    ? 'false'
+    : 'error';
+};
+
+onMounted(() => {
+  initFetch();
+});
+
+const documentCards = computed(() => {
+  return documentStore.getDocuments().map((document) => ({
+    type: document.type,
+    imageUrl: document.thumbnailUrl,
+    docId: document.docId,
+    title:
+      document.type === 'MEMO'
+        ? document.content.split('\n')[0]
+        : document.title,
+    summary: summary(
+      document.type,
+      document.status,
+      document.content,
+      document.summary,
+    ),
+    info: info(document.type, document.url, document.updatedAt),
+  }));
+});
+</script>

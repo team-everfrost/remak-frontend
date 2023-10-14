@@ -41,7 +41,7 @@ const props = defineProps<{
 }>();
 
 const handleAccountClick = () => {
-  navigateTo('/app/account');
+  navigateTo('/account');
 };
 
 const buttonClass = (buttonNumber: number) => {

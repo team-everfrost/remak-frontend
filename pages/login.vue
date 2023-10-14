@@ -55,7 +55,7 @@
         >
           다음으로
         </button>
-        <NuxtLink to="/registerEmail" class="text-xs text-gray-700 underline">
+        <NuxtLink to="/register" class="text-xs text-gray-700 underline">
           처음 이용하시나요?
         </NuxtLink>
       </div>
@@ -65,6 +65,10 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
+
+definePageMeta({
+  onlyLogout: true,
+});
 
 useSeoMeta({
   title: '로그인 - Remak',

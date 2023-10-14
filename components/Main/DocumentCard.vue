@@ -36,7 +36,7 @@
         </p>
         <div class="h-3 w-px bg-[#646f7c]"></div>
         <p class="text-left text-xs text-[#646f7c]">
-          {{ date }}
+          {{ info }}
         </p>
       </div>
     </div>
@@ -47,10 +47,10 @@
 const props = defineProps<{
   type: string;
   imageUrl: string | null;
-  url: string;
+  docId: string | null;
   title: string | null;
   summary: string | null;
-  date: string;
+  info: string;
 }>();
 
 const typeKorean = computed(() => {

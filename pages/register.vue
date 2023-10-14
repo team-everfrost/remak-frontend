@@ -8,6 +8,10 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
 
+definePageMeta({
+  onlyLogout: true,
+});
+
 const authStore = useAuthStore();
 const RegisterEmail = defineAsyncComponent(
   () => import('@/components/Register/Email.vue'),
