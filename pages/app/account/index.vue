@@ -57,7 +57,7 @@
 
 <script setup lang="ts">
 const progress = ref(50);
-const usedUsage = ref(4);
+const usedUsage = ref(10);
 const totalUsage = ref(20);
 const usedPercentage = computed(() => {
   updateProgress((usedUsage.value / totalUsage.value) * 100);
