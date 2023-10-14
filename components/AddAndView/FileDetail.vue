@@ -1,13 +1,11 @@
 <template>
   <div
-    class="flex max-w-[995px] flex-shrink-0 flex-grow-0 items-center justify-center rounded-2xl border border-[#e6e8eb] bg-[#fefefe] px-[130px] pb-12 pt-10"
+    class="flex max-w-[995px] flex-shrink-0 flex-grow-0 items-center justify-center rounded-2xl border border-[#e6e8eb] bg-[#fefefe] px-10 pb-12 pt-10"
   >
     <div
       class="flex w-full flex-shrink-0 flex-grow-0 flex-col justify-start gap-2"
     >
-      <div
-        class="relative flex flex-shrink-0 flex-grow-0 items-center justify-between"
-      >
+      <div class="flex flex-shrink-0 flex-grow-0 items-center justify-between">
         <div
           class="relative flex flex-shrink-0 flex-grow-0 items-center justify-start gap-2"
         >
@@ -23,7 +21,7 @@
             YYYY.MM.DD
           </p>
         </div>
-        <button class="relativeflex-shrink-0 ml-auto flex-grow-0">
+        <button class="relative flex-shrink-0 ml-auto flex-grow-0">
           <svg
             width="24"
             height="24"

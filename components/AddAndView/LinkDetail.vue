@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex max-w-[995px] flex-shrink-0 flex-grow-0 items-center justify-center rounded-2xl border border-[#e6e8eb] bg-[#fefefe] px-[130px] pb-12 pt-10"
+    class="flex max-w-[995px] flex-shrink-0 flex-grow-0 items-center justify-center rounded-2xl border border-[#e6e8eb] bg-[#fefefe] px-10 pb-12 pt-10"
   >
     <div
       class="flex w-full flex-shrink-0 flex-grow-0 flex-col justify-start gap-2"

@@ -1,21 +1,11 @@
 <template>
   <div
-    class="flex max-w-[995px] flex-shrink-0 flex-grow-0 items-center justify-center rounded-2xl border border-[#e6e8eb] bg-[#fefefe] px-[130px] pb-12 pt-10"
+    class="flex max-w-[995px] w-screen flex-shrink-0 flex-grow-0 items-center justify-center rounded-2xl border border-[#e6e8eb] bg-[#fefefe] px-10 pb-12 pt-10"
   >
-    <div
-      class="flex w-full flex-shrink-0 flex-grow-0 flex-col justify-start gap-2"
-    >
-      <div
-        class="relative flex flex-shrink-0 flex-grow-0 items-center justify-between"
-      >
-        <div
-          class="relative flex flex-shrink-0 flex-grow-0 items-center justify-start gap-2"
-        >
-          <p
-            class="flex-shrink-0 flex-grow-0 text-left text-sm font-medium text-[#646f7c]"
-          >
-            메모
-          </p>
+    <div class="flex w-full flex-grow-0 flex-col justify-start gap-2">
+      <div class="flex flex-shrink-0 flex-grow-0 items-center justify-between">
+        <div class="flex items-center justify-start gap-2">
+          <p class="flex text-left text-sm font-medium text-[#646f7c]">메모</p>
           <div class="h-3 w-px flex-shrink-0 flex-grow-0 bg-[#646f7c]"></div>
           <p
             class="flex-shrink-0 flex-grow-0 text-left text-sm font-medium text-[#646f7c]"
@@ -23,7 +13,7 @@
             YYYY.MM.DD
           </p>
         </div>
-        <button class="relativeflex-shrink-0 ml-auto flex-grow-0">
+        <button class="flex-shrink-0 ml-auto flex-grow-0">
           <svg
             width="24"
             height="24"
@@ -65,7 +55,6 @@
           </svg>
         </button>
       </div>
-
       <textarea
         placeholder="메모를 입력하세요"
         class="relative mt-8 h-[278px] flex-grow resize-none self-stretch overflow-auto rounded-xl border border-[#e6e8eb] bg-[#F4F6F8] p-4 outline-none"
