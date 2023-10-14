@@ -16,6 +16,7 @@
               <div class="flex-grow"></div>
               <button
                 class="justify-center h-8 items-center px-3 rounded-md border border-[#e6e8eb] ml-4 bg-[#fefefe] font-medium"
+                @click="logout()"
               >
                 로그아웃
               </button>
@@ -56,6 +57,10 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '~/stores/auth';
+
+const authStore = useAuthStore();
+
 const progress = ref(50);
 const usedUsage = ref(10);
 const totalUsage = ref(20);
@@ -66,5 +71,10 @@ const usedPercentage = computed(() => {
 
 const updateProgress = (newProgress: number) => {
   progress.value = newProgress;
+};
+
+const logout = () => {
+  authStore.signOut();
+  navigateTo('/');
 };
 </script>

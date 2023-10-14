@@ -8,6 +8,7 @@ export const useDocumentStore = defineStore('document', () => {
       docId: '',
       title: '',
       type: '',
+      url: '',
       content: '',
       summary: '',
       status: '',
@@ -25,13 +26,24 @@ export const useDocumentStore = defineStore('document', () => {
   const config = useRuntimeConfig();
   const apiBaseUrl = config.public.apiBaseUrl;
 
+  const initialFetch = async () => {
+    documents.value = [];
+    return await fetchDocuments();
+  };
+
+  const fetchMore = async () => {
+    const cursor = documents.value[documents.value.length - 1].updatedAt;
+    const docId = documents.value[documents.value.length - 1].docId;
+    const limit = 20;
+    return await fetchDocuments(cursor, docId, limit);
+  };
+
   const fetchDocuments = async (
     cursor?: string,
     docId?: string,
     limit?: number,
   ) => {
     if (!authStore.isSignedIn) return false;
-    if (!cursor) documents.value = [];
 
     const { data, error }: any = await useFetch('/document', {
       baseURL: apiBaseUrl,
@@ -50,5 +62,5 @@ export const useDocumentStore = defineStore('document', () => {
     return false;
   };
 
-  return { getDocuments, fetchDocuments };
+  return { getDocuments, initialFetch, fetchMore };
 });
