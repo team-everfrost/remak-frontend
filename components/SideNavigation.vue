@@ -4,14 +4,14 @@
   >
     <button
       :class="buttonClass(1)"
-      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm text-gray-500"
+      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm"
     >
       <img src="~/assets/icons/icon_search.svg" alt="검색" />
       검색
     </button>
     <button
       :class="buttonClass(2)"
-      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm text-gray-500"
+      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm"
     >
       <img src="~/assets/icons/icon_tag.svg" alt="태그" />
       태그
@@ -19,7 +19,8 @@
 
     <button
       :class="buttonClass(3)"
-      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm text-gray-500"
+      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm"
+      @click="handleCollectionClick"
     >
       <img src="~/assets/icons/icon_collection.svg" alt="컬렉션" />
       컬렉션
@@ -42,6 +43,10 @@ const props = defineProps<{
 
 const handleAccountClick = () => {
   navigateTo('/account');
+};
+
+const handleCollectionClick = () => {
+  navigateTo('/collection');
 };
 
 const buttonClass = (buttonNumber: number) => {

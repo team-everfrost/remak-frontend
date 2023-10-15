@@ -4,8 +4,8 @@
       <div class="flex flex-grow flex-row">
         <SideNavigation :active-button="4" class="mt-20"> </SideNavigation>
         <div class="mt-20 w-full bg-[#F4F6F8] ml-48 flex-col">
-          <div class="flex relative mx-20 mt-20 items-center flex-col">
-            <div class="flex relative w-full items-center flex-col md:flex-row">
+          <div class="flex mx-20 mt-20 items-center flex-col">
+            <div class="flex w-full items-center flex-col md:flex-row">
               <p class="text-[32px] font-bold">내 정보</p>
               <button
                 class="justify-center h-8 items-center px-3 rounded-md ml-4 bg-[#475161] text-white"
