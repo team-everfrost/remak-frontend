@@ -5,6 +5,7 @@ export const useTagStore = defineStore('tag', () => {
   const endOfTags = ref(false);
   const config = useRuntimeConfig();
   const apiBaseUrl = config.public.apiBaseUrl;
+  const isTagExists = ref(false);
 
   const tags = ref([
     {
@@ -33,7 +34,12 @@ export const useTagStore = defineStore('tag', () => {
     });
 
     if (data.value && !error.value) {
-      tags.value.push(...data.value.data);
+      if (query === undefined) {
+        tags.value.push(...data.value.data);
+        isTagExists.value = data.value.data.length > 0;
+      } else {
+        tags.value = data.value.data;
+      }
       return true;
     }
 
@@ -55,5 +61,6 @@ export const useTagStore = defineStore('tag', () => {
     fetchTags,
     getTags,
     initalFetch,
+    isTagExists,
   };
 });
