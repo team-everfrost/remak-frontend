@@ -74,5 +74,50 @@ export const useDocumentStore = defineStore('document', () => {
     return false;
   };
 
-  return { getDocuments, getEndOfDocuments, initialFetch, fetchMore };
+  const fetchDocumentDetail = async (docId: string) => {
+    if (!authStore.isSignedIn) return false;
+
+    const { data, error }: any = await useFetch(`/document/${docId}`, {
+      baseURL: apiBaseUrl,
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    });
+
+    if (data.value && !error.value) {
+      return data.value.data;
+    }
+
+    return false;
+  };
+
+  const fetchFileDownloadUrl = async (docId: string) => {
+    if (!authStore.isSignedIn) return false;
+
+    const { data, error }: any = await useFetch(`/document/file/${docId}`, {
+      baseURL: apiBaseUrl,
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    });
+
+    if (data.value && !error.value) {
+      return data.value.data;
+    }
+
+    return false;
+  };
+
+  return {
+    getDocuments,
+    getEndOfDocuments,
+    initialFetch,
+    fetchMore,
+    fetchDocumentDetail,
+    fetchFileDownloadUrl,
+  };
 });

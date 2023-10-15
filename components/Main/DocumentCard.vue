@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink to="/view" class="cursor-pointer">
+  <NuxtLink :to="`/view/${docId}`" class="cursor-pointer">
     <div
       class="flex w-full flex-col items-start justify-start overflow-hidden rounded-2xl border border-[#e6e8eb] bg-[#fefefe] pb-4"
       :class="!imageUrl ? 'gap-0 pt-4' : 'gap-4 pt-0'"
@@ -16,9 +16,9 @@
           class="object-cover h-40 w-full mx-auto"
           :src="imageUrl"
           :alt="title || 'image placeholder'"
-          placeholder="assets/imageHolder.svg"
+          placeholder="/assets/imageHolder.svg"
           loading="lazy"
-          onerror="this.src='assets/imageHolder.svg'"
+          onerror="this.onerror = null; this.src='/assets/imageHolder.svg'"
         />
       </div>
       <div
@@ -50,9 +50,9 @@
 
 <script setup lang="ts">
 const props = defineProps<{
+  docId: string | null;
   type: string;
   imageUrl: string | null;
-  docId: string | null;
   title: string | null;
   summary: string | null;
   info: string;

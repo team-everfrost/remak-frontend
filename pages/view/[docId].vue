@@ -1,15 +1,14 @@
 <template>
   <div>
-    <div class="flex h-screen w-screen flex-col">
+    <div class="flex h-screen flex-col">
+      <TopBar />
       <div class="flex flex-grow">
         <div
           class="mt-20 w-full bg-[#f4f6f8] flex-col justify-center items-center"
         >
-          <div
-            class="flex mt-20 flex-col justify-center items-center mb-[170px]"
-          >
-            <div class="flex flex-col">
-              <div class="flex justify-start items-start w-full">
+          <div class="flex mt-20 flex-col justify-center items-center mb-16">
+            <div class="flex flex-col w-full max-w-[995px]">
+              <div class="flex justify-start items-center w-full">
                 <button
                   class="flex flex-row justify-start items-center h-8 pl-2 pr-4"
                   @click="$router.back()"
@@ -20,7 +19,7 @@
                     viewBox="0 0 20 20"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    class="flex-grow-0 flex-shrink-0 w-5 h-5 relative"
+                    class="w-5 h-5"
                     preserveAspectRatio="xMidYMid meet"
                   >
                     <path
@@ -39,19 +38,37 @@
                 </button>
               </div>
               <div class="mt-[24px] w-full">
-                <AddAndViewMemoDetail v-show="docType === 'memo'" />
-                <AddAndViewLinkDetail v-show="docType === 'link'" />
-                <AddAndViewFileDetail v-show="docType === 'file'" />
+                <div v-if="!status">문서를 불러오는데 오류가 발생했습니다.</div>
+                <div v-else>
+                  <ViewDetail :document="document" />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <TopBar />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const docType = ref('file');
+import { useDocumentStore } from '~/stores/document';
+
+const route = useRoute();
+const documentStore = useDocumentStore();
+
+const docId = route.params.docId as string;
+const status = computed(() => {
+  if (document.value === false) return false;
+  return true;
+});
+const document = ref({} as any);
+
+const initialFetch = async () => {
+  document.value = await documentStore.fetchDocumentDetail(docId);
+};
+
+onMounted(() => {
+  initialFetch();
+});
 </script>

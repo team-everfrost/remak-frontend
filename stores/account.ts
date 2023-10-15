@@ -6,13 +6,10 @@ export const useAccountStore = defineStore('account', () => {
   const config = useRuntimeConfig();
   const apiBaseUrl = config.public.apiBaseUrl;
   const userInfo = ref({
-    uid: '',
     email: '',
     name: '',
     imageUrl: '',
     role: '',
-    createdAt: '',
-    updatedAt: '',
   });
 
   const getUserInfo = computed(() => () => {
