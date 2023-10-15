@@ -61,7 +61,6 @@ onMounted(() => {
 
 const collections = computed(() => {
   return collectionStore.getCollections().map((collection) => {
-    console.log(collection);
     return {
       name: collection.name,
       description: collection.description,

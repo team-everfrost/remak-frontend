@@ -12,6 +12,7 @@
     <button
       :class="buttonClass(2)"
       class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm"
+      @click="handleTagClick"
     >
       <img src="~/assets/icons/icon_tag.svg" alt="태그" />
       태그
@@ -47,6 +48,10 @@ const handleAccountClick = () => {
 
 const handleCollectionClick = () => {
   navigateTo('/collection');
+};
+
+const handleTagClick = () => {
+  navigateTo('/tag');
 };
 
 const buttonClass = (buttonNumber: number) => {

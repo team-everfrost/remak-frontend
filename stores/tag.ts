@@ -1,33 +1,31 @@
 import { useAuthStore } from './auth';
 
-export const useCollectionStore = defineStore('collection', () => {
+export const useTagStore = defineStore('tag', () => {
   const authStore = useAuthStore();
-  const endOfCollections = ref(false);
+  const endOfTags = ref(false);
   const config = useRuntimeConfig();
-
   const apiBaseUrl = config.public.apiBaseUrl;
 
-  const collections = ref([
+  const tags = ref([
     {
       name: '',
-      description: '',
       count: 0,
     },
   ]);
 
   const initalFetch = async () => {
-    collections.value = [];
-    return await fetchCollections();
+    tags.value = [];
+    return await fetchTags();
   };
 
-  const fetchCollections = async (offset?: number, limit?: number) => {
+  const fetchTags = async (query?: string, limit?: number, offset?: number) => {
     if (!authStore.isSignedIn) return false;
-    if (endOfCollections.value) return false;
+    if (endOfTags.value) return false;
 
-    const { data, error }: any = await useFetch('/collection', {
+    const { data, error }: any = await useFetch('/tag', {
       baseURL: apiBaseUrl,
       method: 'GET',
-      params: { offset, limit },
+      params: { query, limit, offset },
       headers: {
         accept: 'application/json',
         Authorization: `Bearer ${authStore.accessToken}`,
@@ -35,27 +33,27 @@ export const useCollectionStore = defineStore('collection', () => {
     });
 
     if (data.value && !error.value) {
-      collections.value.push(...data.value.data);
+      tags.value.push(...data.value.data);
       return true;
     }
 
     if (!error.value && data.value.data.length === 0) {
-      endOfCollections.value = true;
+      endOfTags.value = true;
       return true;
     }
 
     return false;
   };
 
-  const getCollections = computed(() => () => {
-    return collections.value;
+  const getTags = computed(() => () => {
+    return tags.value;
   });
 
   return {
-    collections,
-    endOfCollections,
-    fetchCollections,
-    getCollections,
+    tags,
+    endOfTags,
+    fetchTags,
+    getTags,
     initalFetch,
   };
 });
