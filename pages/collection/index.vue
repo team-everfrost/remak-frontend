@@ -26,6 +26,7 @@
             </p>
             <button
               class="flex justify-center items-center px-7 py-4 rounded-xl border border-[#e6e8eb] bg-white mt-4"
+              @click="open"
             >
               새 컬렉션 만들기
             </button>
@@ -78,7 +79,6 @@ const { open, close } = useModal({
     confirmButtonText: '확인',
     onConfirm() {
       close();
-      navigateTo('/');
     },
     onCancel() {
       close();

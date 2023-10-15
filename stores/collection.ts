@@ -47,6 +47,27 @@ export const useCollectionStore = defineStore('collection', () => {
     return false;
   };
 
+  const createCollection = async (name: string, description: string) => {
+    if (!authStore.isSignedIn) return false;
+    if (name === '') return false;
+
+    const { data, error }: any = await useFetch('/collection', {
+      baseURL: apiBaseUrl,
+      method: 'POST',
+      body: { name, description },
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    });
+
+    if (data.value && !error.value) {
+      initalFetch();
+      return true;
+    }
+    return false;
+  };
+
   const getCollections = computed(() => () => {
     return collections.value;
   });
@@ -57,5 +78,6 @@ export const useCollectionStore = defineStore('collection', () => {
     fetchCollections,
     getCollections,
     initalFetch,
+    createCollection,
   };
 });
