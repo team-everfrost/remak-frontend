@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen flex-col">
+  <div class="flex min-h-screen flex-col">
     <TopBar />
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="2" class="mt-20"> </SideNavigation>
