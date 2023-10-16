@@ -32,7 +32,7 @@
           </div>
           <div
             v-else
-            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-9 mb-9"
+            class="grid grid-cols-1 gap-6 lg:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-9 mb-9"
           >
             <TagCard
               v-for="(tag, index) in tags"

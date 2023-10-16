@@ -5,6 +5,7 @@
     <button
       :class="buttonClass(1)"
       class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm"
+      @click="handleSearchClick"
     >
       <svg
         width="28"
@@ -100,6 +101,10 @@
 const props = defineProps<{
   activeButton: number;
 }>();
+
+const handleSearchClick = () => {
+  navigateTo('/search');
+};
 
 const handleAccountClick = () => {
   navigateTo('/account');

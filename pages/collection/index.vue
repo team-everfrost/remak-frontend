@@ -1,10 +1,10 @@
 <template>
-  <div class="flex h-screen flex-col">
+  <div class="flex min-h-screen flex-col">
     <ModalsContainer />
     <TopBar />
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="3" class="mt-20"> </SideNavigation>
-      <div class="w-full bg-[#F4F6F8] ml-48 flex-col items-start mt-20">
+      <div class="bg-[#F4F6F8] ml-48 flex-col items-start mt-20 w-full">
         <div class="mx-20">
           <div class="flex w-full justify-between flex-row mt-20">
             <p class="font-bold text-[32px]">컬렉션</p>
@@ -33,7 +33,7 @@
           </div>
           <div
             v-else
-            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-9 mb-9"
+            class="grid grid-cols-1 gap-6 lg:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-9 mb-9"
           >
             <CollectionCard
               v-for="(collection, index) in collections"
@@ -51,8 +51,8 @@
 
 <script setup lang="ts">
 import { ModalsContainer, useModal } from 'vue-final-modal';
-import { useCollectionStore } from '~/stores/collection';
 import AddCollection from '~/components/AddCollection.vue';
+import { useCollectionStore } from '~/stores/collection';
 
 const collectionStore = useCollectionStore();
 
