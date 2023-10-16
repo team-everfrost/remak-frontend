@@ -1,7 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: false,
-  css: ['vue-final-modal/style.css'],
+  css: [
+    'vue-final-modal/style.css',
+    'highlight.js/styles/atom-one-dark-reasonable.css',
+  ],
   devtools: { enabled: true },
   modules: [
     '@nuxt/image',

@@ -170,7 +170,12 @@
 
 <script setup lang="ts">
 import { useResizeObserver } from '@vueuse/core';
+import hljs from 'highlight.js';
 import { useDocumentStore } from '~/stores/document';
+
+hljs.configure({
+  ignoreUnescapedHTML: true,
+});
 
 const props = defineProps<{
   document: {
@@ -256,6 +261,21 @@ const date = computed(() => {
 });
 
 const content = computed(() => {
+  if (props.document.type === 'WEBPAGE') {
+    // DOM으로 변환
+    const dom = new DOMParser().parseFromString(
+      props.document.content,
+      'text/html',
+    );
+
+    // 코드 하이라이팅
+    dom.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block as HTMLElement);
+    });
+
+    // 다시 문자열로 변환
+    return dom.body.innerHTML;
+  }
   return props.document.content;
 });
 
@@ -339,8 +359,10 @@ const fileDownload = async () => {
 };
 
 onMounted(() => {
-  if (textarea.value) textarea.value.value = props.document.content;
-  updatedText.value = props.document.content;
-  resizeTextarea();
+  if (props.document.type === 'MEMO' && textarea.value) {
+    textarea.value.value = props.document.content;
+    updatedText.value = props.document.content;
+    resizeTextarea();
+  }
 });
 </script>
