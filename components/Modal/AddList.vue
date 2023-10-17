@@ -98,43 +98,6 @@
     </button>
 
     <button
-      class="relative ml-4 mr-4 mt-6 flex w-[448px] items-center justify-between"
-    >
-      <div
-        class="relative flex flex-shrink-0 flex-grow-0 items-center justify-start gap-3"
-      >
-        <img src="~/assets/icons/icon_add_photo.svg" alt="링크 추가" />
-        <div
-          class="relative flex flex-shrink-0 flex-grow-0 flex-col items-start justify-start gap-1"
-        >
-          <p class="flex-grow0 flex-shrink-0 text-left text-sm font-bold">
-            사진
-          </p>
-          <p class="flex-shrink-0 flex-grow-0 text-left text-sm text-[#646f7c]">
-            jpg, png, gif 등을 지원해요
-          </p>
-        </div>
-      </div>
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        class="relative h-5 w-5 flex-shrink-0 flex-grow-0"
-        preserveAspectRatio="xMidYMid meet"
-      >
-        <path
-          d="M7.5 15L12.5 10L7.5 5"
-          stroke="#28323C"
-          stroke-width="1.66667"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></path>
-      </svg>
-    </button>
-
-    <button
       class="relative mb-6 ml-4 mr-4 mt-6 flex w-[448px] items-center justify-between"
       @click="emit('changeComponent', 'memo')"
     >

@@ -13,7 +13,7 @@
       <ModalAddLink @change-component="handleChangeComponent" />
     </div>
 
-    <div v-else-if="existType === 5">
+    <div v-else-if="existType === 4">
       <ModalAddMemo @change-component="handleChangeComponent" />
     </div>
   </VueFinalModal>
@@ -31,10 +31,8 @@ const handleChangeComponent = (componentName: string) => {
     existType.value = 2;
   } else if (componentName === 'file') {
     existType.value = 3;
-  } else if (componentName === 'image') {
-    existType.value = 4;
   } else if (componentName === 'memo') {
-    existType.value = 5;
+    existType.value = 4;
   } else if (componentName === 'cancel') {
     emit('cancel');
   }
