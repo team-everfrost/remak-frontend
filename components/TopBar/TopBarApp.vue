@@ -29,6 +29,8 @@ const { open, close } = useModal({
   component: AddDialog,
   attrs: {
     onCancel() {
+      console.log('cancel');
+
       close();
     },
   },

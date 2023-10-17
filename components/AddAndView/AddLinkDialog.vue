@@ -1,13 +1,8 @@
 <template>
-  <VueFinalModal
-    class="flex justify-center items-center"
-    content-class="flex w-full max-w-[480px] flex-col rounded-[20px] bg-white"
-    overlay-transition="vfm-fade"
-    content-transition="vfm-fade"
-  >
+  <div class="flex w-full max-w-[480px] flex-col rounded-[20px] bg-white">
     <div class="flex flex-row items-center justify-between pl-5 pr-3 pt-5">
       <p class="leading-18 text-lg font-bold text-[#1b1c1f]">추가하기</p>
-      <button @click="emit('cancel')">
+      <button @click="emit('changeComponent', 'cancel')">
         <svg
           width="24"
           height="24"
@@ -40,12 +35,11 @@
     >
       <p class="flex-grow text-center text-lg font-bold text-white">추가하기</p>
     </button>
-  </VueFinalModal>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { VueFinalModal } from 'vue-final-modal';
 const emit = defineEmits<{
-  (e: 'cancel' | 'confirm'): void;
+  (event: 'changeComponent', componentName: string): void;
 }>();
 </script>
