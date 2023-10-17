@@ -23,20 +23,33 @@
       </button>
     </div>
     <textarea
+      v-model="memo"
       placeholder="메모를 입력해주세요"
       class="ml-4 mr-4 mt-8 h-[278px] flex-grow resize-none self-stretch overflow-auto rounded-xl border border-[#e6e8eb] bg-[#fefefe] p-4 outline-none"
       rows="1"
     ></textarea>
 
     <button
+      :disabled="!memo"
+      :class="!memo ? 'bg-[#eee] text-[#C5C8CE]' : 'bg-[#1F8CE6] text-white'"
       class="mb-5 ml-5 mr-5 mt-6 flex h-[52px] flex-shrink-0 flex-grow-0 items-center justify-center self-stretch overflow-hidden rounded-xl bg-[#1f8ce6]"
+      @click="handleClick"
     >
-      <p class="flex-grow text-center text-lg font-bold text-white">저장하기</p>
+      <p class="flex-grow text-center text-lg font-bold">저장하기</p>
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useAddStore } from '~/stores/add';
+
+const addStore = useAddStore();
+const memo = ref('');
+const handleClick = () => {
+  addStore.addMemo(memo.value);
+  emit('changeComponent', 'cancel');
+};
+
 const emit = defineEmits<{
   (event: 'changeComponent', componentName: string): void;
 }>();

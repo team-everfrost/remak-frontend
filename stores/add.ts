@@ -11,7 +11,6 @@ export const useAddStore = defineStore('add', () => {
     if (!url) return false;
     const title = ref(' ');
     const content = ref(' ');
-
     const { data, error }: any = await useFetch('/document/webpage', {
       baseURL: apiBaseUrl,
       method: 'POST',
@@ -21,7 +20,25 @@ export const useAddStore = defineStore('add', () => {
         Authorization: `Bearer ${authStore.accessToken}`,
       },
     });
+    if (data.value && !error.value) {
+      return true;
+    }
+    return false;
+  };
 
+  const addMemo = async (content: string) => {
+    if (!authStore.isSignedIn) return false;
+    if (!content) return false;
+
+    const { data, error }: any = await useFetch('/document/memo', {
+      baseURL: apiBaseUrl,
+      method: 'POST',
+      body: { content },
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    });
     if (data.value && !error.value) {
       return true;
     }
@@ -30,5 +47,6 @@ export const useAddStore = defineStore('add', () => {
 
   return {
     addLink,
+    addMemo,
   };
 });
