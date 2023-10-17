@@ -73,10 +73,6 @@ const collections = computed(() => {
 const { open, close } = useModal({
   component: AddCollection,
   attrs: {
-    modalTitle: '로그아웃',
-    modalSubtitle: '정말 로그아웃 하시겠습니까?',
-    cancelButtonText: '취소',
-    confirmButtonText: '확인',
     onConfirm() {
       close();
     },

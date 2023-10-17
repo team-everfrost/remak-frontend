@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen flex-col">
     <ModalsContainer />
-    <TopBarBase />
+    <TopBarApp />
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="0" class="mt-20" />
       <div class="mt-20 flex-grow bg-[#F4F6F8] ml-48">

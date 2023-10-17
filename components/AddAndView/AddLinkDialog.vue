@@ -1,8 +1,13 @@
 <template>
-  <div class="relative flex w-[480px] flex-col rounded-[20px] bg-white">
+  <VueFinalModal
+    class="flex justify-center items-center"
+    content-class="flex w-full max-w-[480px] flex-col rounded-[20px] bg-white"
+    overlay-transition="vfm-fade"
+    content-transition="vfm-fade"
+  >
     <div class="flex flex-row items-center justify-between pl-5 pr-3 pt-5">
       <p class="leading-18 text-lg font-bold text-[#1b1c1f]">추가하기</p>
-      <button>
+      <button @click="emit('cancel')">
         <svg
           width="24"
           height="24"
@@ -24,16 +29,23 @@
     </div>
     <textarea
       placeholder="예시: www.naver.com, www.google.com..."
-      class="relative ml-4 mr-4 mt-8 h-[278px] flex-grow resize-none self-stretch overflow-auto rounded-xl border border-[#e6e8eb] bg-[#fefefe] p-4 outline-none"
+      class="ml-4 mr-4 mt-8 h-[278px] flex-grow resize-none self-stretch overflow-auto rounded-xl border border-[#e6e8eb] bg-[#fefefe] p-4 outline-none"
       rows="1"
     ></textarea>
-    <p class="relative ml-4 mr-4 mt-3 text-left text-sm text-[#646f7c]">
+    <p class="ml-4 mr-4 mt-3 text-left text-sm text-[#646f7c]">
       엔터 또는 ,로 구분하여 여러 링크를 추가하세요
     </p>
     <button
-      class="relative mb-5 ml-5 mr-5 mt-6 flex h-[52px] flex-shrink-0 flex-grow-0 items-center justify-center self-stretch overflow-hidden rounded-xl bg-[#1f8ce6]"
+      class="mb-5 ml-5 mr-5 mt-6 flex h-[52px] flex-shrink-0 flex-grow-0 items-center justify-center self-stretch overflow-hidden rounded-xl bg-[#1f8ce6]"
     >
       <p class="flex-grow text-center text-lg font-bold text-white">추가하기</p>
     </button>
-  </div>
+  </VueFinalModal>
 </template>
+
+<script setup lang="ts">
+import { VueFinalModal } from 'vue-final-modal';
+const emit = defineEmits<{
+  (e: 'cancel' | 'confirm'): void;
+}>();
+</script>
