@@ -6,11 +6,15 @@
     content-transition="vfm-fade"
   >
     <div v-if="existType === 1">
-      <AddAndViewDialogMain @change-component="handleChangeComponent" />
+      <ModalAddList @change-component="handleChangeComponent" />
     </div>
 
     <div v-else-if="existType === 2">
-      <AddAndViewAddLinkDialog @change-component="handleChangeComponent" />
+      <ModalAddLink @change-component="handleChangeComponent" />
+    </div>
+
+    <div v-else-if="existType === 5">
+      <ModalAddMemo @change-component="handleChangeComponent" />
     </div>
   </VueFinalModal>
 </template>
@@ -29,8 +33,9 @@ const handleChangeComponent = (componentName: string) => {
     existType.value = 3;
   } else if (componentName === 'image') {
     existType.value = 4;
+  } else if (componentName === 'memo') {
+    existType.value = 5;
   } else if (componentName === 'cancel') {
-    console.log('cancel');
     emit('cancel');
   }
 };

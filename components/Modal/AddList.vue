@@ -24,7 +24,7 @@
     </div>
     <button
       class="relative ml-4 mr-4 mt-10 flex w-[448px] items-center justify-between"
-      @click="$emit('changeComponent', 'link')"
+      @click="emit('changeComponent', 'link')"
     >
       <div
         class="relative flex flex-shrink-0 flex-grow-0 items-center justify-start gap-3"
@@ -136,6 +136,7 @@
 
     <button
       class="relative mb-6 ml-4 mr-4 mt-6 flex w-[448px] items-center justify-between"
+      @click="emit('changeComponent', 'memo')"
     >
       <div
         class="relative flex flex-shrink-0 flex-grow-0 items-center justify-start gap-3"

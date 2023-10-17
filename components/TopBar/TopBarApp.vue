@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { ModalsContainer, useModal } from 'vue-final-modal';
-import AddDialog from '../AddAndView/AddDialog.vue';
+import AddDialog from '../Modal/AddModal.vue';
 
 const { open, close } = useModal({
   component: AddDialog,
