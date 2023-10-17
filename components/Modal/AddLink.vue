@@ -29,7 +29,7 @@
       rows="1"
     ></textarea>
     <p class="ml-4 mr-4 mt-3 text-left text-sm text-[#646f7c]">
-      엔터 또는 ,로 구분하여 여러 링크를 추가하세요
+      엔터 또는 ,로 구분하여 여러 링크를 추가할 수 있어요
     </p>
     <button
       :disabled="!link"

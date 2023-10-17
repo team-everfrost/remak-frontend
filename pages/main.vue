@@ -6,7 +6,7 @@
       <SideNavigation :active-button="0" class="mt-20" />
       <div class="mt-20 flex-grow bg-[#F4F6F8] ml-48">
         <div class="flex flex-col m-20">
-          <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center justify-between">
             <p class="text-neutral-900 text-[32px] font-bold leading-[44.80px]">
               메인
             </p>
@@ -34,41 +34,53 @@
           </div>
           <div v-else-if="isInitialLoad === 'true'">
             <div
-              class="animate-pulse bg-[#e6e8eb] h-9 mb-7 w-24 rounded-lg"
+              class="animate-pulse bg-[#e6e8eb] h-9 mt-8 mb-7 w-24 rounded-lg"
             ></div>
-            <MasonryWall
-              :items="Array(20).fill({})"
-              :column-width="258"
-              :gap="16"
-            >
-              <template #default="{ index }">
-                <MainSkeletonCard :image="index % 5 ? true : false" />
-              </template>
-            </MasonryWall>
-          </div>
-          <div v-else class="">
             <div
-              class="text-neutral-900 text-2xl font-bold leading-normal mb-7"
+              class="animate-pulse gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             >
-              오늘
+              <MainSkeletonCard
+                v-for="number in [...Array(10).keys()].map((i) => i + 1)"
+                :key="number"
+                :image="true"
+              />
             </div>
-            <MasonryWall :items="documentCards" :column-width="258" :gap="16">
-              <template #default="{ item }">
-                <MainDocumentCard
-                  :type="item.type"
-                  :image-url="item.imageUrl"
-                  :doc-id="item.docId"
-                  :title="item.title"
-                  :summary="item.summary"
-                  :info="item.info"
-                />
-              </template>
-            </MasonryWall>
+          </div>
+          <div v-else class="flex flex-col">
+            <div
+              v-for="list in [
+                { title: '오늘', docs: todayDocuments },
+                { title: '최근 일주일', docs: last7daysDocuments },
+                { title: '최근 한 달', docs: last30daysDocuments },
+                { title: '전체', docs: olderDocuments },
+              ]"
+              :key="list.title"
+            >
+              <div v-if="list.docs.length > 0">
+                <div
+                  class="mt-8 text-neutral-900 text-2xl font-bold leading-normal mb-7"
+                >
+                  {{ list.title }}
+                </div>
+                <MasonryWall :items="list.docs" :column-width="258" :gap="16">
+                  <template #default="{ item }">
+                    <MainDocumentCard
+                      :type="item.type"
+                      :image-url="item.imageUrl"
+                      :doc-id="item.docId"
+                      :title="item.title"
+                      :summary="item.summary"
+                      :info="item.info"
+                    />
+                  </template>
+                </MasonryWall>
+              </div>
+            </div>
           </div>
           <div
             v-if="!isEndOfDocuments"
             ref="loadObserverTarget"
-            class="bottom-0 -z-50 h-96 w-full -mt-96"
+            class="bottom-0 -z-50 h-[500px] w-full -mt-[500px]"
           ></div>
           <div class="fixed bottom-4 right-4 z-10">
             <button
@@ -109,15 +121,20 @@ defineComponent({
 
 const isInitialLoad = ref('true');
 const isEndOfDocuments = computed(() => {
-  return documentStore.getEndOfDocuments();
+  return documentStore.isEndOfDocuments();
 });
 const loadObserverTarget = ref<HTMLElement | null>(null);
 const loadObserver = ref<IntersectionObserver | null>(null);
 const isLoading = ref(false);
 const documentStore = useDocumentStore();
 
+const todayDocuments = ref([] as any[]);
+const last7daysDocuments = ref([] as any[]);
+const last30daysDocuments = ref([] as any[]);
+const olderDocuments = ref([] as any[]);
+
 onMounted(() => {
-  initFetch();
+  initLoad();
 });
 
 onMounted(() => {
@@ -133,31 +150,99 @@ onMounted(() => {
       threshold: 0.1,
     },
   );
-  loadObserver.value?.observe(loadObserverTarget.value!);
+  if (loadObserverTarget.value)
+    loadObserver.value?.observe(loadObserverTarget.value);
 });
 
 onUnmounted(() => {
-  loadObserver.value?.disconnect();
+  if (loadObserverTarget.value) loadObserver.value?.disconnect();
 });
 
-const initFetch = async () => {
+const initLoad = async () => {
   isLoading.value = true;
-  isInitialLoad.value = (await documentStore.initialFetch())
-    ? 'false'
-    : 'error';
+  const result = await documentStore.fetchCached();
+  if (!result) {
+    isInitialLoad.value = 'error';
+    isLoading.value = false;
+    return;
+  }
+  const docs = splitDocuments(documentsParser(result));
+
+  todayDocuments.value = docs.today;
+  last7daysDocuments.value = docs.last7days;
+  last30daysDocuments.value = docs.last30days;
+  olderDocuments.value = docs.older;
+
+  isInitialLoad.value = 'false';
   isLoading.value = false;
 };
 
 const loadMore = async () => {
   if (isLoading.value || isEndOfDocuments.value) return;
-
   isLoading.value = true;
-  await documentStore.fetchMore();
+
+  const olderDocs = await documentStore.fetchMore();
+  if (!olderDocs) {
+    isLoading.value = false;
+    return;
+  }
+
+  const docs = splitDocuments(documentsParser(olderDocs));
+
+  if (docs.today.length)
+    todayDocuments.value = [...todayDocuments.value, ...docs.today];
+  if (docs.last7days.length)
+    last7daysDocuments.value = [...last7daysDocuments.value, ...docs.last7days];
+  if (docs.last30days.length)
+    last30daysDocuments.value = [
+      ...last30daysDocuments.value,
+      ...docs.last30days,
+    ];
+  if (docs.older.length)
+    olderDocuments.value = [...olderDocuments.value, ...docs.older];
+
   isLoading.value = false;
 };
 
-const documentCards = computed(() => {
-  return documentStore.getDocuments().map((document) => ({
+const splitDocuments = (documents: any[]) => {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const oneDay = 24 * 60 * 60 * 1000;
+
+  const docs: {
+    today: any[];
+    last7days: any[];
+    last30days: any[];
+    older: any[];
+  } = {
+    today: [],
+    last7days: [],
+    last30days: [],
+    older: [],
+  };
+
+  for (const doc of documents) {
+    const updatedAt = new Date(doc.updatedAt);
+    updatedAt.setHours(0, 0, 0, 0);
+    const diffTime = today.getTime() - updatedAt.getTime();
+
+    if (diffTime < oneDay) {
+      docs.today.push(doc);
+    } else if (diffTime < oneDay * 7) {
+      docs.last7days.push(doc);
+    } else if (diffTime < oneDay * 30) {
+      docs.last30days.push(doc);
+    } else {
+      docs.older.push(doc);
+    }
+  }
+
+  return docs;
+};
+
+const documentsParser = (documents: any[]) => {
+  if (!documents) return [];
+  return documents.map((document: any) => ({
     type: document.type,
     imageUrl: document.thumbnailUrl,
     docId: document.docId,
@@ -169,8 +254,9 @@ const documentCards = computed(() => {
       document.summary,
     ),
     info: info(document.type, document.url, document.updatedAt),
+    updatedAt: document.updatedAt,
   }));
-});
+};
 
 const summary = (
   type: string,

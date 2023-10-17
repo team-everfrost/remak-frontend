@@ -75,7 +75,7 @@
             파일
           </p>
           <p class="flex-shrink-0 flex-grow-0 text-left text-sm text-[#646f7c]">
-            pdf, txt의 요약을 지원해요
+            pdf, txt와 이미지의 요약을 지원해요
           </p>
         </div>
       </div>
