@@ -13,6 +13,10 @@
       <ModalAddLink @change-component="handleChangeComponent" />
     </div>
 
+    <div v-else-if="existType === 3">
+      <ModalAddFile @change-component="handleChangeComponent" />
+    </div>
+
     <div v-else-if="existType === 4">
       <ModalAddMemo @change-component="handleChangeComponent" />
     </div>

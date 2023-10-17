@@ -2,7 +2,7 @@
   <div class="relative flex w-[480px] flex-col rounded-[20px] bg-white">
     <div class="flex flex-row items-center justify-between pl-5 pr-3 pt-5">
       <p class="leading-18 text-lg font-bold text-[#1b1c1f]">추가하기</p>
-      <button>
+      <button @click="emit('changeComponent', 'cancel')">
         <svg
           width="24"
           height="24"
@@ -73,7 +73,7 @@
       </div>
     </div>
     <div
-      class="relative ml-4 mr-4 flex flex-shrink-0 flex-grow-0 items-center justify-between rounded py-3"
+      class="relative ml-4 mt-4 mr-4 flex flex-shrink-0 flex-grow-0 items-center justify-between rounded py-3"
     >
       <p
         class="flex-shrink-0 flex-grow-0 text-left text-sm font-bold text-[#28323c]"
@@ -110,3 +110,9 @@
     </button>
   </div>
 </template>
+
+<script setup lang="ts">
+const emit = defineEmits<{
+  (event: 'changeComponent', componentName: string): void;
+}>();
+</script>

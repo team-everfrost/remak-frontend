@@ -62,6 +62,7 @@
 
     <button
       class="relative ml-4 mr-4 mt-6 flex w-[448px] items-center justify-between"
+      @click="emit('changeComponent', 'file')"
     >
       <div
         class="relative flex flex-shrink-0 flex-grow-0 items-center justify-start gap-3"
