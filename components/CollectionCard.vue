@@ -1,7 +1,7 @@
 <template>
   <button>
     <div
-      class="flex min-h-[124px] min-w-[140px] max-w-[258px] overflow-hidden rounded-2xl border border-[#e6e8eb] bg-white"
+      class="flex min-h-[124px] min-w-[140px] overflow-hidden rounded-2xl border border-[#e6e8eb] bg-white"
       style="
         box-shadow:
           0px 0px 1px 0 rgba(65, 74, 82, 0.04),
