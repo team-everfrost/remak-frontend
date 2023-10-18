@@ -2,7 +2,7 @@
   <div>
     <TopBarBase />
     <div class="flex min-h-screen items-center justify-center bg-white">
-      <div class="text-center">
+      <div v-auto-animate class="text-center">
         <div class="mb-4 text-2xl font-bold">
           <span class="text-sky-500">쉽다, 빠르다, 편리하다 </span>
           <span class="text-gray-800">Remak</span>
@@ -26,7 +26,7 @@
           >
         </div>
         <input
-          v-show="showPasswordInput"
+          v-if="showPasswordInput"
           ref="passwordInput"
           v-model="password"
           type="password"

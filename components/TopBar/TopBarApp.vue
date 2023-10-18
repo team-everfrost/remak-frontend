@@ -2,14 +2,14 @@
   <ModalsContainer />
 
   <div
-    class="fixed left-0 top-0 flex h-20 w-full items-center border-b border-gray-300 bg-topbar-background pl-6"
+    class="fixed left-0 top-0 flex h-20 w-full items-center border-b border-gray-300 bg-topbar-background px-6"
   >
     <NuxtLink to="/">
       <img src="~/assets/logo.svg" alt="logo" />
     </NuxtLink>
     <div class="flex flex-grow"></div>
     <button
-      class="relative flex h-9 flex-shrink-0 flex-grow-0 items-center justify-center rounded-md bg-[#1f8ce6] px-4 mr-7"
+      class="relative flex h-9 flex-shrink-0 w-20 items-center justify-center rounded-md bg-[#1f8ce6]"
       @click="open"
     >
       <p
@@ -29,8 +29,6 @@ const { open, close } = useModal({
   component: AddDialog,
   attrs: {
     onCancel() {
-      console.log('cancel');
-
       close();
     },
   },

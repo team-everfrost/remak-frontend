@@ -9,17 +9,18 @@
           0px 2px 4px 0 rgba(102, 110, 119, 0.16);
       "
     >
-      <div class="w-full bg-[#F4F6F8]">
+      <div class="w-full bg-[#F4F6F8] rounded-t-2xl">
         <img
           v-if="imageUrl"
           sizes="100vw"
           class="object-cover h-40 w-full mx-auto"
           :src="imageUrl"
           :alt="title || 'image placeholder'"
-          placeholder="/assets/imageHolder.svg"
+          placeholder="~/assets/imageHolder.svg"
           loading="lazy"
-          onerror="this.onerror = null; this.src='/assets/imageHolder.svg'"
+          onerror="this.onerror = null; this.src = '/image/imageHolder.svg';"
         />
+        <!-- 이미지 로딩 실패시 대체 이미지 경로 문제로 public에 지정 -->
       </div>
       <div
         class="flex flex-col items-start justify-start gap-5 mx-3.5 break-all"

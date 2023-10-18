@@ -2,9 +2,10 @@
   <div>
     <div class="flex h-screen flex-col">
       <TopBar />
-      <div class="flex flex-grow">
+      <div class="flex flex-grow overflow-hidden">
         <div
-          class="mt-20 w-full bg-[#f4f6f8] flex-col justify-center items-center"
+          ref="scrollContainer"
+          class="mt-20 w-full bg-[#f4f6f8] flex-col justify-center items-center overflow-y-auto"
         >
           <div class="flex mt-20 flex-col justify-center items-center mb-16">
             <div class="flex flex-col w-full max-w-[995px]">
@@ -38,13 +39,19 @@
                 </button>
               </div>
               <div class="mt-[24px] w-full">
-                <div v-if="!status">문서를 불러오는데 오류가 발생했습니다.</div>
+                <div v-if="!hasError">
+                  문서를 불러오는데 오류가 발생했습니다.
+                </div>
+                <div v-else-if="isLoading">
+                  <ViewSkeletonDetail />
+                </div>
                 <div v-else>
                   <ViewDetail :document="document" />
                 </div>
               </div>
             </div>
           </div>
+          <ScrollTop :scroll-container="scrollContainer" />
         </div>
       </div>
     </div>
@@ -54,11 +61,14 @@
 <script setup lang="ts">
 import { useDocumentStore } from '~/stores/document';
 
+const scrollContainer = ref<HTMLElement | null>(null);
+
 const route = useRoute();
 const documentStore = useDocumentStore();
 
 const docId = route.params.docId as string;
-const status = computed(() => {
+const isLoading = ref(true);
+const hasError = computed(() => {
   if (document.value === false) return false;
   return true;
 });
@@ -66,6 +76,7 @@ const document = ref({} as any);
 
 const initialFetch = async () => {
   document.value = await documentStore.fetchDocumentDetail(docId);
+  isLoading.value = false;
 };
 
 onMounted(() => {
