@@ -5,14 +5,18 @@
     <div class="flex w-full flex-col justify-start">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start gap-2">
-          <p class="text-left text-sm font-medium text-[#646f7c]">
+          <p class="text-left text-sm font-medium text-[#646f7c] flex-shrink-0">
             {{ typeKorean }}
           </p>
           <div class="h-3 w-px bg-[#646f7c]"></div>
-          <p class="text-left text-sm font-medium text-[#646f7c]">{{ date }}</p>
+          <p class="text-left text-sm font-medium text-[#646f7c] flex-shrink-0">
+            {{ date }}
+          </p>
           <div class="h-3 w-px bg-[#646f7c]"></div>
           <NuxtLink :to="props.document.url" target="_blank">
-            <p class="text-left text-sm font-medium text-[#646f7c]">
+            <p
+              class="text-left text-sm font-medium text-[#646f7c] line-clamp-1"
+            >
               {{ props.document.url }}
             </p>
           </NuxtLink>
@@ -67,11 +71,11 @@
       >
         <img
           sizes="100vw"
-          class="object-cover h-full w-full mx-auto"
+          class="object-cover h-full w-full mx-auto rounded-xl"
           :src="props.document.thumbnailUrl"
           :alt="props.document.title || 'image placeholder'"
-          placeholder="/assets/imageHolder.svg"
-          onerror="this.onerror = null; this.src='/assets/imageHolder.svg'"
+          placeholder="~/assets/imageHolder.svg"
+          onerror="this.onerror = null; this.src = '/image/imageHolder.svg'"
         />
       </div>
       <NuxtLink :to="props.document.url" target="_blank">
@@ -86,23 +90,17 @@
         <ViewTagList :tags="props.document.tags" />
       </div>
       <div v-if="props.document.type !== 'MEMO'">
-        <p class="mt-9 mb-4 text-left text-base font-bold text-[#28323c]">
-          요약
-        </p>
+        <p class="mt-9 mb-4 text-left text-lg font-bold text-[#28323c]">요약</p>
         <div
           class="flex items-start justify-start gap-2.5 self-stretch rounded-xl border border-[#e6e8eb] bg-[#fefefe] px-4 py-5"
         >
-          <p class="flex-grow text-left text-sm font-medium text-[#111]">
+          <p class="flex-grow text-left text-md font-medium text-[#111]">
             {{ summary }}
           </p>
         </div>
       </div>
       <div v-if="props.document.type === 'WEBPAGE'">
-        <p
-          class="mt-6 mb-4 flex-shrink-0 flex-grow-0 text-left text-base font-bold text-[#28323c]"
-        >
-          본문
-        </p>
+        <p class="mt-6 mb-4 text-left text-lg font-bold text-[#28323c]">본문</p>
         <div
           v-dompurify-html="content"
           class="prose md:prose-lg lg:prose-xl max-w-none"

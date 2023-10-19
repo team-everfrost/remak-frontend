@@ -4,12 +4,38 @@
     <TopBarApp />
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="0" class="mt-20" />
-      <div class="mt-20 flex-grow bg-[#F4F6F8] ml-48">
-        <div class="flex flex-col m-20">
-          <div class="flex items-center justify-between">
+      <main class="mt-20 flex flex-grow bg-[#F4F6F8] ml-48">
+        <div class="flex flex-grow flex-col m-20">
+          <div class="flex items-center gap-4">
             <p class="text-neutral-900 text-[32px] font-bold leading-[44.80px]">
               메인
             </p>
+            <div class="flex-grow"></div>
+            <button
+              ref="updateBtn"
+              class="h-8 w-8"
+              :disabled="isLoading"
+              @click="cleanLoad()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="28"
+                viewBox="0 -960 960 960"
+                width="28"
+                :class="
+                  isLoading
+                    ? 'animate-spin text-gray-400'
+                    : hasError
+                    ? 'text-red-500'
+                    : ''
+                "
+                fill="currentColor"
+              >
+                <path
+                  d="M482-160q-134 0-228-93t-94-227v-7l-64 64-56-56 160-160 160 160-56 56-64-64v7q0 100 70.5 170T482-240q26 0 51-6t49-18l60 60q-38 22-78 33t-82 11Zm278-161L600-481l56-56 64 64v-7q0-100-70.5-170T478-720q-26 0-51 6t-49 18l-60-60q38-22 78-33t82-11q134 0 228 93t94 227v7l64-64 56 56-160 160Z"
+                />
+              </svg>
+            </button>
             <button
               class="h-8 w-[78px] rounded-md bg-gray-600 text-base font-medium text-white"
             >
@@ -46,6 +72,13 @@
               />
             </div>
           </div>
+          <div v-else-if="!loadedDocumentsCount" class="flex flex-grow">
+            <NoItemBox
+              :discription="'등록된 자료가 없어요'"
+              :button-text="'새 자료 등록하기'"
+              :open="open"
+            />
+          </div>
           <div v-else class="flex flex-col">
             <div
               v-for="list in [
@@ -56,7 +89,7 @@
               ]"
               :key="list.title"
             >
-              <div v-if="list.docs.length > 0">
+              <div v-show="list.docs.length > 0">
                 <div
                   class="mt-8 text-neutral-900 text-2xl font-bold leading-normal mb-7"
                 >
@@ -82,40 +115,31 @@
             ref="loadObserverTarget"
             class="bottom-0 -z-50 h-[500px] w-full -mt-[500px]"
           ></div>
-          <div class="fixed bottom-4 right-4 z-10">
-            <button
-              onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
-              class="h-10 w-10 bg-white border border-gray-200 text-gray-500 rounded-full flex items-center justify-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class=""
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"
-                />
-              </svg>
-            </button>
-          </div>
+          <ScrollTop />
         </div>
-      </div>
+      </main>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import MasonryWall from '@yeger/vue-masonry-wall';
-import { ModalsContainer } from 'vue-final-modal';
+import { ModalsContainer, useModal } from 'vue-final-modal';
+import AddDialog from '~/components/Modal/AddModal.vue';
 import { useDocumentStore } from '~/stores/document';
 
 defineComponent({
   components: {
     MasonryWall,
+  },
+});
+
+const { open, close } = useModal({
+  component: AddDialog,
+  attrs: {
+    onCancel() {
+      close();
+    },
   },
 });
 
@@ -125,8 +149,22 @@ const isEndOfDocuments = computed(() => {
 });
 const loadObserverTarget = ref<HTMLElement | null>(null);
 const loadObserver = ref<IntersectionObserver | null>(null);
+const updateBtn = ref<HTMLElement | null>(null);
+const updateObserver = ref<IntersectionObserver | null>(null);
+const shouldUpdate = ref(false);
+
 const isLoading = ref(false);
+const hasError = ref(false);
 const documentStore = useDocumentStore();
+
+const loadedDocumentsCount = computed(() => {
+  return (
+    todayDocuments.value.length +
+    last7daysDocuments.value.length +
+    last30daysDocuments.value.length +
+    olderDocuments.value.length
+  );
+});
 
 const todayDocuments = ref([] as any[]);
 const last7daysDocuments = ref([] as any[]);
@@ -135,28 +173,63 @@ const olderDocuments = ref([] as any[]);
 
 onMounted(() => {
   initLoad();
-});
-
-onMounted(() => {
-  loadObserver.value = new IntersectionObserver(
-    (entries) => {
-      if (entries[0].isIntersecting) {
-        loadMore();
-      }
-    },
-    {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1,
-    },
-  );
-  if (loadObserverTarget.value)
-    loadObserver.value?.observe(loadObserverTarget.value);
+  setObserver();
 });
 
 onUnmounted(() => {
-  if (loadObserverTarget.value) loadObserver.value?.disconnect();
+  unsetObserver();
 });
+
+onActivated(() => {
+  setObserver();
+  if (shouldUpdate.value) {
+    initLoad();
+  }
+});
+
+onDeactivated(() => {
+  unsetObserver();
+});
+
+const setObserver = () => {
+  if (!loadObserver.value)
+    loadObserver.value = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1,
+      },
+    );
+  if (loadObserverTarget.value)
+    loadObserver.value?.observe(loadObserverTarget.value);
+
+  if (!updateObserver.value)
+    updateObserver.value = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          shouldUpdate.value = true;
+        } else {
+          shouldUpdate.value = false;
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 1,
+      },
+    );
+  if (updateBtn.value) updateObserver.value?.observe(updateBtn.value);
+};
+
+const unsetObserver = () => {
+  if (loadObserverTarget.value) loadObserver.value?.disconnect();
+  if (updateBtn.value) updateObserver.value?.disconnect();
+};
 
 const initLoad = async () => {
   isLoading.value = true;
@@ -164,6 +237,7 @@ const initLoad = async () => {
   if (!result) {
     isInitialLoad.value = 'error';
     isLoading.value = false;
+    hasError.value = true;
     return;
   }
   const docs = splitDocuments(documentsParser(result));
@@ -175,6 +249,28 @@ const initLoad = async () => {
 
   isInitialLoad.value = 'false';
   isLoading.value = false;
+  hasError.value = false;
+
+  if (shouldUpdate) cleanLoad();
+};
+
+const cleanLoad = async () => {
+  isLoading.value = true;
+  const result = await documentStore.cleanFetch();
+  if (!result) {
+    isLoading.value = false;
+    hasError.value = true;
+    return;
+  }
+  const docs = splitDocuments(documentsParser(result));
+
+  todayDocuments.value = docs.today;
+  last7daysDocuments.value = docs.last7days;
+  last30daysDocuments.value = docs.last30days;
+  olderDocuments.value = docs.older;
+
+  isLoading.value = false;
+  hasError.value = false;
 };
 
 const loadMore = async () => {
@@ -202,6 +298,7 @@ const loadMore = async () => {
     olderDocuments.value = [...olderDocuments.value, ...docs.older];
 
   isLoading.value = false;
+  hasError.value = false;
 };
 
 const splitDocuments = (documents: any[]) => {

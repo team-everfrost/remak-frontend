@@ -13,9 +13,9 @@
         v-if="image"
         sizes="100vw"
         class="object-cover h-40 w-full mx-auto"
-        src="assets/imageHolder.svg"
+        src="~/assets/imageHolder.svg"
         alt="image placeholder"
-        placeholder="assets/imageHolder.svg"
+        placeholder="~/assets/imageHolder.svg"
         loading="lazy"
       />
     </div>

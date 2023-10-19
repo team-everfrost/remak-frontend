@@ -35,6 +35,7 @@ export const useDocumentStore = defineStore(
 
     const cleanFetch = async () => {
       documents.value = [];
+      endOfDocuments.value = false;
       return await fetchDocuments();
     };
 

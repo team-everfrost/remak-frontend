@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  tags: [];
+  tags: string[];
 }>();
 
 const tags = computed(() => {

@@ -40,6 +40,7 @@
     "vue": "latest"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.8.0",
     "@nuxt/image": "^1.0.0-rc.3",
     "@pinia/nuxt": "^0.4.4",
     "@yeger/vue-masonry-wall": "^5.0.2",

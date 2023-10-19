@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@vueuse/nuxt',
+    '@formkit/auto-animate/nuxt',
   ],
   pinia: {
     autoImports: ['defineStore', 'acceptHMRUpdate'],

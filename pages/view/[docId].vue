@@ -38,13 +38,19 @@
                 </button>
               </div>
               <div class="mt-[24px] w-full">
-                <div v-if="!status">문서를 불러오는데 오류가 발생했습니다.</div>
+                <div v-if="!hasError">
+                  문서를 불러오는데 오류가 발생했습니다.
+                </div>
+                <div v-else-if="isLoading">
+                  <ViewSkeletonDetail />
+                </div>
                 <div v-else>
                   <ViewDetail :document="document" />
                 </div>
               </div>
             </div>
           </div>
+          <ScrollTop />
         </div>
       </div>
     </div>
@@ -58,7 +64,8 @@ const route = useRoute();
 const documentStore = useDocumentStore();
 
 const docId = route.params.docId as string;
-const status = computed(() => {
+const isLoading = ref(true);
+const hasError = computed(() => {
   if (document.value === false) return false;
   return true;
 });
@@ -66,6 +73,7 @@ const document = ref({} as any);
 
 const initialFetch = async () => {
   document.value = await documentStore.fetchDocumentDetail(docId);
+  isLoading.value = false;
 };
 
 onMounted(() => {

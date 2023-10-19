@@ -116,7 +116,6 @@ const checkCode = async () => {
       authStore.registerPage = 3;
     } else {
       isValidCode.value = false;
-      console.log('인증번호가 일치하지 않습니다.');
     }
   }
 };
