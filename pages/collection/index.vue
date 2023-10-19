@@ -1,12 +1,12 @@
 <template>
-  <div class="flex min-h-screen flex-col">
+  <div class="flex h-screen flex-col">
     <ModalsContainer />
     <TopBar />
-    <div class="flex flex-grow flex-row">
+    <div class="flex flex-grow">
       <SideNavigation :active-button="3" class="mt-20"> </SideNavigation>
-      <div class="bg-[#F4F6F8] ml-48 flex-col items-start mt-20 w-full">
-        <div class="mx-20">
-          <div class="flex w-full justify-between flex-row mt-20">
+      <div class="bg-[#F4F6F8] ml-48 mt-20 flex flex-grow">
+        <div class="m-20 flex flex-grow flex-col">
+          <div class="flex w-full justify-between flex-row">
             <p class="font-bold text-[32px]">컬렉션</p>
             <button
               v-if="collections.length > 0"
@@ -16,20 +16,12 @@
               추가하기
             </button>
           </div>
-          <div
-            v-if="collections.length === 0"
-            class="flex w-full justify-center mt-32 flex-col items-center mb-40"
-          >
-            <img src="~/assets/empty_box.svg" alt="컬렉션" />
-            <p class="text-lg text-center text-[#646f7c] mt-6">
-              등록된 컬렉션이 없어요
-            </p>
-            <button
-              class="flex justify-center items-center px-7 py-4 rounded-xl border border-[#e6e8eb] bg-white mt-4"
-              @click="open"
-            >
-              새 컬렉션 만들기
-            </button>
+          <div v-if="collections.length === 0" class="flex flex-grow">
+            <NoItemBox
+              :discription="'등록된 컬렉션이 없어요'"
+              :button-text="'새 컬렉션 만들기'"
+              :open="open"
+            />
           </div>
           <div
             v-else
@@ -43,6 +35,7 @@
               :count="collection.count"
             />
           </div>
+          <ScrollTop />
         </div>
       </div>
     </div>

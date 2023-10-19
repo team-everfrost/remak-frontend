@@ -45,6 +45,10 @@ export const useAuthStore = defineStore(
       useFetch('/auth/local/logout', {
         baseURL: apiBaseUrl,
         method: 'POST',
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${accessToken.value}`,
+        },
       });
 
       accessToken.value = '';

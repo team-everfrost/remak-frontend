@@ -2,10 +2,9 @@
   <div>
     <div class="flex h-screen flex-col">
       <TopBar />
-      <div class="flex flex-grow overflow-hidden">
+      <div class="flex flex-grow">
         <div
-          ref="scrollContainer"
-          class="mt-20 w-full bg-[#f4f6f8] flex-col justify-center items-center overflow-y-auto"
+          class="mt-20 w-full bg-[#f4f6f8] flex-col justify-center items-center"
         >
           <div class="flex mt-20 flex-col justify-center items-center mb-16">
             <div class="flex flex-col w-full max-w-[995px]">
@@ -51,7 +50,7 @@
               </div>
             </div>
           </div>
-          <ScrollTop :scroll-container="scrollContainer" />
+          <ScrollTop />
         </div>
       </div>
     </div>
@@ -60,8 +59,6 @@
 
 <script setup lang="ts">
 import { useDocumentStore } from '~/stores/document';
-
-const scrollContainer = ref<HTMLElement | null>(null);
 
 const route = useRoute();
 const documentStore = useDocumentStore();

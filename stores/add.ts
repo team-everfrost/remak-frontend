@@ -6,7 +6,6 @@ export const useAddStore = defineStore('add', () => {
   const apiBaseUrl = config.public.apiBaseUrl;
 
   const addLink = async (url: string) => {
-    console.log(url);
     if (!authStore.isSignedIn) return false;
     if (!url) return false;
     const title = ref(' ');

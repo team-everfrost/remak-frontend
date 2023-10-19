@@ -3,9 +3,9 @@
     <TopBar />
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="2" class="mt-20"> </SideNavigation>
-      <div class="w-full bg-[#F4F6F8] ml-48 flex-col items-start mt-20">
-        <div class="mx-20">
-          <div class="flex w-full justify-between flex-row mt-20">
+      <div class="w-full bg-[#F4F6F8] ml-48 flex grow mt-20">
+        <div class="m-20 flex flex-col grow">
+          <div class="flex w-full justify-between grow">
             <p class="font-bold text-[32px]">태그</p>
           </div>
           <div
@@ -21,14 +21,13 @@
               @input="onInput"
             />
           </div>
-          <div
-            v-if="!isTagExists"
-            class="flex w-full justify-center mt-32 flex-col items-center mb-40"
-          >
-            <img src="~/assets/empty_box.svg" alt="컬렉션" />
-            <p class="text-lg text-center text-[#646f7c] mt-6">
-              태그가 없습니다
-            </p>
+          <div v-if="!isTagExists" class="flex grow">
+            <div class="flex w-full justify-center flex-col items-center">
+              <img src="~/assets/empty_box.svg" alt="컬렉션" />
+              <p class="text-lg text-center text-[#646f7c] mt-6">
+                생성된 태그가 아직 없어요
+              </p>
+            </div>
           </div>
           <div
             v-else

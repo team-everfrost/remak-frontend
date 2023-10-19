@@ -2,13 +2,10 @@
   <div class="flex h-screen flex-col">
     <ModalsContainer />
     <TopBarApp />
-    <div class="flex flex-grow flex-row overflow-hidden">
+    <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="0" class="mt-20" />
-      <main
-        ref="scrollContainer"
-        class="mt-20 flex flex-grow bg-[#F4F6F8] ml-48 overflow-y-auto"
-      >
-        <div class="flex flex-col m-20">
+      <main class="mt-20 flex flex-grow bg-[#F4F6F8] ml-48">
+        <div class="flex flex-grow flex-col m-20">
           <div class="flex items-center gap-4">
             <p class="text-neutral-900 text-[32px] font-bold leading-[44.80px]">
               메인
@@ -75,20 +72,12 @@
               />
             </div>
           </div>
-          <div
-            v-else-if="!loadedDocumentsCount"
-            class="flex w-full justify-center mt-32 flex-col items-center mb-40"
-          >
-            <img src="~/assets/empty_box.svg" alt="컬렉션" />
-            <p class="text-lg text-center text-[#646f7c] mt-6">
-              등록된 자료가 없어요
-            </p>
-            <button
-              class="flex justify-center items-center px-7 py-4 rounded-xl border border-[#e6e8eb] bg-white mt-4"
-              @click="open"
-            >
-              새 자료 등록하기
-            </button>
+          <div v-else-if="!loadedDocumentsCount" class="flex flex-grow">
+            <NoItemBox
+              :discription="'등록된 자료가 없어요'"
+              :button-text="'새 자료 등록하기'"
+              :open="open"
+            />
           </div>
           <div v-else class="flex flex-col">
             <div
@@ -106,12 +95,7 @@
                 >
                   {{ list.title }}
                 </div>
-                <MasonryWall
-                  :items="list.docs"
-                  :column-width="258"
-                  :gap="16"
-                  :scroll-container="scrollContainer"
-                >
+                <MasonryWall :items="list.docs" :column-width="258" :gap="16">
                   <template #default="{ item }">
                     <MainDocumentCard
                       :type="item.type"
@@ -131,7 +115,7 @@
             ref="loadObserverTarget"
             class="bottom-0 -z-50 h-[500px] w-full -mt-[500px]"
           ></div>
-          <ScrollTop :scroll-container="scrollContainer" />
+          <ScrollTop />
         </div>
       </main>
     </div>
@@ -158,9 +142,6 @@ const { open, close } = useModal({
     },
   },
 });
-
-const scrollContainer = ref<HTMLElement | null>(null);
-const savedScrollTop = ref(0);
 
 const isInitialLoad = ref('true');
 const isEndOfDocuments = computed(() => {

@@ -1,8 +1,8 @@
 <template>
-  <div class="fixed bottom-4 right-8 z-10">
+  <div class="fixed bottom-4 right-4 z-10">
     <button
       class="h-10 w-10 bg-white border border-gray-200 text-gray-500 rounded-full flex items-center justify-center"
-      @click="scrollContainer?.scrollTo({ top: 0, behavior: 'smooth' })"
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -20,9 +20,3 @@
     </button>
   </div>
 </template>
-
-<script setup lang="ts">
-defineProps<{
-  scrollContainer: HTMLElement | null;
-}>();
-</script>

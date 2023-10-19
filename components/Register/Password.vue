@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 
 const authStore = useAuthStore();
@@ -92,7 +92,6 @@ function isValidPassword(password: string): boolean {
 }
 
 const handleNextClick = () => {
-  console.log('clicked');
   authStore.setPassword(password.value);
 };
 </script>
