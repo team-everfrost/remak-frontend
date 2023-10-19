@@ -49,14 +49,14 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '~/stores/auth';
+import { useRegisterStore } from '~/stores/register';
 
-const authStore = useAuthStore();
+const registerStore = useRegisterStore();
 const password = ref('');
 const isValidPassword = ref(true);
 
 const handleNextClick = async () => {
-  if (await authStore.signUp(password.value)) {
+  if (await registerStore.signUp(password.value)) {
     navigateTo('/');
   } else {
     isValidPassword.value = false;
@@ -68,6 +68,6 @@ const resetState = () => {
 };
 
 const handleBackClick = () => {
-  authStore.registerPage -= 1;
+  registerStore.registerPage -= 1;
 };
 </script>

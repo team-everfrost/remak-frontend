@@ -43,17 +43,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useAuthStore } from '~/stores/auth';
+import { computed, ref } from 'vue';
+import { useRegisterStore } from '~/stores/register';
 
-const authStore = useAuthStore();
+const registerStore = useRegisterStore();
 const email = ref('');
 const emailAvailable = ref(true);
 
 const handleNextClick = async () => {
-  if (await authStore.getSignUpCode(email.value)) {
+  if (await registerStore.getSignUpCode(email.value)) {
     emailAvailable.value = true;
-    authStore.registerEmail = email.value;
+    registerStore.registerEmail = email.value;
   } else {
     emailAvailable.value = false;
   }

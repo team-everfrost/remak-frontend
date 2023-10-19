@@ -7,9 +7,6 @@ export const useAuthStore = defineStore(
     const config = useRuntimeConfig();
     const apiBaseUrl = config.public.apiBaseUrl;
 
-    const registerEmail = ref('');
-    const registerPage = ref(1);
-    const registerPassword = ref('');
     const allowNavigationToHome = ref(false);
 
     const checkEmail = async (email: string) => {
@@ -54,79 +51,18 @@ export const useAuthStore = defineStore(
       accessToken.value = '';
     };
 
-    const getSignUpCode = async (email: string) => {
-      if (!email) return false;
-
-      const { data, error }: any = await useFetch('/auth/signup-code', {
-        baseURL: apiBaseUrl,
-        method: 'POST',
-        body: { email },
-      });
-
-      if (data.value && !error.value) {
-        registerEmail.value = email;
-        registerPage.value = 2;
-        return true;
-      }
-      return false;
+    const setAccessToken = (token: string) => {
+      accessToken.value = token;
     };
-
-    const checkSignUpCode = async (signupCode: string) => {
-      const email = registerEmail.value;
-      if (!signupCode) return false;
-
-      const { data, error }: any = await useFetch('/auth/verify-code', {
-        baseURL: apiBaseUrl,
-        method: 'POST',
-        body: { signupCode, email },
-      });
-
-      if (data.value && !error.value) {
-        registerPage.value = 3;
-        return true;
-      }
-      return false;
-    };
-
-    const signUp = async (password: string) => {
-      const email = registerEmail.value;
-      if (!email || !password) return false;
-
-      if (password !== registerPassword.value) {
-        return false;
-      }
-
-      const { data, error }: any = await useFetch('/auth/local/signup', {
-        baseURL: apiBaseUrl,
-        method: 'POST',
-        body: { email, password },
-      });
-
-      if (data.value && !error.value) {
-        accessToken.value = data.value.data.accessToken;
-        return true;
-      }
-      return false;
-    };
-
-    function setPassword(newPassword: string) {
-      registerPassword.value = newPassword;
-      registerPage.value = 4;
-    }
 
     return {
       accessToken,
       isSignedIn,
-      getSignUpCode,
-      registerEmail,
-      registerPage,
       allowNavigationToHome,
-      setPassword,
-      checkSignUpCode,
       checkEmail,
       signIn,
       signOut,
-      signUp,
+      setAccessToken,
     };
   },
   { persist: true },

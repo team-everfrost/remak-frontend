@@ -56,9 +56,9 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useAuthStore } from '~/stores/auth';
+import { useRegisterStore } from '~/stores/register';
 
-const authStore = useAuthStore();
+const registerStore = useRegisterStore();
 const password = ref('');
 const passwordClass = computed(() => {
   return isValidPassword(password.value)
@@ -92,6 +92,6 @@ function isValidPassword(password: string): boolean {
 }
 
 const handleNextClick = () => {
-  authStore.setPassword(password.value);
+  registerStore.setPassword(password.value);
 };
 </script>

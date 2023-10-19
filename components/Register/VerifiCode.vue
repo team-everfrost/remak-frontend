@@ -14,7 +14,7 @@
       >
         <div v-if="isValidCode" class="text-center">
           <span class="text-xl font-bold leading-relaxed text-blue-500">{{
-            authStore.registerEmail
+            registerStore.registerEmail
           }}</span>
           <span class="text-xl font-medium leading-relaxed text-neutral-900">
             로 발송 된<br />인증번호를 입력해주세요
@@ -63,9 +63,9 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '~/stores/auth';
+import { useRegisterStore } from '~/stores/register';
 
-const authStore = useAuthStore();
+const registerStore = useRegisterStore();
 const inputFields = ref<HTMLElement[]>([]);
 const inputs = ref(Array(6).fill(''));
 const isValidCode = ref(true);
@@ -112,8 +112,8 @@ const handlePaste = (event: Event) => {
 
 const checkCode = async () => {
   if (allFieldsFilled.value) {
-    if (await authStore.checkSignUpCode(inputs.value.join(''))) {
-      authStore.registerPage = 3;
+    if (await registerStore.checkSignUpCode(inputs.value.join(''))) {
+      registerStore.registerPage = 3;
     } else {
       isValidCode.value = false;
     }

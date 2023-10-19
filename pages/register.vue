@@ -6,13 +6,14 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '~/stores/auth';
+import { useRegisterStore } from '~/stores/register';
 
 definePageMeta({
   onlyLogout: true,
 });
 
-const authStore = useAuthStore();
+const registerStore = useRegisterStore();
+
 const RegisterEmail = defineAsyncComponent(
   () => import('@/components/Register/Email.vue'),
 );
@@ -27,7 +28,7 @@ const RegisterPasswordRepeat = defineAsyncComponent(
 );
 
 const currenComponent = computed(() => {
-  switch (authStore.registerPage) {
+  switch (registerStore.registerPage) {
     case 1:
       return RegisterEmail;
     case 2:
@@ -43,8 +44,8 @@ const currenComponent = computed(() => {
 
 const handlePopState = () => {
   // registerPage 값을 감소시키고 필요한 경우 컴포넌트를 변경하는 로직
-  if (authStore.registerPage > 1) {
-    authStore.registerPage -= 1;
+  if (registerStore.registerPage > 1) {
+    registerStore.registerPage -= 1;
   } else {
     navigateTo('/');
   }
@@ -52,7 +53,7 @@ const handlePopState = () => {
 
 onMounted(() => {
   // 초기 상태를 푸시
-  history.pushState({ page: authStore.registerPage }, '');
+  history.pushState({ page: registerStore.registerPage }, '');
 
   // popstate 이벤트 핸들러를 등록
   window.addEventListener('popstate', handlePopState);
