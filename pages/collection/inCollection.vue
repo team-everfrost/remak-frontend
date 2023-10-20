@@ -31,15 +31,7 @@
               편집하기
             </button>
           </div>
-          <div
-            v-if="collections.length === 0"
-            class="flex w-full justify-center mt-32 flex-col items-center mb-40"
-          >
-            <img src="~/assets/empty_box.svg" alt="컬렉션" />
-            <p class="text-lg text-center text-[#646f7c] mt-6">
-              등록된 자료가 없어요
-            </p>
-          </div>
+          <NoItemBox :discription="'등록된 컬렉션이 없어요'" />
           <div>
             <!-- 여기에 자료를 넣을 것 -->
           </div>
