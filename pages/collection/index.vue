@@ -1,6 +1,9 @@
 <template>
   <div class="flex h-screen flex-col">
-    <ModalsContainer />
+    <AddCollection
+      :is-open="isModalOpen"
+      @update:is-open="handleIsOpenUpdate"
+    />
     <TopBar />
     <div class="flex flex-grow">
       <SideNavigation :active-button="3" class="mt-20"> </SideNavigation>
@@ -11,7 +14,7 @@
             <button
               v-if="collections.length > 0"
               class="flex items-center my-1 rounded-md bg-[#cce8ff] px-2 text-base font-medium text-[#1f8ce6]"
-              @click="open"
+              @click="openModal"
             >
               추가하기
             </button>
@@ -20,7 +23,7 @@
             <NoItemBox
               :discription="'등록된 컬렉션이 없어요'"
               :button-text="'새 컬렉션 만들기'"
-              :open="open"
+              :open="openModal"
             />
           </div>
           <div
@@ -43,7 +46,6 @@
 </template>
 
 <script setup lang="ts">
-import { ModalsContainer, useModal } from 'vue-final-modal';
 import AddCollection from '~/components/AddCollection.vue';
 import { useCollectionStore } from '~/stores/collection';
 
@@ -63,15 +65,14 @@ const collections = computed(() => {
   });
 });
 
-const { open, close } = useModal({
-  component: AddCollection,
-  attrs: {
-    onConfirm() {
-      close();
-    },
-    onCancel() {
-      close();
-    },
-  },
-});
+const isModalOpen = ref(false);
+
+// 모달을 열기 위해 이 함수를 호출합니다
+const openModal = () => {
+  isModalOpen.value = true;
+};
+
+const handleIsOpenUpdate = (newIsOpen: boolean) => {
+  isModalOpen.value = newIsOpen;
+};
 </script>

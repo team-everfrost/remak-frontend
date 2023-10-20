@@ -1,54 +1,103 @@
 <template>
-  <VueFinalModal
-    class="flex justify-center items-center"
-    content-class="flex flex-col items-center justify-center gap-6 rounded-[20px] bg-[#fefefe] px-4 pb-4 pt-6"
-    overlay-transition="vfm-fade"
-    content-transition="vfm-fade"
-  >
-    <div
-      class="relative flex flex-shrink-0 flex-grow-0 flex-col items-center justify-start gap-2 self-stretch"
-    >
-      <p
-        class="w-[448px] flex-shrink-0 flex-grow-0 self-stretch text-center text-lg font-bold text-[#1b1c1f]"
+  <HeadlessTransitionRoot appear :show="isOpen" as="template">
+    <HeadlessDialog as="div" class="relative z-10" @close="closeModal">
+      <HeadlessTransitionChild
+        as="template"
+        enter="duration-300 ease-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-200 ease-in"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
       >
-        {{ modalTitle }}
-      </p>
-      <p
-        class="w-[448px] flex-shrink-0 flex-grow-0 self-stretch text-center text-sm text-[#757779]"
-      >
-        {{ modalSubtitle }}
-      </p>
-    </div>
-    <div
-      class="flex flex-shrink-0 flex-grow-0 items-start justify-start gap-3 self-stretch"
-    >
-      <button
-        class="relative flex h-[52px] flex-grow items-center justify-center overflow-hidden rounded-xl bg-[#f4f6f8] px-2 py-4 font-bold"
-        @click="emit('cancel')"
-      >
-        {{ cancelButtonText }}
-      </button>
-      <button
-        class="relative flex h-[52px] flex-grow items-center justify-center overflow-hidden rounded-xl bg-[#F83A41] px-2 py-4 font-bold text-white"
-        @click="emit('confirm')"
-      >
-        {{ confirmButtonText }}
-      </button>
-    </div>
-  </VueFinalModal>
+        <div class="fixed inset-0 bg-black bg-opacity-25" />
+      </HeadlessTransitionChild>
+
+      <div class="fixed inset-0">
+        <div class="flex min-h-full items-center justify-center text-center">
+          <HeadlessTransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95"
+          >
+            <HeadlessDialogPanel
+              class="w-full max-w-[480px] max-h-[480px] h-full transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
+            >
+              <div
+                class="flex flex-col items-center justify-center gap-6 rounded-[20px] bg-[#fefefe] px-4 pb-4 pt-6"
+              >
+                <div
+                  class="relative flex flex-shrink-0 flex-grow-0 flex-col items-center justify-start gap-2 self-stretch"
+                >
+                  <p
+                    class="w-[448px] flex-shrink-0 flex-grow-0 self-stretch text-center text-lg font-bold text-[#1b1c1f]"
+                  >
+                    {{ modalTitle }}
+                  </p>
+                  <p
+                    class="w-[448px] flex-shrink-0 flex-grow-0 self-stretch text-center text-sm text-[#757779]"
+                  >
+                    {{ modalSubtitle }}
+                  </p>
+                </div>
+                <div class="flex flex-shrink-0 flex-grow-0 gap-3 self-stretch">
+                  <button
+                    class="flex h-[52px] basis-1/2 items-center justify-center overflow-hidden rounded-xl bg-[#f4f6f8] px-2 py-4 font-bold"
+                    @click="handleCancelClick"
+                  >
+                    {{ cancelButtonText }}
+                  </button>
+                  <button
+                    class="flex h-[52px] flex-grow items-center justify-center overflow-hidden rounded-xl bg-[#F83A41] px-2 py-4 font-bold text-white"
+                    @click="handleConfirmClick"
+                  >
+                    {{ confirmButtonText }}
+                  </button>
+                </div>
+              </div>
+            </HeadlessDialogPanel>
+          </HeadlessTransitionChild>
+        </div>
+      </div>
+    </HeadlessDialog>
+  </HeadlessTransitionRoot>
 </template>
 
 <script setup lang="ts">
-import { VueFinalModal } from 'vue-final-modal';
-const emit = defineEmits<{
-  (e: 'cancel' | 'confirm'): void;
+import { defineEmits, defineProps } from 'vue';
+
+// Define the props
+defineProps<{
+  isOpen: boolean; // Change 'initialIsOpen' to 'isOpen'
+  modalTitle: string;
+  modalSubtitle: string;
+  cancelButtonText: string;
+  confirmButtonText: string;
 }>();
 
-const { modalTitle, modalSubtitle, cancelButtonText, confirmButtonText } =
-  defineProps<{
-    modalTitle: string;
-    modalSubtitle: string;
-    cancelButtonText: string;
-    confirmButtonText: string;
-  }>();
+const handleCancelClick = () => {
+  // Emit the 'cancel' event
+  closeModal();
+};
+
+const handleConfirmClick = () => {
+  // Emit the 'confirm' event
+  emit('confirm');
+  closeModal();
+};
+
+// Define the emits
+const emit = defineEmits<{
+  (event: 'update:isOpen', value: boolean): void;
+  (event: 'confirm'): void;
+}>();
+
+// Update the 'closeModal' function to emit the updated 'isOpen' value
+const closeModal = () => {
+  emit('update:isOpen', false);
+};
 </script>

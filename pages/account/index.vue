@@ -1,5 +1,14 @@
 <template>
   <div>
+    <DeleteAlert
+      :is-open="isModalOpen"
+      :modal-title="'로그아웃'"
+      :modal-subtitle="'정말 로그아웃 하시겠습니까?'"
+      :cancel-button-text="'취소'"
+      :confirm-button-text="'확인'"
+      @update:is-open="handleIsOpenUpdate"
+      @confirm="handleConfirmClick"
+    />
     <div class="flex h-screen flex-col">
       <div class="flex flex-grow flex-row">
         <SideNavigation :active-button="4" class="mt-20"> </SideNavigation>
@@ -16,11 +25,10 @@
               <div class="flex-grow"></div>
               <button
                 class="justify-center h-8 items-center px-3 rounded-md border border-[#e6e8eb] ml-4 bg-[#fefefe] font-medium"
-                @click="open"
+                @click="openModal"
               >
                 로그아웃
               </button>
-              <ModalsContainer />
             </div>
             <div
               class="mt-10 flex flex-col w-full h-[128px] bg-white rounded-[20px] gap-4 p-5"
@@ -58,7 +66,6 @@
 </template>
 
 <script setup lang="ts">
-import { ModalsContainer, useModal } from 'vue-final-modal';
 import DeleteAlert from '~/components/DeleteAlert.vue';
 import { useAccountStore } from '~/stores/account';
 import { useAuthStore } from '~/stores/auth';
@@ -75,6 +82,18 @@ const usedPercentage = computed(() => {
   updateProgress(roundedPercentage);
   return roundedPercentage;
 });
+const isModalOpen = ref(false);
+const openModal = () => {
+  isModalOpen.value = true;
+};
+const handleConfirmClick = () => {
+  isModalOpen.value = false;
+  authStore.signOut();
+  navigateTo('/');
+};
+const handleIsOpenUpdate = (value: boolean) => {
+  isModalOpen.value = value;
+};
 
 const updateProgress = (newProgress: number) => {
   progress.value = newProgress;
@@ -90,24 +109,6 @@ const initFetch = async () => {
   const totalInGB = total / 1024 / 1024 / 1024;
   totalUsage.value = totalInGB;
 };
-
-const { open, close } = useModal({
-  component: DeleteAlert,
-  attrs: {
-    modalTitle: '로그아웃',
-    modalSubtitle: '정말 로그아웃 하시겠습니까?',
-    cancelButtonText: '취소',
-    confirmButtonText: '확인',
-    onConfirm() {
-      close();
-      authStore.signOut();
-      navigateTo('/');
-    },
-    onCancel() {
-      close();
-    },
-  },
-});
 
 onMounted(() => {
   initFetch();

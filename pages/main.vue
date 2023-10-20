@@ -1,6 +1,9 @@
 <template>
   <div class="flex h-screen flex-col">
-    <ModalsContainer />
+    <ModalAddModal
+      :is-open="isModalOpen"
+      @update:is-open="handleIsOpenUpdate"
+    />
     <TopBarApp />
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="0" class="mt-20" />
@@ -76,7 +79,7 @@
             <NoItemBox
               :discription="'등록된 자료가 없어요'"
               :button-text="'새 자료 등록하기'"
-              :open="open"
+              :open="openModal"
             />
           </div>
           <div v-else class="flex flex-col">
@@ -122,18 +125,7 @@
 </template>
 
 <script setup lang="ts">
-import { ModalsContainer, useModal } from 'vue-final-modal';
-import AddDialog from '~/components/Modal/AddModal.vue';
 import { useDocumentStore } from '~/stores/document';
-
-const { open, close } = useModal({
-  component: AddDialog,
-  attrs: {
-    onCancel() {
-      close();
-    },
-  },
-});
 
 const isInitialLoad = ref('true');
 const isEndOfDocuments = computed(() => {
@@ -162,6 +154,14 @@ const todayDocuments = ref([] as any[]);
 const last7daysDocuments = ref([] as any[]);
 const last30daysDocuments = ref([] as any[]);
 const olderDocuments = ref([] as any[]);
+
+const isModalOpen = ref(false);
+const openModal = () => {
+  isModalOpen.value = true;
+};
+const handleIsOpenUpdate = (value: boolean) => {
+  isModalOpen.value = value;
+};
 
 onMounted(() => {
   initLoad();

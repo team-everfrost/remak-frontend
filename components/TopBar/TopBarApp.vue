@@ -1,6 +1,5 @@
 <template>
-  <ModalsContainer />
-
+  <ModalAddModal :is-open="isModalOpen" @update:is-open="handleIsOpenUpdate" />
   <div
     class="fixed left-0 top-0 flex h-20 w-full items-center border-b border-gray-300 bg-topbar-background px-6"
   >
@@ -10,7 +9,7 @@
     <div class="flex flex-grow"></div>
     <button
       class="relative flex h-9 flex-shrink-0 w-20 items-center justify-center rounded-md bg-[#1f8ce6]"
-      @click="open"
+      @click="openModal"
     >
       <p
         class="flex-shrink-0 flex-grow-0 text-center text-base font-medium text-white"
@@ -22,15 +21,11 @@
 </template>
 
 <script setup lang="ts">
-import { ModalsContainer, useModal } from 'vue-final-modal';
-import AddDialog from '../Modal/AddModal.vue';
-
-const { open, close } = useModal({
-  component: AddDialog,
-  attrs: {
-    onCancel() {
-      close();
-    },
-  },
-});
+const isModalOpen = ref(false);
+const openModal = () => {
+  isModalOpen.value = true;
+};
+const handleIsOpenUpdate = (value: boolean) => {
+  isModalOpen.value = value;
+};
 </script>

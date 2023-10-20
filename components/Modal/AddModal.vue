@@ -1,32 +1,76 @@
 <template>
-  <VueFinalModal
-    class="flex justify-center items-center"
-    content-class=" flex max-w-[480px] w-full flex-col rounded-[20px] bg-white"
-    overlay-transition="vfm-fade"
-    content-transition="vfm-fade"
-  >
-    <div v-if="existType === 1">
-      <ModalAddList @change-component="handleChangeComponent" />
-    </div>
+  <HeadlessTransitionRoot appear :show="isOpen" as="template">
+    <HeadlessDialog as="div" class="relative z-10" @close="closeModal">
+      <HeadlessTransitionChild
+        as="template"
+        enter="duration-300 ease-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-200 ease-in"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
+      >
+        <div class="fixed inset-0 bg-black bg-opacity-25" />
+      </HeadlessTransitionChild>
 
-    <div v-else-if="existType === 2">
-      <ModalAddLink @change-component="handleChangeComponent" />
-    </div>
+      <div class="fixed inset-0">
+        <div class="flex min-h-full items-center justify-center text-center">
+          <HeadlessTransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95"
+          >
+            <HeadlessDialogPanel
+              class="w-full max-w-[480px] max-h-[480px] h-full transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
+            >
+              <div
+                class="flex max-w-[480px] w-full flex-col rounded-[20px] bg-white"
+              >
+                <div v-if="existType === 1">
+                  <ModalAddList @change-component="handleChangeComponent" />
+                </div>
 
-    <div v-else-if="existType === 3">
-      <ModalAddFile @change-component="handleChangeComponent" />
-    </div>
+                <div v-else-if="existType === 2">
+                  <ModalAddLink @change-component="handleChangeComponent" />
+                </div>
 
-    <div v-else-if="existType === 4">
-      <ModalAddMemo @change-component="handleChangeComponent" />
-    </div>
-  </VueFinalModal>
+                <div v-else-if="existType === 3">
+                  <ModalAddFile @change-component="handleChangeComponent" />
+                </div>
+
+                <div v-else-if="existType === 4">
+                  <ModalAddMemo @change-component="handleChangeComponent" />
+                </div>
+              </div>
+            </HeadlessDialogPanel>
+          </HeadlessTransitionChild>
+        </div>
+      </div>
+    </HeadlessDialog>
+  </HeadlessTransitionRoot>
 </template>
 
 <script setup lang="ts">
-import { VueFinalModal } from 'vue-final-modal';
-
+import { defineEmits, defineProps } from 'vue';
 const existType = ref(1);
+
+// Define the props
+const props = defineProps<{
+  isOpen: boolean;
+}>();
+
+watch(
+  () => props.isOpen,
+  (newIsOpen) => {
+    if (newIsOpen) {
+      existType.value = 1;
+    }
+  },
+);
 
 const handleChangeComponent = (componentName: string) => {
   if (componentName === 'main') {
@@ -38,11 +82,16 @@ const handleChangeComponent = (componentName: string) => {
   } else if (componentName === 'memo') {
     existType.value = 4;
   } else if (componentName === 'cancel') {
-    emit('cancel');
+    closeModal();
   }
 };
-
+// Define the emits
 const emit = defineEmits<{
-  (e: 'cancel' | 'link' | 'file' | 'image' | 'memo'): void;
+  (event: 'update:isOpen', value: boolean): void;
 }>();
+
+// Update the 'closeModal' function to emit the updated 'isOpen' value
+const closeModal = () => {
+  emit('update:isOpen', false);
+};
 </script>

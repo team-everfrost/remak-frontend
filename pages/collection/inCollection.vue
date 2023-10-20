@@ -27,6 +27,7 @@
           <div class="flex w-full flex-row justify-end gap-6 mt-9">
             <button
               class="flex justify-end items-end px-3 py-2 rounded-md bg-[#475161] text-white"
+              @click="openModal"
             >
               편집하기
             </button>
@@ -45,4 +46,11 @@
 
 <script setup lang="ts">
 const collections = ref([]);
+
+const isModalOpen = ref(false);
+
+// 모달을 열기 위해 이 함수를 호출합니다
+const openModal = () => {
+  isModalOpen.value = true;
+};
 </script>
