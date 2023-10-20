@@ -4,7 +4,10 @@ export default function (
   content: string,
   summary: string,
 ) {
-  if (type === 'MEMO') return content.split('\n')[1] ?? '';
+  if (type === 'MEMO') {
+    // 최대 3줄까지
+    return content.split('\n').slice(0, 3).join('\n') ?? '';
+  }
   if (type === 'IMAGE') {
     switch (status) {
       case 'EMBED_PENDING':

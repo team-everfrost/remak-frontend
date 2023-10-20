@@ -13,7 +13,6 @@
           >
             <img src="~/assets/icons/icon_search.svg" alt="검색" />
             <input
-              v-model="query"
               autofocus
               type="text"
               class="w-full h-full text-[#646f7c] text-base font-medium outline-none mx-2"
@@ -133,7 +132,7 @@
               ></div>
             </div>
             <div
-              v-show="documents.length == 0"
+              v-show="documents.length == 0 && !isLoading && !hasError && idle"
               class="grow items-center justify-center flex h-full pb-32"
             >
               <div class="text-center">
@@ -142,8 +141,7 @@
                   >{{ query }}</span
                 >
                 <span class="text-gray-500 text-lg font-normal leading-normal">
-                  검색 결과가 없습니다.<br />다른 검색어를 입력하거나 엔터를
-                  눌러보세요.</span
+                  검색 결과가 없습니다.<br />다른 검색어를 입력해주세요.</span
                 >
               </div>
             </div>
@@ -162,6 +160,7 @@ const history = computed(() => searchStore.searchHistory.slice().reverse());
 
 const isLoading = ref(false);
 const hasError = ref(false);
+const idle = ref(false);
 const textSearchCanceled = ref(false);
 const documents = ref([] as any[]);
 
@@ -231,22 +230,43 @@ const deleteHistoryEntry = (entry: string) => {
 };
 
 const onInput = (event: Event) => {
+  idle.value = false;
   query.value = (event.target as HTMLInputElement).value;
-  throttledTextSearch(query.value);
+  if (query.value.trim()) {
+    getTextSearch(query.value);
+    waitedHybridSearch(query.value);
+  }
 };
 
 const onEnter = () => {
-  throttledHybridSearch(query.value);
-  if (query.value.trim()) searchStore.addSearchHistory(query.value);
+  if (query.value.trim()) {
+    getHybridSearch(query.value);
+  }
+  searchStore.addSearchHistory(query.value);
 };
 
-const throttledTextSearch = useThrottleFn((query) => {
-  textSearch(query);
-}, 600);
+const getTextSearch = useDebounceFn(
+  (query) => {
+    textSearch(query.trim());
+  },
+  300,
+  { maxWait: 1000 },
+);
 
-const throttledHybridSearch = useThrottleFn((query) => {
-  hybridSearch(query);
-}, 600);
+const getHybridSearch = useDebounceFn(
+  (query) => {
+    hybridSearch(query.trim());
+  },
+  300,
+  { maxWait: 1000 },
+);
+
+const waitedHybridSearch = useDebounceFn(async (query) => {
+  if (query.trim() && documents.value.length === 0) {
+    await hybridSearch(query.trim());
+    idle.value = true;
+  }
+}, 1100);
 
 const textSearch = async (query: string) => {
   if (query.trim()) {
@@ -257,12 +277,11 @@ const textSearch = async (query: string) => {
     if (result) {
       if (textSearchCanceled.value) return;
       documents.value = cardParser(result);
-      isLoading.value = false;
     } else {
       hasError.value = true;
-      isLoading.value = false;
     }
   }
+  isLoading.value = false;
 };
 
 const textSearchMore = async (query: string) => {
@@ -274,12 +293,11 @@ const textSearchMore = async (query: string) => {
     if (result) {
       if (textSearchCanceled.value) return;
       documents.value = [...documents.value, ...cardParser(result)];
-      isLoading.value = false;
-    } else {
+    } else if (result === false) {
       hasError.value = true;
-      isLoading.value = false;
     }
   }
+  isLoading.value = false;
 };
 
 const hybridSearch = async (query: string) => {
@@ -291,12 +309,11 @@ const hybridSearch = async (query: string) => {
 
     if (result) {
       documents.value = cardParser(result);
-      isLoading.value = false;
-    } else {
+    } else if (result === false) {
       hasError.value = true;
-      isLoading.value = false;
     }
     textSearchCanceled.value = false;
   }
+  isLoading.value = false;
 };
 </script>
