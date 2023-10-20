@@ -50,7 +50,6 @@
               </div>
             </div>
           </div>
-          <ScrollTop />
         </div>
       </div>
     </div>

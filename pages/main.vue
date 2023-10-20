@@ -115,7 +115,6 @@
             ref="loadObserverTarget"
             class="bottom-0 -z-50 h-[500px] w-full -mt-[500px]"
           ></div>
-          <ScrollTop />
         </div>
       </main>
     </div>
@@ -123,16 +122,9 @@
 </template>
 
 <script setup lang="ts">
-import MasonryWall from '@yeger/vue-masonry-wall';
 import { ModalsContainer, useModal } from 'vue-final-modal';
 import AddDialog from '~/components/Modal/AddModal.vue';
 import { useDocumentStore } from '~/stores/document';
-
-defineComponent({
-  components: {
-    MasonryWall,
-  },
-});
 
 const { open, close } = useModal({
   component: AddDialog,
@@ -240,7 +232,7 @@ const initLoad = async () => {
     hasError.value = true;
     return;
   }
-  const docs = splitDocuments(documentsParser(result));
+  const docs = cardSplitter(result);
 
   todayDocuments.value = docs.today;
   last7daysDocuments.value = docs.last7days;
@@ -262,7 +254,7 @@ const cleanLoad = async () => {
     hasError.value = true;
     return;
   }
-  const docs = splitDocuments(documentsParser(result));
+  const docs = cardSplitter(result);
 
   todayDocuments.value = docs.today;
   last7daysDocuments.value = docs.last7days;
@@ -283,7 +275,7 @@ const loadMore = async () => {
     return;
   }
 
-  const docs = splitDocuments(documentsParser(olderDocs));
+  const docs = cardSplitter(olderDocs);
 
   if (docs.today.length)
     todayDocuments.value = [...todayDocuments.value, ...docs.today];
@@ -299,114 +291,5 @@ const loadMore = async () => {
 
   isLoading.value = false;
   hasError.value = false;
-};
-
-const splitDocuments = (documents: any[]) => {
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const oneDay = 24 * 60 * 60 * 1000;
-
-  const docs: {
-    today: any[];
-    last7days: any[];
-    last30days: any[];
-    older: any[];
-  } = {
-    today: [],
-    last7days: [],
-    last30days: [],
-    older: [],
-  };
-
-  for (const doc of documents) {
-    const updatedAt = new Date(doc.updatedAt);
-    updatedAt.setHours(0, 0, 0, 0);
-    const diffTime = today.getTime() - updatedAt.getTime();
-
-    if (diffTime < oneDay) {
-      docs.today.push(doc);
-    } else if (diffTime < oneDay * 7) {
-      docs.last7days.push(doc);
-    } else if (diffTime < oneDay * 30) {
-      docs.last30days.push(doc);
-    } else {
-      docs.older.push(doc);
-    }
-  }
-
-  return docs;
-};
-
-const documentsParser = (documents: any[]) => {
-  if (!documents) return [];
-  return documents.map((document: any) => ({
-    type: document.type,
-    imageUrl: document.thumbnailUrl,
-    docId: document.docId,
-    title: title(document.type, document.content, document.title, document.url),
-    summary: summary(
-      document.type,
-      document.status,
-      document.content,
-      document.summary,
-    ),
-    info: info(document.type, document.url, document.updatedAt),
-    updatedAt: document.updatedAt,
-  }));
-};
-
-const summary = (
-  type: string,
-  status: string,
-  content: string,
-  summary: string,
-) => {
-  if (type === 'MEMO') return content.split('\n')[1] ?? '';
-  if (type === 'IMAGE') {
-    switch (status) {
-      case 'EMBED_PENDING':
-        return 'AI가 곧 이미지를 분석할거에요.';
-      case 'EMBED_PROCESSING':
-        return 'AI가 이미지를 분석중이에요!';
-      case 'EMBED_REJECTED':
-        return 'AI가 이미지 분석에 실패했어요.';
-      default:
-        return summary?.split('\n')[0] ?? '';
-    }
-  }
-  switch (status) {
-    case 'SCRAPE_PENDING':
-      return '스크랩 대기중이에요.';
-    case 'SCRAPE_PROCESSING':
-      return '스크랩이 진행중이에요!';
-    case 'SCRAPE_REJECTED':
-      return '스크랩에 실패했어요.';
-    case 'EMBED_PENDING':
-      return 'AI가 곧 자료를 요약할거에요.';
-    case 'EMBED_PROCESSING':
-      return 'AI가 자료를 요약중이에요!';
-    case 'EMBED_REJECTED':
-      return 'AI가 자료를 요약하지 못했어요.';
-    default:
-      return summary?.split('\n')[0] ?? '';
-  }
-};
-
-const info = (type: string, url: string, updatedAt: string) => {
-  if (type === 'WEBPAGE') return new URL(url).hostname;
-  return new Date(Date.parse(updatedAt))
-    .toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    })
-    .replace(/. /g, '.')
-    .slice(0, -1);
-};
-
-const title = (type: string, content: string, title: string, url: string) => {
-  if (type === 'MEMO') return content.split('\n')[0];
-  if (type === 'WEBPAGE' && !title.trim()) return url;
-  return title;
 };
 </script>

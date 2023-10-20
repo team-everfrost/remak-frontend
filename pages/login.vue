@@ -70,10 +70,6 @@ definePageMeta({
   onlyLogout: true,
 });
 
-useSeoMeta({
-  title: '로그인 - Remak',
-});
-
 const email = ref('');
 const password = ref('');
 const showPasswordInput = ref(false);
