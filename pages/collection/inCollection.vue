@@ -3,9 +3,9 @@
     <TopBar />
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="3" class="mt-20"> </SideNavigation>
-      <div class="bg-[#F4F6F8] ml-48 flex-col items-start mt-20 w-full">
-        <div class="mx-20">
-          <div class="flex w-full justify-start flex-row mt-20">
+      <div class="bg-[#F4F6F8] ml-48 mt-20 flex flex-grow">
+        <div class="m-20 flex flex-grow flex-col">
+          <div class="flex w-full justify-start flex-row">
             <p class="font-bold text-[32px]">컬렉션이름</p>
             <button class="ml-3">
               <svg
@@ -31,7 +31,9 @@
               편집하기
             </button>
           </div>
-          <NoItemBox :discription="'등록된 컬렉션이 없어요'" />
+          <div v-if="true" class="flex flex-grow">
+            <NoItemBox :discription="'등록된 태그가 없어요'" />
+          </div>
           <div>
             <!-- 여기에 자료를 넣을 것 -->
           </div>
