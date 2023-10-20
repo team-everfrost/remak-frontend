@@ -13,6 +13,7 @@
           >
             <img src="~/assets/icons/icon_search.svg" alt="검색" />
             <input
+              v-model="query"
               autofocus
               type="text"
               class="w-full h-full text-[#646f7c] text-base font-medium outline-none mx-2"
