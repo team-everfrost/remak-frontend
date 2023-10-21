@@ -1,10 +1,14 @@
 <template>
   <div class="flex h-screen flex-col">
-    <AddCollection
+    <ModalAddModal
       :is-open="isModalOpen"
       @update:is-open="handleIsOpenUpdate"
     />
-    <TopBar />
+    <AddCollection
+      :is-open="isCollectionModalOpen"
+      @update:is-open="handleCollectionIsOpenUpdate"
+    />
+    <TopBarApp />
     <div class="flex flex-grow">
       <SideNavigation :active-button="3" class="mt-20"> </SideNavigation>
       <div class="bg-[#F4F6F8] ml-48 mt-20 flex flex-grow">
@@ -14,7 +18,7 @@
             <button
               v-if="collections.length > 0"
               class="flex items-center my-1 rounded-md bg-[#cce8ff] px-2 text-base font-medium text-[#1f8ce6]"
-              @click="openModal"
+              @click="openCollectionModal"
             >
               추가하기
             </button>
@@ -23,7 +27,7 @@
             <NoItemBox
               :discription="'등록된 컬렉션이 없어요'"
               :button-text="'새 컬렉션 만들기'"
-              :open="openModal"
+              :open="openCollectionModal"
             />
           </div>
           <div
@@ -67,12 +71,18 @@ const collections = computed(() => {
 
 const isModalOpen = ref(false);
 
-// 모달을 열기 위해 이 함수를 호출합니다
-const openModal = () => {
-  isModalOpen.value = true;
+const handleIsOpenUpdate = (value: boolean) => {
+  isModalOpen.value = value;
 };
 
-const handleIsOpenUpdate = (newIsOpen: boolean) => {
-  isModalOpen.value = newIsOpen;
+const isCollectionModalOpen = ref(false);
+
+// 모달을 열기 위해 이 함수를 호출합니다
+const openCollectionModal = () => {
+  isCollectionModalOpen.value = true;
+};
+
+const handleCollectionIsOpenUpdate = (newIsOpen: boolean) => {
+  isCollectionModalOpen.value = newIsOpen;
 };
 </script>

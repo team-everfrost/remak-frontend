@@ -1,6 +1,10 @@
 <template>
   <div class="flex min-h-screen flex-col">
-    <TopBar />
+    <ModalAddModal
+      :is-open="isModalOpen"
+      @update:is-open="handleIsOpenUpdate"
+    />
+    <TopBarApp />
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="2" class="mt-20"> </SideNavigation>
 
@@ -51,6 +55,12 @@ const search = ref('');
 onMounted(() => {
   tagStore.initalFetch();
 });
+
+const isModalOpen = ref(false);
+
+const handleIsOpenUpdate = (value: boolean) => {
+  isModalOpen.value = value;
+};
 
 const tagSearch = async (query: string) => {
   await tagStore.fetchTags(query);

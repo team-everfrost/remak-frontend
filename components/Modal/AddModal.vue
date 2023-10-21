@@ -1,6 +1,6 @@
 <template>
   <HeadlessTransitionRoot appear :show="isOpen" as="template">
-    <HeadlessDialog as="div" class="relative z-10" @close="closeModal">
+    <HeadlessDialog as="div" class="relative z-50" @close="closeModal">
       <HeadlessTransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -13,7 +13,7 @@
         <div class="fixed inset-0 bg-black bg-opacity-25" />
       </HeadlessTransitionChild>
 
-      <div class="fixed inset-0">
+      <div class="fixed inset-0 z-50 w-screen overflow-y-auto">
         <div class="flex min-h-full items-center justify-center text-center">
           <HeadlessTransitionChild
             as="template"
@@ -25,10 +25,10 @@
             leave-to="opacity-0 scale-95"
           >
             <HeadlessDialogPanel
-              class="w-full max-w-[480px] max-h-[480px] h-full transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
+              class="w-full max-w-[480px] h-full transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
             >
               <div
-                class="flex max-w-[480px] w-full flex-col rounded-[20px] bg-white"
+                class="flex max-w-[480px] min-h-[372px] w-full flex-col rounded-[20px] bg-white"
               >
                 <div v-if="existType === 1">
                   <ModalAddList @change-component="handleChangeComponent" />

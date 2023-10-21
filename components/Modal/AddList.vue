@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-col justify-between grow">
     <div class="flex flex-row items-center justify-between pl-5 pr-3 pt-5">
       <p class="leading-18 text-lg font-bold text-[#1b1c1f]">추가하기</p>
       <button @click="emit('changeComponent', 'cancel')">
@@ -75,7 +75,7 @@
             파일
           </p>
           <p class="flex-shrink-0 flex-grow-0 text-left text-sm text-[#646f7c]">
-            pdf, txt와 이미지의 요약을 지원해요
+            pdf, txt와 이미지의 분석을 지원해요
           </p>
         </div>
       </div>
@@ -135,6 +135,12 @@
         ></path>
       </svg>
     </button>
+
+    <div class="items-center justify-between pl-5 pr-3 pb-4">
+      <p class="text-center text-xs text-[#646f7c]">
+        Tip: 화면 어디서든 자료를 붙여넣기하거나 파일을 드래그해보세요!
+      </p>
+    </div>
   </div>
 </template>
 

@@ -1,6 +1,10 @@
 <template>
   <div class="flex min-h-screen">
-    <TopBar />
+    <ModalAddModal
+      :is-open="isModalOpen"
+      @update:is-open="handleIsOpenUpdate"
+    />
+    <TopBarApp />
     <div class="flex grow">
       <SideNavigation :active-button="1" class="mt-20"> </SideNavigation>
       <div class="w-full bg-[#F4F6F8] ml-48 mt-20 flex items-stretch">
@@ -217,6 +221,12 @@ const setObserver = () => {
 
 const unsetObserver = () => {
   if (loadObserverTarget.value) loadObserver.value?.disconnect();
+};
+
+const isModalOpen = ref(false);
+
+const handleIsOpenUpdate = (value: boolean) => {
+  isModalOpen.value = value;
 };
 
 const queryClear = () => {

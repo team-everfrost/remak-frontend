@@ -1,6 +1,8 @@
 <template>
-  <div class="flex w-full max-w-[480px] flex-col rounded-[20px] bg-white">
-    <div class="flex flex-row items-center justify-between pl-5 pr-3 pt-5">
+  <div
+    class="flex grow min-h-[372px] w-full max-w-[480px] flex-col rounded-[20px] bg-white"
+  >
+    <div class="flex flex-row items-center justify-between pl-5 pr-4 pt-5">
       <p class="leading-18 text-lg font-bold text-[#1b1c1f]">추가하기</p>
       <button @click="emit('changeComponent', 'cancel')">
         <svg
@@ -25,10 +27,9 @@
     <textarea
       v-model="link"
       placeholder="예시: www.naver.com, www.google.com..."
-      class="ml-4 mr-4 mt-8 h-[278px] flex-grow resize-none self-stretch overflow-auto rounded-xl border border-[#e6e8eb] bg-[#fefefe] p-4 outline-none"
-      rows="1"
+      class="ml-5 mr-5 mt-8 flex-grow resize-none self-stretch overflow-auto rounded-xl border border-[#e6e8eb] bg-[#fefefe] p-4 outline-none"
     ></textarea>
-    <p class="ml-4 mr-4 mt-3 text-left text-sm text-[#646f7c]">
+    <p class="ml-5 mr-5 mt-3 text-left text-sm text-[#646f7c]">
       엔터 또는 ,로 구분하여 여러 링크를 추가할 수 있어요
     </p>
     <button
