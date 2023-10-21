@@ -4,15 +4,21 @@
     <div class="flex grow">
       <SideNavigation :active-button="1" class="mt-20"> </SideNavigation>
       <div class="w-full bg-[#F4F6F8] ml-48 mt-20 flex items-stretch">
-        <div class="w-full flex flex-col m-20">
+        <div class="w-full flex flex-col m-20 bg-[#F4F6F8]">
           <div class="flex w-full justify-between">
             <p class="font-bold text-[32px]">검색</p>
           </div>
           <div
-            class="flex h-[56px] w-full mt-9 px-4 items-center rounded-xl bg-white border border-[#e6e8eb] focus-within:border-2 focus-within:border-remak-blue"
+            class="top-24 flex h-14 w-full mt-9 items-center rounded-xl bg-white border border-[#e6e8eb] focus-within:border-remak-blue"
+            :class="
+              isLoading
+                ? 'transition-shadow duration-1000 shadow-xl shadow-remak-blue/50'
+                : ''
+            "
           >
-            <img src="~/assets/icons/icon_search.svg" alt="검색" />
+            <img class="pl-4" src="~/assets/icons/icon_search.svg" alt="검색" />
             <input
+              ref="searchInput"
               v-model="query"
               autofocus
               type="text"
@@ -22,7 +28,7 @@
               @keyup.enter="onEnter"
               @keyup.esc="queryClear"
             />
-            <button v-show="query" @click="queryClear">
+            <button v-show="query" class="pr-4" @click="queryClear">
               <svg
                 width="24"
                 height="24"
@@ -89,7 +95,7 @@
                     </div>
                   </button>
                   <button
-                    class="w-5 h-5 relative shrink-0"
+                    class="w-5 h-5 shrink-0"
                     @click="deleteHistoryEntry(entry)"
                   >
                     <svg
@@ -157,6 +163,7 @@
 import { useSearchStore } from '~/stores/search';
 
 const query = ref('');
+const searchInput = ref<HTMLInputElement | null>(null);
 const history = computed(() => searchStore.searchHistory.slice().reverse());
 
 const isLoading = ref(false);
@@ -183,6 +190,7 @@ onUnmounted(() => {
 
 onActivated(() => {
   setObserver();
+  searchInput.value?.focus();
 });
 
 onDeactivated(() => {

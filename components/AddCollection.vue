@@ -94,7 +94,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps } from 'vue';
 import { useCollectionStore } from '~/stores/collection';
 
 const collectionStore = useCollectionStore();

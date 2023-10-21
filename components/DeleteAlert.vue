@@ -68,8 +68,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps } from 'vue';
-
 // Define the props
 defineProps<{
   isOpen: boolean; // Change 'initialIsOpen' to 'isOpen'

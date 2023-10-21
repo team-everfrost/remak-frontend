@@ -55,7 +55,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps } from 'vue';
 const existType = ref(1);
 
 // Define the props

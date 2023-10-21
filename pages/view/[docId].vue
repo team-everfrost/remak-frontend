@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex h-screen flex-col">
-      <TopBar />
+      <TopBar :is-fixed="false" />
       <div class="flex flex-grow">
         <div
           class="mt-20 w-full bg-[#f4f6f8] flex-col justify-center items-center"

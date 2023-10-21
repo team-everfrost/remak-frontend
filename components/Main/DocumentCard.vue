@@ -30,7 +30,7 @@
             {{ title }}
           </p>
           <p class="line-clamp-3 text-left text-sm text-[#646f7c]">
-            <span class="text-left text-sm text-[#646f7c]">
+            <span class="text-left text-sm text-[#646f7c] whitespace-pre-line">
               {{ summary }}
             </span>
           </p>
