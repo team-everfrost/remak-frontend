@@ -119,6 +119,25 @@ export const useDocumentStore = defineStore(
       return false;
     };
 
+    const deleteDocument = async (docId: string) => {
+      if (!authStore.isSignedIn) return false;
+
+      const { data, error }: any = await useFetch(`/document/${docId}`, {
+        baseURL: apiBaseUrl,
+        method: 'DELETE',
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${authStore.accessToken}`,
+        },
+      });
+
+      if (data.value && !error.value) {
+        return true;
+      }
+
+      return false;
+    };
+
     return {
       documents,
       getDocuments,
@@ -128,6 +147,7 @@ export const useDocumentStore = defineStore(
       fetchMore,
       fetchDocumentDetail,
       fetchFileDownloadUrl,
+      deleteDocument,
     };
   },
   {

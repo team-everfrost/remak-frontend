@@ -2,6 +2,15 @@
   <div
     class="flex items-center justify-center rounded-2xl border border-[#e6e8eb] bg-[#fefefe] px-10 pb-12 pt-10"
   >
+    <DeleteAlert
+      :is-open="isModalOpen"
+      :modal-title="'정말 삭제하시겠어요?'"
+      :modal-subtitle="'삭제시 복구가 불가능해요'"
+      :cancel-button-text="'취소하기'"
+      :confirm-button-text="'삭제하기'"
+      @update:is-open="handleIsOpenUpdate"
+      @confirm="handleConfirmClick"
+    />
     <div class="flex w-full flex-col justify-start">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start gap-2">
@@ -21,47 +30,87 @@
             </p>
           </NuxtLink>
         </div>
-        <button class="ml-auto">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            preserveAspectRatio="xMidYMid meet"
+        <HeadlessMenu as="div" class="relative inline-block text-left">
+          <div>
+            <HeadlessMenuButton>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid meet"
+              >
+                <path
+                  d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z"
+                  fill="#28323C"
+                ></path>
+                <path
+                  d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z"
+                  fill="#28323C"
+                ></path>
+                <path
+                  d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z"
+                  fill="#28323C"
+                ></path>
+                <path
+                  d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z"
+                  stroke="#28323C"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z"
+                  stroke="#28323C"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z"
+                  stroke="#28323C"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg>
+            </HeadlessMenuButton>
+          </div>
+          <transition
+            enter-active-class="transition duration-100 ease-out"
+            enter-from-class="transform scale-95 opacity-0"
+            enter-to-class="transform scale-100 opacity-100"
+            leave-active-class="transition duration-75 ease-in"
+            leave-from-class="transform scale-100 opacity-100"
+            leave-to-class="transform scale-95 opacity-0"
           >
-            <path
-              d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z"
-              fill="#28323C"
-            ></path>
-            <path
-              d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z"
-              fill="#28323C"
-            ></path>
-            <path
-              d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z"
-              fill="#28323C"
-            ></path>
-            <path
-              d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z"
-              stroke="#28323C"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-            <path
-              d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z"
-              stroke="#28323C"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-            <path
-              d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z"
-              stroke="#28323C"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-          </svg>
-        </button>
+            <HeadlessMenuItems
+              class="absolute right-0 mt-1 w-[71px] origin-top-right divide-yd bg-white rounded-xl border border-[#e6e8eb] shadow-lg outline-none"
+            >
+              <div class="py-">
+                <HeadlessMenuItem v-slot="{ active }">
+                  <button
+                    :class="[
+                      active ? 'bg-blue-400 text-white' : 'text-gray-900',
+                      'group flex w-full items-center justify-center rounded-t-md px-2 py-2 text-sm border-t-0 border-r-0 border-b border-l-0 border-[#e6e8eb]',
+                    ]"
+                  >
+                    컬렉션
+                  </button>
+                </HeadlessMenuItem>
+                <HeadlessMenuItem v-slot="{ active }">
+                  <button
+                    :class="[
+                      active ? 'bg-blue-400 text-white' : 'text-[#f83a41]',
+                      'group flex w-full items-center justify-center rounded-md px-2 py-2 text-sm font-medium ',
+                    ]"
+                    @click="openModal"
+                  >
+                    삭제하기
+                  </button>
+                </HeadlessMenuItem>
+              </div>
+            </HeadlessMenuItems>
+          </transition>
+        </HeadlessMenu>
       </div>
       <div
         v-if="props.document.type === 'IMAGE' || props.document.type === 'FILE'"
@@ -169,7 +218,10 @@
 <script setup lang="ts">
 import { useResizeObserver } from '@vueuse/core';
 import hljs from 'highlight.js';
+import { useRouter } from 'nuxt/app';
 import { useDocumentStore } from '~/stores/document';
+
+const router = useRouter();
 
 hljs.configure({
   ignoreUnescapedHTML: true,
@@ -198,6 +250,19 @@ const textarea = ref<HTMLTextAreaElement | null>(null);
 const updatedText = ref('');
 const progress = ref<number | null>(null);
 const downloadBtnText = ref('다운로드');
+
+const isModalOpen = ref(false);
+const openModal = () => {
+  isModalOpen.value = true;
+};
+const handleConfirmClick = () => {
+  isModalOpen.value = false;
+  documentStore.deleteDocument(props.document.docId);
+  router.back();
+};
+const handleIsOpenUpdate = (value: boolean) => {
+  isModalOpen.value = value;
+};
 
 const summary = computed(() => {
   if (props.document.type === 'MEMO')

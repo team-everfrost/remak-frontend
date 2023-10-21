@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   name: string;
   count: number | null;
 }>();

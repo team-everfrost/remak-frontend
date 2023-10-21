@@ -27,13 +27,13 @@
           <div class="flex w-full flex-row justify-end gap-6 mt-9">
             <button
               class="flex justify-end items-end px-3 py-2 rounded-md bg-[#475161] text-white"
-              @click="openModal"
+              @click="null"
             >
               편집하기
             </button>
           </div>
           <div v-if="true" class="flex flex-grow">
-            <NoItemBox :discription="'등록된 태그가 없어요'" />
+            <NoItemBox :discription="'등록된 자료가 없어요'" />
           </div>
           <div>
             <!-- 여기에 자료를 넣을 것 -->
@@ -44,13 +44,4 @@
   </div>
 </template>
 
-<script setup lang="ts">
-const collections = ref([]);
-
-const isModalOpen = ref(false);
-
-// 모달을 열기 위해 이 함수를 호출합니다
-const openModal = () => {
-  isModalOpen.value = true;
-};
-</script>
+<script setup lang="ts"></script>

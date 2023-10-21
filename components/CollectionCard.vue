@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   name: string;
   description: string | null;
   count: number | null;
