@@ -212,6 +212,7 @@ const setObserver = () => {
       (entries) => {
         if (entries[0].isIntersecting) {
           shouldUpdate.value = true;
+          // 뭔가 이상해서 비활성화
           // cleanLoad();
         } else {
           shouldUpdate.value = false;
