@@ -81,22 +81,22 @@
             class="flex animate-infinite-flow items-center justify-center md:justify-start [&_li]:mx-6"
           >
             <li>
-              <MainMovingCard />
+              <MainMovingCard :title="'문서.docx'" :type="'file'" />
             </li>
             <li>
-              <MainMovingCard />
+              <MainMovingCard :title="'강의자료.png'" :type="'photo'" />
             </li>
             <li>
-              <MainMovingCard />
+              <MainMovingCard :title="'메모.txt'" :type="'memo'" />
             </li>
             <li>
-              <MainMovingCard />
+              <MainMovingCard :title="'이번주 저널'" :type="'link'" />
             </li>
             <li>
-              <MainMovingCard />
+              <MainMovingCard :title="'회의자료.pdf'" :type="'file'" />
             </li>
             <li>
-              <MainMovingCard />
+              <MainMovingCard :title="'노트필기.jpg'" :type="'photo'" />
             </li>
           </ul>
           <ul
@@ -104,22 +104,22 @@
             aria-hidden="true"
           >
             <li>
-              <MainMovingCard />
+              <MainMovingCard :title="'문서.docx'" :type="'file'" />
             </li>
             <li>
-              <MainMovingCard />
+              <MainMovingCard :title="'강의자료.png'" :type="'photo'" />
             </li>
             <li>
-              <MainMovingCard />
+              <MainMovingCard :title="'메모.txt'" :type="'memo'" />
             </li>
             <li>
-              <MainMovingCard />
+              <MainMovingCard :title="'이번주 저널'" :type="'link'" />
             </li>
             <li>
-              <MainMovingCard />
+              <MainMovingCard :title="'회의자료.pdf'" :type="'file'" />
             </li>
             <li>
-              <MainMovingCard />
+              <MainMovingCard :title="'노트필기.jpg'" :type="'photo'" />
             </li>
           </ul>
         </div>
