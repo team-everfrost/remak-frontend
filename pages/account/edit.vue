@@ -1,5 +1,7 @@
 <template>
   <div>
+    <TopBar />
+
     <div class="flex h-screen flex-col">
       <div class="flex flex-grow flex-row">
         <SideNavigation :active-button="4" class="mt-20"> </SideNavigation>
@@ -53,6 +55,12 @@
                   <p class="text-sm text-center text-[#646f7c]">비밀번호</p>
                   <p class="text-base font-medium text-center">**********</p>
                 </div>
+                <button
+                  class="flex justify-center items-center px-3 py-2 rounded-md bg-[#fefefe] border border-[#e6e8eb] text-center"
+                  @click="hanleEditBtnClick"
+                >
+                  변경하기
+                </button>
               </div>
             </div>
             <button
@@ -63,7 +71,6 @@
           </div>
         </div>
       </div>
-      <TopBar />
     </div>
   </div>
 </template>
@@ -80,4 +87,9 @@ onMounted(() => {
 const userEmail = computed(() => {
   return accountStore.userInfo.email;
 });
+
+const hanleEditBtnClick = () => {
+  accountStore.resetCode(userEmail.value);
+  navigateTo('/account/changePw');
+};
 </script>

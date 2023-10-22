@@ -1,6 +1,14 @@
 <template>
   <div class="flex min-h-screen flex-col">
     <TopBar />
+    <ModalInformAlert
+      :is-open="isModalOpen"
+      :modal-title="'컬렉션 삭제'"
+      :modal-subtitle="'컬렉션을 삭제하시겠습니까?'"
+      :cancel-button-text="'취소'"
+      :confirm-button-text="'삭제'"
+      @update:is-open="handleIsOpenUpdate"
+    />
 
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="3" class="mt-20"> </SideNavigation>

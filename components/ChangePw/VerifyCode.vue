@@ -1,0 +1,128 @@
+<script setup></script>
+<template>
+  <div class="flex justify-center">
+    <div
+      class="flex h-[358px] w-[480px] flex-col rounded-2xl border border-gray-200 bg-white px-6 py-9"
+    >
+      <div v-if="isValidCode" class="text-center">
+        <span class="text-xl font-bold leading-relaxed text-blue-500">{{
+          userEmail
+        }}</span>
+        <span class="text-xl font-medium leading-relaxed text-neutral-900">
+          로 발송 된<br />인증번호를 입력해주세요
+        </span>
+      </div>
+      <span
+        v-else
+        class="text-xl font-medium leading-relaxed text-red-500 text-center"
+      >
+        인증번호가 일치하지 않습니다<br />
+        다시확인해주세요</span
+      >
+      <div class="mt-8 flex justify-center space-x-2">
+        <!-- 이 div에서 각 입력 상자를 일렬로 배열합니다 -->
+        <input
+          v-for="(input, index) in inputs"
+          :key="index"
+          ref="inputField"
+          :value="input"
+          type="text"
+          pattern="[0-9]*"
+          maxlength="1"
+          class="h-[54px] w-12 rounded-lg border border-gray-200 bg-neutral-100 text-center outline-none focus:border-2"
+          :class="{
+            'border-red-500': !isValidCode,
+            'focus:border-remak-blue': isValidCode,
+          }"
+          @input="checkNumber($event, index)"
+          @paste="handlePaste"
+        />
+      </div>
+      <button
+        :disabled="!allFieldsFilled"
+        :class="{
+          'bg-remak-blue text-white': allFieldsFilled,
+          'bg-gray-200 text-gray-500': !allFieldsFilled,
+        }"
+        class="mt-12 inline-flex h-[52px] w-[432px] items-center justify-center rounded-xl px-2 py-4"
+        @click="checkCode"
+      >
+        다음으로
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useAccountStore } from '~/stores/account';
+
+const accountStore = useAccountStore();
+const inputFields = ref<HTMLElement[]>([]);
+const inputs = ref(Array(6).fill(''));
+const isValidCode = ref(true);
+const allFieldsFilled = computed(() => {
+  return inputs.value.every((input) => /^[0-9]$/.test(input));
+});
+const checkNumber = (event: Event, index: number) => {
+  const inputEvent = event as InputEvent;
+  const value = (inputEvent.target as HTMLInputElement).value;
+  if (/^[0-9]*$/.test(value)) {
+    inputs.value.splice(index, 1, value);
+    if (value && index < inputs.value.length - 1) {
+      inputFields.value[index + 1].focus();
+    }
+    // 입력값이 삭제되었고, 첫 번째 입력창이 아닌 경우
+    else if (!value && index > 0) {
+      inputFields.value[index - 1].focus();
+    }
+  } else {
+    (inputEvent.target as HTMLInputElement).value = inputs.value[index];
+  }
+};
+
+const handlePaste = (event: Event) => {
+  event.preventDefault();
+  const pasteEvent = event as ClipboardEvent;
+  const pasteData = (pasteEvent.clipboardData || window.clipboardData).getData(
+    'text',
+  );
+  const pasteValues = pasteData.split('').slice(0, inputs.value.length);
+  let lastValidIndex = -1;
+  for (let i = 0; i < pasteValues.length; i++) {
+    if (/^[0-9]$/.test(pasteValues[i])) {
+      inputs.value[i] = pasteValues[i];
+      lastValidIndex = i;
+    }
+  }
+  if (lastValidIndex !== -1) {
+    inputFields.value[lastValidIndex].focus(); // 수정된 부분
+  }
+};
+
+const checkCode = async () => {
+  if (allFieldsFilled.value) {
+    if (
+      await accountStore.verifyResetCode(inputs.value.join(''), userEmail.value)
+    ) {
+      isValidCode.value = true;
+      accountStore.resetPage = 2;
+    } else {
+      isValidCode.value = false;
+    }
+    // Todo: 인증번호 확인 로직
+  }
+};
+
+const userEmail = computed(() => {
+  return accountStore.userInfo.email;
+});
+
+watchEffect(() => {
+  checkCode();
+});
+
+onMounted(() => {
+  accountStore.fetchUserInfo();
+  inputFields.value = Array.from(document.querySelectorAll('input'));
+});
+</script>
