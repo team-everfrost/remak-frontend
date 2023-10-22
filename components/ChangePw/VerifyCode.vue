@@ -109,7 +109,6 @@ const checkCode = async () => {
     } else {
       isValidCode.value = false;
     }
-    // Todo: 인증번호 확인 로직
   }
 };
 
