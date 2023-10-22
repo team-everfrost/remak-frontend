@@ -45,6 +45,7 @@
     "@nuxt/image": "^1.0.0-rc.3",
     "@pinia/nuxt": "^0.4.4",
     "@yeger/vue-masonry-wall": "^5.0.2",
+    "axios": "^1.5.1",
     "highlight.js": "^11.9.0",
     "pinia": "^2.1.7",
     "vue-dompurify-html": "^4.1.4",

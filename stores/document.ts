@@ -19,6 +19,11 @@ export const useDocumentStore = defineStore(
   () => {
     const authStore = useAuthStore();
 
+    const shouldFetch = ref(false);
+    const setShouldFetch = (value: boolean) => {
+      shouldFetch.value = value;
+    };
+
     const documents = ref<Document[]>([]);
     const endOfDocuments = ref(false);
 
@@ -139,6 +144,8 @@ export const useDocumentStore = defineStore(
     };
 
     return {
+      shouldFetch,
+      setShouldFetch,
       documents,
       getDocuments,
       isEndOfDocuments,

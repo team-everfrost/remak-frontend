@@ -1,9 +1,6 @@
 <template>
   <div class="flex h-screen flex-col">
-    <ModalAddModal
-      :is-open="isModalOpen"
-      @update:is-open="handleIsOpenUpdate"
-    />
+    <ModalAddModal :is-open="isModalOpen" />
     <TopBarApp />
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="0" class="mt-20" />
@@ -135,6 +132,7 @@ const loadObserverTarget = ref<HTMLElement | null>(null);
 const loadObserver = ref<IntersectionObserver | null>(null);
 const updateBtn = ref<HTMLElement | null>(null);
 const updateObserver = ref<IntersectionObserver | null>(null);
+
 const shouldUpdate = ref(false);
 
 const isLoading = ref(false);
@@ -159,9 +157,18 @@ const isModalOpen = ref(false);
 const openModal = () => {
   isModalOpen.value = true;
 };
-const handleIsOpenUpdate = (value: boolean) => {
-  isModalOpen.value = value;
-};
+
+const shouldFetch = computed(() => {
+  return documentStore.shouldFetch;
+});
+
+// 모달 생성 주체가 Topbar라서 일단 이렇게 처리
+watch(shouldFetch, (newVal) => {
+  if (newVal) {
+    documentStore.setShouldFetch(false);
+    cleanLoad();
+  }
+});
 
 onMounted(() => {
   initLoad();
@@ -205,6 +212,7 @@ const setObserver = () => {
       (entries) => {
         if (entries[0].isIntersecting) {
           shouldUpdate.value = true;
+          // cleanLoad();
         } else {
           shouldUpdate.value = false;
         }

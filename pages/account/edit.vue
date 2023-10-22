@@ -6,7 +6,7 @@
       <div class="flex flex-grow flex-row">
         <SideNavigation :active-button="4" class="mt-20"> </SideNavigation>
         <div class="mt-20 w-full bg-[#F4F6F8] ml-48 flex-col">
-          <div class="flex relative flex-col mt-20 mx-[232px]">
+          <div class="flex relative flex-col mt-20 mx-20">
             <div>
               <button
                 class="flex flex-row justify-center items-center"
@@ -90,6 +90,6 @@ const userEmail = computed(() => {
 
 const hanleEditBtnClick = () => {
   accountStore.resetCode(userEmail.value);
-  navigateTo('/account/changePw');
+  navigateTo('/account/change-password');
 };
 </script>

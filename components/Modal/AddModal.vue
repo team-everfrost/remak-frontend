@@ -39,7 +39,10 @@
                 </div>
 
                 <div v-else-if="existType === 3">
-                  <ModalAddFile @change-component="handleChangeComponent" />
+                  <ModalAddFile
+                    @change-component="handleChangeComponent"
+                    @is-uploading="handleComponentWorking"
+                  />
                 </div>
 
                 <div v-else-if="existType === 4">
@@ -55,7 +58,12 @@
 </template>
 
 <script setup lang="ts">
+import { useDocumentStore } from '~/stores/document';
+
 const existType = ref(1);
+const isComponentWorking = ref(false);
+
+const documentStore = useDocumentStore();
 
 // Define the props
 const props = defineProps<{
@@ -71,6 +79,10 @@ watch(
   },
 );
 
+const handleComponentWorking = (value: boolean) => {
+  isComponentWorking.value = value;
+};
+
 const handleChangeComponent = (componentName: string) => {
   if (componentName === 'main') {
     existType.value = 1;
@@ -85,12 +97,14 @@ const handleChangeComponent = (componentName: string) => {
   }
 };
 // Define the emits
-const emit = defineEmits<{
-  (event: 'update:isOpen', value: boolean): void;
-}>();
+const emit = defineEmits<(e: 'update:isOpen', value: boolean) => void>();
 
 // Update the 'closeModal' function to emit the updated 'isOpen' value
 const closeModal = () => {
+  if (isComponentWorking.value) {
+    return;
+  }
+  documentStore.setShouldFetch(true);
   emit('update:isOpen', false);
 };
 </script>
