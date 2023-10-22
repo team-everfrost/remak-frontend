@@ -72,6 +72,28 @@ export const useCollectionStore = defineStore('collection', () => {
     return collections.value;
   });
 
+  const addDocInCollection = async (
+    collectionName: string,
+    docIds: string[],
+  ) => {
+    if (!authStore.isSignedIn) return false;
+    const name = collectionName;
+    const { data, error }: any = await useFetch(`/collection/add/${name}`, {
+      baseURL: apiBaseUrl,
+      method: 'POST',
+      body: { docIds },
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    });
+
+    if (data.value && !error.value) {
+      return true;
+    }
+    return false;
+  };
+
   return {
     collections,
     endOfCollections,
@@ -79,5 +101,6 @@ export const useCollectionStore = defineStore('collection', () => {
     getCollections,
     initalFetch,
     createCollection,
+    addDocInCollection,
   };
 });

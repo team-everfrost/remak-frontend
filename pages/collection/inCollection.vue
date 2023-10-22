@@ -1,6 +1,7 @@
 <template>
   <div class="flex min-h-screen flex-col">
     <TopBar />
+
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="3" class="mt-20"> </SideNavigation>
       <div class="bg-[#F4F6F8] ml-48 mt-20 flex flex-grow">
@@ -27,7 +28,7 @@
           <div class="flex w-full flex-row justify-end gap-6 mt-9">
             <button
               class="flex justify-end items-end px-3 py-2 rounded-md bg-[#475161] text-white"
-              @click="null"
+              @click="openModal"
             >
               편집하기
             </button>
@@ -44,4 +45,12 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const isModalOpen = ref(false);
+const handleIsOpenUpdate = (value: boolean) => {
+  isModalOpen.value = value;
+};
+const openModal = () => {
+  isModalOpen.value = true;
+};
+</script>

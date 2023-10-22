@@ -2,6 +2,11 @@
   <div
     class="flex items-center justify-center rounded-2xl border border-[#e6e8eb] bg-[#fefefe] px-10 pb-12 pt-10"
   >
+    <ModalDocumentInCollection
+      :is-open="isCollectionModalOpen"
+      :doc-id="[props.document.docId]"
+      @update:is-open="handleCollectionIsOpenUpdate"
+    />
     <DeleteAlert
       :is-open="isModalOpen"
       :modal-title="'정말 삭제하시겠어요?'"
@@ -92,6 +97,7 @@
                       active ? 'bg-blue-400 text-white' : 'text-gray-900',
                       'group flex w-full items-center justify-center rounded-t-md px-2 py-2 text-sm border-t-0 border-r-0 border-b border-l-0 border-[#e6e8eb]',
                     ]"
+                    @click="openCollectionModal"
                   >
                     컬렉션
                   </button>
@@ -100,7 +106,7 @@
                   <button
                     :class="[
                       active ? 'bg-blue-400 text-white' : 'text-[#f83a41]',
-                      'group flex w-full items-center justify-center rounded-md px-2 py-2 text-sm font-medium ',
+                      'group flex w-full items-center justify-center rounded-b-md px-2 py-2 text-sm font-medium ',
                     ]"
                     @click="openModal"
                   >
@@ -262,6 +268,13 @@ const handleConfirmClick = () => {
 };
 const handleIsOpenUpdate = (value: boolean) => {
   isModalOpen.value = value;
+};
+const isCollectionModalOpen = ref(false);
+const openCollectionModal = () => {
+  isCollectionModalOpen.value = true;
+};
+const handleCollectionIsOpenUpdate = (newIsOpen: boolean) => {
+  isCollectionModalOpen.value = newIsOpen;
 };
 
 const summary = computed(() => {
