@@ -70,6 +70,7 @@ export const useAccountStore = defineStore('account', () => {
   };
 
   const resetCode = async (email: string) => {
+    userInfo.value.email = email;
     const { data, error }: any = await useFetch('/auth/reset-code', {
       baseURL: apiBaseUrl,
       method: 'POST',

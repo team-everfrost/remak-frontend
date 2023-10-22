@@ -55,7 +55,15 @@
         >
           다음으로
         </button>
-        <NuxtLink to="/register" class="text-xs text-gray-700 underline">
+        <NuxtLink
+          v-if="passwordWrong"
+          to="/resetPassword"
+          class="text-xs text-gray-700 underline"
+          @click="handleResetPasswordClick"
+        >
+          비밀번호를 잊으셨나요?
+        </NuxtLink>
+        <NuxtLink v-else to="/register" class="text-xs text-gray-700 underline">
           처음 이용하시나요?
         </NuxtLink>
       </div>
@@ -64,6 +72,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAccountStore } from '~/stores/account';
 import { useAuthStore } from '~/stores/auth';
 
 definePageMeta({
@@ -79,6 +88,7 @@ const passwordWrong = ref(false);
 const passwordInput = ref<HTMLInputElement | null>(null);
 
 const authStore = useAuthStore();
+const accountStore = useAccountStore();
 
 const checkEmail = () => {
   isValidEmail(email.value);
@@ -117,5 +127,9 @@ const handleNextClick = async () => {
   } else {
     emailNotExists.value = true;
   }
+};
+
+const handleResetPasswordClick = () => {
+  accountStore.resetCode(email.value);
 };
 </script>
