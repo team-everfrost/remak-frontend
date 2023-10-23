@@ -38,7 +38,7 @@
     </p>
     <button
       :disabled="!hasUrl || isUploading"
-      class="relative mb-5 ml-5 mr-5 mt-6 flex h-[52px] flex-shrink-0 flex-grow-0 items-center justify-center self-stretch overflow-hidden rounded-xl bg-[#1f8ce6]"
+      class="relative mb-5 ml-5 mr-5 mt-6 flex flex-col h-[52px] flex-shrink-0 flex-grow-0 items-start justify-center self-stretch overflow-hidden rounded-xl bg-[#1f8ce6]"
       @click="handleClick"
     >
       <div
@@ -59,7 +59,7 @@
         "
       ></div>
       <p
-        class="absolute flex-grow text-center text-lg font-bold"
+        class="absolute w-full flex-grow text-center text-lg font-bold"
         :class="
           hasError
             ? 'animate-shake text-white'
@@ -192,9 +192,9 @@ const saveLink = async () => {
   progress.value = 0;
 
   if (failedUrlList.length) {
-    hasError.value = true;
-    link.value = failedUrlList.join('\n');
+    if (textarea.value) textarea.value.value = failedUrlList.join('\n');
     inputTextarea();
+    hasError.value = true;
   } else {
     emit('changeComponent', 'cancel');
   }
