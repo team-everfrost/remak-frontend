@@ -197,19 +197,20 @@
     <button
       :disabled="fileList.length === 0 || fileList.length > 10 || isUploading"
       class="relative mb-5 ml-5 mr-5 mt-6 flex flex-col h-[52px] flex-shrink-0 flex-grow-0 items-start justify-center self-stretch overflow-hidden rounded-xl bg-[#1f8ce6]"
+      :class="
+        hasError
+          ? 'bg-[#f83a41] text-white'
+          : isUploading
+          ? 'bg-gradient-to-r from-emerald-500 from-60% to-bg-[#1f8ce4]'
+          : fileList.length === 0 || fileList.length > 10
+          ? 'bg-[#eee] text-[#C5C8CE]'
+          : 'bg-[#1F8CE6] text-white'
+      "
       @click="uploadFiles"
     >
       <div
         class="h-full"
-        :class="
-          hasError
-            ? 'bg-[#f83a41] text-white'
-            : isUploading
-            ? 'bg-gradient-to-r from-emerald-500 from-60% to-bg-[#1f8ce6]'
-            : fileList.length === 0 || fileList.length > 10
-            ? 'bg-[#eee] text-[#C5C8CE]'
-            : 'bg-[#1F8CE6] text-white'
-        "
+        :class="hasError"
         :style="
           progress
             ? 'width: ' + progress.toString().padStart(2, '0') + '%'
