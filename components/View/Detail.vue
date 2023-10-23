@@ -16,7 +16,7 @@
       @update:is-open="handleIsOpenUpdate"
       @confirm="handleConfirmClick"
     />
-    <div class="flex w-full flex-col justify-start">
+    <div v-auto-animate class="flex w-full flex-col justify-start">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start gap-2">
           <p class="text-left text-sm font-medium text-[#646f7c] flex-shrink-0">
@@ -31,7 +31,11 @@
             <p
               class="text-left text-sm font-medium text-[#646f7c] line-clamp-1"
             >
-              {{ props.document.url }}
+              {{
+                props.document.type !== 'MEMO'
+                  ? props.document.url
+                  : updatedText.length + '자'
+              }}
             </p>
           </NuxtLink>
         </div>
@@ -88,17 +92,29 @@
             leave-to-class="transform scale-95 opacity-0"
           >
             <HeadlessMenuItems
-              class="absolute right-0 mt-1 w-[71px] origin-top-right divide-yd bg-white rounded-xl border border-[#e6e8eb] shadow-lg outline-none"
+              class="absolute right-0 mt-1 w-24 origin-top-right divide-yd bg-white rounded-xl border border-[#e6e8eb] shadow-lg outline-none"
             >
               <div class="py-">
                 <HeadlessMenuItem v-slot="{ active }">
                   <button
                     :class="[
                       active ? 'bg-blue-400 text-white' : 'text-gray-900',
-                      'group flex w-full items-center justify-center rounded-t-md px-2 py-2 text-sm border-t-0 border-r-0 border-b border-l-0 border-[#e6e8eb]',
+                      'group flex w-full items-center justify-center rounded-t-md px-2 py-2 text-md border-t-0 border-r-0 border-b border-l-0 border-[#e6e8eb]',
                     ]"
                     @click="openCollectionModal"
                   >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="-ml-2"
+                      width="20"
+                      height="20"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+                      />
+                    </svg>
                     컬렉션
                   </button>
                 </HeadlessMenuItem>
@@ -106,11 +122,11 @@
                   <button
                     :class="[
                       active ? 'bg-blue-400 text-white' : 'text-[#f83a41]',
-                      'group flex w-full items-center justify-center rounded-b-md px-2 py-2 text-sm font-medium ',
+                      'group flex w-full items-center justify-center rounded-b-md px-2 py-2 text-md font-medium ',
                     ]"
                     @click="openModal"
                   >
-                    삭제하기
+                    삭제
                   </button>
                 </HeadlessMenuItem>
               </div>
@@ -133,10 +149,19 @@
           onerror="this.onerror = null; this.src = '/image/imageHolder.svg'"
         />
       </div>
-      <NuxtLink :to="props.document.url" target="_blank">
-        <p class="text-left text-[28px] font-bold text-[#111] mt-4 mb-8">
-          {{ props.document.title }}
-        </p>
+      <NuxtLink :to="props.document.url" target="_blank" class="inline-block">
+        <h1
+          class="text-left text-[28px] font-bold text-[#111] mt-4 mb-8"
+          :class="
+            props.document.type === 'MEMO' ? 'line-clamp-1' : 'inline-block'
+          "
+        >
+          {{
+            props.document.type !== 'MEMO'
+              ? props.document.title
+              : updatedText.split('\n')[0]
+          }}
+        </h1>
       </NuxtLink>
       <div
         v-if="props.document.tags"
@@ -170,6 +195,10 @@
           maxlength="1000000"
           :value="updatedText"
           @input="inputTextarea"
+          @keydown.meta.s.prevent
+          @keydown.ctrl.s.prevent
+          @keydown.meta.s="saveMemo"
+          @keydown.ctrl.s="saveMemo"
         ></textarea>
       </div>
       <div
@@ -216,6 +245,34 @@
           </div>
         </NuxtLink>
       </div>
+      <div
+        v-if="
+          props.document.type === 'MEMO' &&
+          updatedText !== props.document.content
+        "
+        class="flex gap-4"
+      >
+        <button
+          class="basis-1/2 mt-12 flex h-[52px] w-full items-center justify-center overflow-hidden rounded-xl bg-[#e6e8eb]"
+          @click="
+            if (textarea) textarea.value = props.document.content;
+            inputTextarea();
+          "
+        >
+          <p class="flex text-center text-lg font-bold text-gray-900">
+            되돌리기
+          </p>
+        </button>
+        <button
+          class="basis-1/2 mt-12 flex h-[52px] w-full items-center justify-center overflow-hidden rounded-xl"
+          :class="hasError ? 'bg-[#f83a41]' : 'bg-[#1f8ce6]'"
+          @click="saveMemo"
+        >
+          <p class="flex text-center text-lg font-bold text-white">
+            {{ hasError ? '저장 재시도' : '수정내용 저장하기' }}
+          </p>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -256,13 +313,15 @@ const updatedText = ref('');
 const progress = ref<number | null>(null);
 const downloadBtnText = ref('다운로드');
 
+const hasError = ref(false);
+
 const isModalOpen = ref(false);
 const openModal = () => {
   isModalOpen.value = true;
 };
-const handleConfirmClick = () => {
+const handleConfirmClick = async () => {
   isModalOpen.value = false;
-  documentStore.deleteDocument(props.document.docId);
+  await documentStore.deleteDocument(props.document.docId);
   router.back();
 };
 const handleIsOpenUpdate = (value: boolean) => {
@@ -274,6 +333,25 @@ const openCollectionModal = () => {
 };
 const handleCollectionIsOpenUpdate = (newIsOpen: boolean) => {
   isCollectionModalOpen.value = newIsOpen;
+};
+
+const emit = defineEmits<{
+  (event: 'shouldFetch'): void;
+}>();
+
+const saveMemo = async () => {
+  if (textarea.value || updatedText.value !== props.document.content) {
+    hasError.value = false;
+    const result = await documentStore.updateMemo(
+      props.document.docId,
+      updatedText.value,
+    );
+    if (result) {
+      emit('shouldFetch');
+    } else {
+      hasError.value = true;
+    }
+  }
 };
 
 const summary = computed(() => {

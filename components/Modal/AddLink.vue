@@ -4,7 +4,11 @@
   >
     <div class="flex flex-row items-center justify-between pl-5 pr-4 pt-5">
       <p class="leading-18 text-lg font-bold text-[#1b1c1f]">추가하기</p>
-      <button @click="emit('changeComponent', 'cancel')">
+      <button
+        :disabled="isUploading"
+        :class="isUploading ? 'cursor-not-allowed opacity-50' : ''"
+        @click="emit('changeComponent', 'cancel')"
+      >
         <svg
           width="24"
           height="24"
@@ -27,14 +31,21 @@
     <textarea
       ref="textarea"
       :value="link"
+      :disabled="isUploading"
       maxlength="1000000"
       placeholder="www.naver.com, www.google.com..."
       class="ml-5 mr-5 mt-8 flex-grow resize-none self-stretch overflow-auto rounded-xl border border-[#e6e8eb] bg-[#fefefe] p-4 outline-none"
       @input="inputTextarea"
       @paste="pasteTextarea"
+      @keydown.meta.s.prevent
+      @keydown.ctrl.s.prevent
+      @keydown.meta.s="handleClick"
+      @keydown.ctrl.s="handleClick"
+      @keydown.meta.enter="handleClick"
+      @keydown.ctrl.enter="handleClick"
     ></textarea>
     <p class="ml-5 mr-5 mt-3 text-left text-sm text-[#646f7c]">
-      엔터와 공백 또는 ,로 구분하여 여러 링크를 추가할 수 있어요
+      엔터 또는 공백으로 구분하여 여러 링크를 추가할 수 있어요
     </p>
     <button
       :disabled="!hasUrl || isUploading"
@@ -93,7 +104,7 @@ const hasError = ref(false);
 
 const hasUrl = computed(() => {
   const url = link.value.trim();
-  const splitUrl = url.split(/\n|,|\s/);
+  const splitUrl = url.split(/\n|\s/);
   const urlList = splitUrl.map((item) => item.trim()).filter(checkUrl);
   return urlList.length > 0;
 });
@@ -136,7 +147,7 @@ const pasteTextarea = (e: ClipboardEvent) => {
     const pastedText = e.clipboardData.getData('text');
 
     // 텍스트를 분할하고, 유효한 URL만 필터링합니다.
-    const splitText = pastedText.split(/\n|,|\s/);
+    const splitText = pastedText.split(/\n|\s/);
     const urlList = splitText.map((item) => item.trim()).filter(checkUrl);
 
     // 필터링된 URL을 공백으로 구분하여 합칩니다.
@@ -161,7 +172,7 @@ const saveLink = async () => {
   emit('isUploading', isUploading.value);
 
   const url = link.value.trim();
-  const splitUrl = url.split(/\n|,|\s/);
+  const splitUrl = url.split(/\n|\s/);
   const urlList = splitUrl.map((item) => item.trim()).filter(checkUrl);
 
   const totalProgress = urlList.length;

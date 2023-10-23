@@ -45,7 +45,10 @@
                   <ViewSkeletonDetail />
                 </div>
                 <div v-else>
-                  <ViewDetail :document="document" />
+                  <ViewDetail
+                    :document="document"
+                    @should-fetch="initialFetch"
+                  />
                 </div>
               </div>
             </div>
