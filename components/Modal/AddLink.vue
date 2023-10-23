@@ -25,20 +25,57 @@
       </button>
     </div>
     <textarea
-      v-model="link"
-      placeholder="예시: www.naver.com, www.google.com..."
+      ref="textarea"
+      :value="link"
+      maxlength="1000000"
+      placeholder="www.naver.com, www.google.com..."
       class="ml-5 mr-5 mt-8 flex-grow resize-none self-stretch overflow-auto rounded-xl border border-[#e6e8eb] bg-[#fefefe] p-4 outline-none"
+      @input="inputTextarea"
+      @paste="pasteTextarea"
     ></textarea>
     <p class="ml-5 mr-5 mt-3 text-left text-sm text-[#646f7c]">
-      엔터 또는 ,로 구분하여 여러 링크를 추가할 수 있어요
+      엔터와 공백 또는 ,로 구분하여 여러 링크를 추가할 수 있어요
     </p>
     <button
-      :disabled="!link"
-      :class="!link ? 'bg-[#eee] text-[#C5C8CE]' : 'bg-[#1F8CE6] text-white'"
-      class="mb-5 ml-5 mr-5 mt-6 flex h-[52px] flex-shrink-0 flex-grow-0 items-center justify-center self-stretch overflow-hidden rounded-xl bg-[#1f8ce6]"
+      :disabled="!hasUrl || isUploading"
+      class="relative mb-5 ml-5 mr-5 mt-6 flex h-[52px] flex-shrink-0 flex-grow-0 items-center justify-center self-stretch overflow-hidden rounded-xl bg-[#1f8ce6]"
       @click="handleClick"
     >
-      <p class="flex-grow text-center text-lg font-bold">추가하기</p>
+      <div
+        class="h-full"
+        :class="
+          hasError
+            ? 'bg-[#f83a41]'
+            : isUploading
+            ? 'bg-gradient-to-r from-emerald-500 from-60% to-bg-[#1f8ce4]'
+            : !hasUrl || isUploading
+            ? 'bg-[#eee] text-[#C5C8CE]'
+            : 'bg-[#1F8CE6] text-white'
+        "
+        :style="
+          progress
+            ? 'width: ' + progress.toString().padStart(2, '0') + '%'
+            : 'width:100%'
+        "
+      ></div>
+      <p
+        class="absolute flex-grow text-center text-lg font-bold"
+        :class="
+          hasError
+            ? 'animate-shake text-white'
+            : !hasUrl
+            ? 'text-[#C5C8CE]'
+            : 'text-white'
+        "
+      >
+        {{
+          isUploading
+            ? '저장 중...' + progress.toString().padStart(2, '0') + '%'
+            : hasError
+            ? '실패 링크 재시도'
+            : '저장하기'
+        }}
+      </p>
     </button>
   </div>
 </template>
@@ -48,24 +85,118 @@ import { useAddStore } from '~/stores/add';
 
 const addStore = useAddStore();
 const link = ref('');
+const textarea = ref<HTMLTextAreaElement | null>(null);
+
+const isUploading = ref(false);
+const progress = ref(0);
+const hasError = ref(false);
+
+const hasUrl = computed(() => {
+  const url = link.value.trim();
+  const splitUrl = url.split(/\n|,|\s/);
+  const urlList = splitUrl.map((item) => item.trim()).filter(checkUrl);
+  return urlList.length > 0;
+});
+
+const checkUrl = (url: string) => {
+  // TODO: url이 () [] "" ''로 감싸진 경우 처리
+
+  // http: 또는 https:로 시작하거나 도메인만
+  const regex = /^(?:(?:https?):\/\/)?(?:[\S]+\.+[\S]+)(?:\/[^\s]*)?$/i;
+
+  return regex.test(url) ? url : false;
+};
+
+onMounted(() => {
+  if (textarea.value) {
+    textarea.value.focus();
+  }
+});
+
 const emit = defineEmits<{
   (event: 'changeComponent', componentName: string): void;
+  (event: 'isUploading', isUploading: boolean): void;
 }>();
-const handleClick = () => {
+
+const inputTextarea = () => {
+  if (textarea.value) {
+    hasError.value = false;
+    link.value = textarea.value.value;
+    textarea.value.style.height = 'auto';
+    textarea.value.style.height = textarea.value.scrollHeight + 5 + 'px';
+  }
+};
+
+const pasteTextarea = (e: ClipboardEvent) => {
+  if (e.clipboardData) {
+    e.preventDefault();
+
+    // clipboardData가 있는지 확인
+    // 클립보드에서 텍스트 데이터를 가져옵니다.
+    const pastedText = e.clipboardData.getData('text');
+
+    // 텍스트를 분할하고, 유효한 URL만 필터링합니다.
+    const splitText = pastedText.split(/\n|,|\s/);
+    const urlList = splitText.map((item) => item.trim()).filter(checkUrl);
+
+    // 필터링된 URL을 공백으로 구분하여 합칩니다.
+    if (textarea.value) textarea.value.value = urlList.join('\n');
+  }
+  inputTextarea();
+};
+
+useResizeObserver(textarea, () => {
+  inputTextarea();
+});
+
+const handleClick = async () => {
+  await saveLink();
+};
+
+const saveLink = async () => {
+  if (!hasUrl.value || isUploading.value) return;
+
+  isUploading.value = true;
+  hasError.value = false;
+  emit('isUploading', isUploading.value);
+
   const url = link.value.trim();
-  const splitUrl = url.split(/\n|,/);
-  const urlList = splitUrl.map((item) => item.trim());
+  const splitUrl = url.split(/\n|,|\s/);
+  const urlList = splitUrl.map((item) => item.trim()).filter(checkUrl);
+
+  const totalProgress = urlList.length;
+  let currentProgress = 0;
+
+  const failedUrlList = [];
   for (const i of urlList) {
     let url = i;
-    if (!i.startsWith('http://') && !i.startsWith('https://')) {
-      url = 'https://' + i;
-      addStore.addLink(url);
-      // Assuming the action is named 'createWebPage'
+    if (!i.startsWith('http:') && !i.startsWith('https:')) {
+      url = 'http://' + i;
+      const result = await addStore.addLink(url);
+      if (!result) {
+        failedUrlList.push(i);
+      }
     } else {
-      addStore.addLink(url);
-      // Assuming the action is named 'createWebPage'
+      const result = await addStore.addLink(url);
+      if (!result) {
+        failedUrlList.push(i);
+      }
     }
+
+    currentProgress++;
+    progress.value = Math.floor((currentProgress / totalProgress) * 100);
   }
-  emit('changeComponent', 'cancel');
+
+  isUploading.value = false;
+  emit('isUploading', isUploading.value);
+  progress.value = 0;
+
+  if (failedUrlList.length) {
+    hasError.value = true;
+    link.value = failedUrlList.join('\n');
+    inputTextarea();
+  } else {
+    emit('changeComponent', 'cancel');
+  }
 };
 </script>

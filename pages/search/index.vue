@@ -24,7 +24,6 @@
             <input
               ref="searchInput"
               v-model="query"
-              autofocus
               type="text"
               class="w-full h-full text-[#646f7c] text-base font-medium outline-none mx-2"
               placeholder="검색어를 입력해주세요"
@@ -183,14 +182,6 @@ const loadObserverTarget = ref<HTMLElement | null>(null);
 const loadObserver = ref<IntersectionObserver | null>(null);
 
 const searchStore = useSearchStore();
-
-onMounted(() => {
-  setObserver();
-});
-
-onUnmounted(() => {
-  unsetObserver();
-});
 
 onActivated(() => {
   setObserver();

@@ -168,9 +168,8 @@
           class="mt-8 w-full rounded-xl border border-[#e6e8eb] bg-[#F4F6F8] p-4 outline-none resize-none"
           rows="6"
           maxlength="1000000"
-          :value="props.document.content"
-          @input="resizeTextarea"
-          @change="changeTextarea"
+          :value="updatedText"
+          @input="inputTextarea"
         ></textarea>
       </div>
       <div
@@ -355,22 +354,17 @@ const content = computed(() => {
   return props.document.content;
 });
 
-const resizeTextarea = () => {
+const inputTextarea = () => {
   if (textarea.value) {
+    updatedText.value = textarea.value.value;
     textarea.value.style.height = 'auto';
     textarea.value.style.height = textarea.value.scrollHeight + 5 + 'px';
   }
 };
 
 useResizeObserver(textarea, () => {
-  resizeTextarea();
+  inputTextarea();
 });
-
-const changeTextarea = () => {
-  if (textarea.value) {
-    updatedText.value = textarea.value.value;
-  }
-};
 
 const fileDownload = async () => {
   if (progress.value) return;
@@ -438,7 +432,7 @@ onMounted(() => {
   if (props.document.type === 'MEMO' && textarea.value) {
     textarea.value.value = props.document.content;
     updatedText.value = props.document.content;
-    resizeTextarea();
+    inputTextarea();
   }
 });
 </script>

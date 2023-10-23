@@ -30,12 +30,12 @@
     </div>
     <div v-auto-animate>
       <div
-        v-if="!isUploading"
+        v-show="!isUploading"
         class="ml-5 mr-5 mt-8 flex shrink-0 h-[196px] flex-col items-center justify-center gap-2.5 rounded-2xl border border-[#e6e8eb] bg-[#fefefe] p-2.5"
         :class="
           fileList.length >= 10
             ? isDragover
-              ? 'cursor-not-allowed bg-gray-200 ring-4 ring-red-500'
+              ? 'cursor-not-allowed bg-gray-200 ring-4 ring-red-500 animate-shake'
               : 'cursor-not-allowed bg-gray-200'
             : isDragover
             ? 'ring-4 ring-remak-blue'
@@ -124,7 +124,7 @@
         </div>
       </div>
       <div
-        v-if="isUploading"
+        v-show="isUploading"
         class="ml-5 mr-5 mt-8 flex shrink-0 h-[196px] flex-col items-center justify-center gap-2.5 rounded-2xl border overflow-hidden border-[#fefefe] bg-[#fefefe] p-2.5"
       >
         <img
@@ -147,7 +147,12 @@
           class="flex justify-between w-full text-sm font-normal text-[#28323c] mb-2 px-1"
         >
           <div>{{ fileList.length }} / 10</div>
-          <div class="text-red-500 font-medium">{{ lastMessage }}</div>
+          <div
+            class="text-red-500 font-medium"
+            :class="lastMessage ? 'animate-shake' : ''"
+          >
+            {{ lastMessage }}
+          </div>
           <div class="cursor-pointer" @click="deleteAll">전체삭제</div>
         </div>
         <div
@@ -197,27 +202,35 @@
     <button
       :disabled="fileList.length === 0 || fileList.length > 10 || isUploading"
       class="relative mb-5 ml-5 mr-5 mt-6 flex flex-col h-[52px] flex-shrink-0 flex-grow-0 items-start justify-center self-stretch overflow-hidden rounded-xl bg-[#1f8ce6]"
-      :class="
-        hasError
-          ? 'bg-[#f83a41] text-white'
-          : isUploading
-          ? 'bg-gradient-to-r from-emerald-500 from-60% to-bg-[#1f8ce4]'
-          : fileList.length === 0 || fileList.length > 10
-          ? 'bg-[#eee] text-[#C5C8CE]'
-          : 'bg-[#1F8CE6] text-white'
-      "
       @click="uploadFiles"
     >
       <div
         class="h-full"
-        :class="hasError"
+        :class="
+          hasError
+            ? 'bg-[#f83a41]'
+            : isUploading
+            ? 'bg-gradient-to-r from-emerald-500 from-60% to-bg-[#1f8ce4]'
+            : fileList.length === 0 || fileList.length > 10
+            ? 'bg-[#eee] text-[#C5C8CE]'
+            : 'bg-[#1F8CE6] text-white'
+        "
         :style="
           progress
             ? 'width: ' + progress.toString().padStart(2, '0') + '%'
             : 'width:100%'
         "
       ></div>
-      <p class="absolute w-full flex-grow text-center text-lg font-bold">
+      <p
+        class="absolute w-full flex-grow text-center text-lg font-bold"
+        :class="
+          hasError
+            ? 'animate-shake text-white'
+            : fileList.length === 0 || fileList.length > 10
+            ? 'text-[#C5C8CE]'
+            : 'text-white'
+        "
+      >
         {{
           isUploading
             ? '업로드 중...' + progress.toString().padStart(2, '0') + '%'

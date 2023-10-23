@@ -104,7 +104,7 @@ const closeModal = () => {
   if (isComponentWorking.value) {
     return;
   }
-  documentStore.setShouldFetch(true);
   emit('update:isOpen', false);
+  documentStore.setShouldFetch(true);
 };
 </script>

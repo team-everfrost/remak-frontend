@@ -4,7 +4,7 @@
   >
     <button
       :class="buttonClass(1)"
-      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm"
+      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm hover:bg-[#e1f1ff] hover:text-[#1F8CE6]"
       @click="handleSearchClick"
     >
       <svg
@@ -29,7 +29,7 @@
     </button>
     <button
       :class="buttonClass(2)"
-      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm"
+      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm hover:bg-[#e1f1ff] hover:text-[#1F8CE6]"
       @click="handleTagClick"
     >
       <svg
@@ -53,7 +53,7 @@
 
     <button
       :class="buttonClass(3)"
-      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm"
+      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm hover:bg-[#e1f1ff] hover:text-[#1F8CE6]"
       @click="handleCollectionClick"
     >
       <svg
@@ -73,7 +73,7 @@
     </button>
     <button
       :class="buttonClass(4)"
-      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm"
+      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm hover:bg-[#e1f1ff] hover:text-[#1F8CE6]"
       @click="handleAccountClick"
     >
       <svg
