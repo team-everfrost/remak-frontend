@@ -1,5 +1,5 @@
 <template>
-  <button>
+  <NuxtLink :to="`/tag/${name}`" class="cursor-pointer">
     <div
       class="flex min-h-[124px] min-w-[140px] max-w-[258px]overflow-hidden rounded-2xl border border-[#e6e8eb] bg-white"
       style="
@@ -20,7 +20,7 @@
         </p>
       </div>
     </div>
-  </button>
+  </NuxtLink>
 </template>
 
 <script setup lang="ts">

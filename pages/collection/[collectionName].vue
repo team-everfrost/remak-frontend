@@ -1,12 +1,10 @@
 <template>
   <div class="flex min-h-screen flex-col">
     <TopBar />
-    <ModalInformAlert
+    <ModalEditCollection
       :is-open="isModalOpen"
-      :modal-title="'컬렉션 삭제'"
-      :modal-subtitle="'컬렉션을 삭제하시겠습니까?'"
-      :cancel-button-text="'취소'"
-      :confirm-button-text="'삭제'"
+      :previous-collection-name="collectionName"
+      :previous-collection-description="collectionDescription"
       @update:is-open="handleIsOpenUpdate"
     />
 
@@ -15,8 +13,8 @@
       <div class="bg-[#F4F6F8] ml-48 mt-20 flex flex-grow">
         <div class="m-20 flex flex-grow flex-col">
           <div class="flex w-full justify-start flex-row">
-            <p class="font-bold text-[32px]">컬렉션이름</p>
-            <button class="ml-3">
+            <p class="font-bold text-[32px]">{{ collectionName }}</p>
+            <button class="ml-3" @click="openModal">
               <svg
                 width="24"
                 height="25"
@@ -35,17 +33,29 @@
           </div>
           <div class="flex w-full flex-row justify-end gap-6 mt-9">
             <button
+              v-if="documents.length > 0"
               class="flex justify-end items-end px-3 py-2 rounded-md bg-[#475161] text-white"
               @click="openModal"
             >
               편집하기
             </button>
           </div>
-          <div v-if="true" class="flex flex-grow">
+          <div v-if="documents.length === 0" class="flex flex-grow">
             <NoItemBox :discription="'등록된 자료가 없어요'" />
           </div>
-          <div>
-            <!-- 여기에 자료를 넣을 것 -->
+          <div v-show="documents.length > 0" class="mt-9">
+            <MasonryWall :items="documents" :column-width="258" :gap="16">
+              <template #default="{ item }">
+                <MainDocumentCard
+                  :type="item.type"
+                  :image-url="item.imageUrl"
+                  :doc-id="item.docId"
+                  :title="item.title"
+                  :summary="item.summary"
+                  :info="item.info"
+                />
+              </template>
+            </MasonryWall>
           </div>
         </div>
       </div>
@@ -54,6 +64,13 @@
 </template>
 
 <script setup lang="ts">
+import { useCollectionStore } from '~/stores/collection';
+const route = useRoute();
+const collectionStore = useCollectionStore();
+const documents = ref([] as any[]);
+
+const collectionName = route.params.collectionName as string;
+const collectionDescription = ref('');
 const isModalOpen = ref(false);
 const handleIsOpenUpdate = (value: boolean) => {
   isModalOpen.value = value;
@@ -61,4 +78,17 @@ const handleIsOpenUpdate = (value: boolean) => {
 const openModal = () => {
   isModalOpen.value = true;
 };
+
+const initalFetch = async () => {
+  collectionDescription.value =
+    collectionStore.getCollectionDescription(collectionName);
+  const result = await collectionStore.fetchCollectionDetail(collectionName);
+  if (result) {
+    documents.value = cardParser(result);
+  }
+};
+
+onMounted(() => {
+  initalFetch();
+});
 </script>

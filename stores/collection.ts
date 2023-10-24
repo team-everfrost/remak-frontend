@@ -15,6 +15,11 @@ export const useCollectionStore = defineStore('collection', () => {
     },
   ]);
 
+  const getCollectionDescription = (name: string) => {
+    const collection = collections.value.find((c) => c.name === name);
+    return collection ? collection.description : '';
+  };
+
   const initalFetch = async () => {
     collections.value = [];
     return await fetchCollections();
@@ -94,6 +99,53 @@ export const useCollectionStore = defineStore('collection', () => {
     return false;
   };
 
+  const fetchCollectionDetail = async (
+    collectionName: string,
+    cursor?: string,
+    docid?: string,
+    limit?: number,
+  ) => {
+    if (!authStore.isSignedIn) return false;
+
+    const { data, error }: any = await useFetch('/document/search/collection', {
+      baseURL: apiBaseUrl,
+      method: 'GET',
+      params: { collectionName, cursor, docid, limit },
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    });
+
+    if (data.value && !error.value) {
+      return data.value.data;
+    }
+    return false;
+  };
+
+  const editCollection = async (
+    name: string,
+    newName: string,
+    description: string,
+  ) => {
+    if (!authStore.isSignedIn) return false;
+
+    const { data, error }: any = await useFetch(`/collection/${name}`, {
+      baseURL: apiBaseUrl,
+      method: 'PATCH',
+      body: { newName, description },
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    });
+
+    if (data.value && !error.value) {
+      return true;
+    }
+    return false;
+  };
+
   return {
     collections,
     endOfCollections,
@@ -102,5 +154,8 @@ export const useCollectionStore = defineStore('collection', () => {
     initalFetch,
     createCollection,
     addDocInCollection,
+    getCollectionDescription,
+    fetchCollectionDetail,
+    editCollection,
   };
 });

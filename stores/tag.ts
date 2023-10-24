@@ -55,6 +55,31 @@ export const useTagStore = defineStore('tag', () => {
     return tags.value;
   });
 
+  // 태그 디테일 자료 가져오기
+  const fetchTagDetail = async (
+    tagName: string,
+    cursor?: string,
+    docid?: string,
+    limit?: number,
+  ) => {
+    if (!authStore.isSignedIn) return false;
+
+    const { data, error }: any = await useFetch('/document/search/tag', {
+      baseURL: apiBaseUrl,
+      method: 'GET',
+      params: { tagName, cursor, docid, limit },
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    });
+
+    if (data.value && !error.value) {
+      return data.value.data;
+    }
+    return false;
+  };
+
   return {
     tags,
     endOfTags,
@@ -62,5 +87,6 @@ export const useTagStore = defineStore('tag', () => {
     getTags,
     initalFetch,
     isTagExists,
+    fetchTagDetail,
   };
 });

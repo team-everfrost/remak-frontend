@@ -13,7 +13,7 @@
         <div class="fixed inset-0 bg-black bg-opacity-25" />
       </HeadlessTransitionChild>
 
-      <div class="fixed inset-0">
+      <div class="fixed inset-0 w-screen overflow-y-auto">
         <div class="flex min-h-full items-center justify-center text-center">
           <HeadlessTransitionChild
             as="template"

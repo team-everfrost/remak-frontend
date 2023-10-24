@@ -13,7 +13,7 @@
         <div class="fixed inset-0 bg-black bg-opacity-25" />
       </HeadlessTransitionChild>
 
-      <div class="fixed inset-0">
+      <div class="fixed inset-0 w-screen overflow-y-auto">
         <div class="flex min-h-full items-center justify-center text-center">
           <HeadlessTransitionChild
             as="template"
@@ -31,7 +31,7 @@
                 class="flex flex-col max-w-[480px] bg-white w-full h-full rounded-[20px]"
               >
                 <div class="flex flex-row justify-between mt-5 mx-5">
-                  <p class="text-lg font-bold">새 컬렉션 만들기</p>
+                  <p class="text-lg font-bold">컬렉션 수정</p>
                   <button @click="closeModal">
                     <svg
                       width="24"
@@ -59,7 +59,7 @@
                   >
                 </p>
                 <textarea
-                  v-model="collectionName"
+                  v-model="newCollectionName"
                   class="flex h-full max-h-14 bg-[##FEFEFE] rounded-xl px-4 py-2 mt-3 items-center mx-4 resize-none outline-none border border-[#e6e8eb]"
                   placeholder="컬렉션 이름을 입력해주세요"
                 ></textarea>
@@ -67,22 +67,22 @@
                   컬렉션 설명
                 </p>
                 <textarea
-                  v-model="collectionDescription"
+                  v-model="newCollectionDescription"
                   class="flex h-full max-h-20 bg-[##FEFEFE] rounded-xl px-4 py-2 mt-3 items-center mx-4 resize-none outline-none border border-[#e6e8eb]"
                   placeholder="컬렉션 설명을 입력해주세요"
                 ></textarea>
                 <div class="flex-grow"></div>
                 <button
-                  :disabled="!collectionName"
+                  :disabled="!newCollectionName"
                   :class="
-                    !collectionName
+                    !newCollectionName
                       ? 'bg-[#eee] text-[#C5C8CE]'
                       : 'bg-[#1F8CE6] text-white'
                   "
                   class="flex mx-4 h-[52px] mt-28 justify-center items-center rounded-xl text-lg font-bold text-center mb-5"
                   @click="handleClick"
                 >
-                  생성하기
+                  수정하기
                 </button>
               </div>
             </HeadlessDialogPanel>
@@ -99,22 +99,47 @@ import { useCollectionStore } from '~/stores/collection';
 const collectionStore = useCollectionStore();
 const collectionName = ref('');
 const collectionDescription = ref('');
+const router = useRouter();
 
+// Todo: 수정
 const handleClick = () => {
-  collectionStore.createCollection(
-    collectionName.value,
-    collectionDescription.value,
-  );
-  collectionName.value = '';
-  collectionDescription.value = '';
-
-  closeModal();
+  collectionStore
+    .editCollection(
+      props.previousCollectionName,
+      newCollectionName.value,
+      newCollectionDescription.value,
+    )
+    .then(() => {
+      router.replace(`/collection/${newCollectionName.value}`);
+      closeModal();
+    });
 };
 
-// Define the props
-defineProps<{
-  isOpen: boolean; // Change 'initialIsOpen' to 'isOpen'
-}>();
+const props = withDefaults(
+  defineProps<{
+    isOpen: boolean;
+    previousCollectionName: string;
+    previousCollectionDescription: string;
+  }>(),
+  {
+    isOpen: false,
+    previousCollectionName: '',
+    previousCollectionDescription: '',
+  },
+);
+
+watch(
+  () => props.isOpen,
+  (newValue, oldValue) => {
+    if (newValue === true && oldValue === false) {
+      newCollectionName.value = props.previousCollectionName;
+      newCollectionDescription.value = props.previousCollectionDescription;
+    }
+  },
+);
+
+const newCollectionName = ref('');
+const newCollectionDescription = ref('');
 
 // Define the emits
 const emit = defineEmits<{
