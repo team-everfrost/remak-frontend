@@ -136,7 +136,7 @@
       </div>
       <div
         v-if="props.document.type === 'IMAGE' || props.document.type === 'FILE'"
-        class="flex mt-4 h-60 items-center justify-center gap-2.5 self-stretch rounded-xl border border-[#e6e8eb] bg-[#F4F6F8] cursor-pointer"
+        class="flex mt-4 items-center justify-center gap-2.5 self-stretch rounded-xl border border-[#e6e8eb] bg-[#F4F6F8] cursor-pointer"
         :class="imageClick ? 'h-auto' : 'h-60'"
         @click="imageClick = !imageClick"
       >

@@ -60,7 +60,7 @@
           컬렉션
         </button>
         <button
-          :disabled="isLoading"
+          :disabled="isLoading || !selectedList.length"
           class="h-8 w-[78px] rounded-md bg-white text-base font-medium border border-gray-200 text-red-500 disabled:opacity-50"
           @click="openDeleteModal"
         >
@@ -139,7 +139,7 @@
                   컬렉션
                 </button>
                 <button
-                  :disabled="isLoading"
+                  :disabled="isLoading || !selectedList.length"
                   class="h-8 w-[78px] rounded-md bg-white text-base font-medium border border-gray-200 text-red-500 disabled:opacity-50"
                   @click="openDeleteModal"
                 >
