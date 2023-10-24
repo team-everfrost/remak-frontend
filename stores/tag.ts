@@ -7,12 +7,18 @@ export const useTagStore = defineStore('tag', () => {
   const apiBaseUrl = config.public.apiBaseUrl;
   const isTagExists = ref(false);
 
-  const tags = ref([
+  const tags = ref<
     {
-      name: '',
-      count: 0,
-    },
-  ]);
+      name: string;
+      count: number;
+    }[]
+  >([]);
+
+  function $reset() {
+    tags.value = [];
+    endOfTags.value = false;
+    isTagExists.value = false;
+  }
 
   const initalFetch = async () => {
     tags.value = [];
@@ -81,6 +87,7 @@ export const useTagStore = defineStore('tag', () => {
   };
 
   return {
+    $reset,
     tags,
     endOfTags,
     fetchTags,

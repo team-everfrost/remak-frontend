@@ -28,10 +28,15 @@
     >
       <div
         v-if="!topIntersection && !selectMode"
-        class="flex h-20 items-center justify-end"
+        class="flex h-20 items-center justify-end gap-4"
       >
         <button
-          :disabled="isLoading"
+          class="relative flex h-8 flex-shrink-0 w-[78px] items-center justify-center rounded-md bg-[#1f8ce6] text-center text-base font-medium text-white"
+          @click="openModal"
+        >
+          추가하기
+        </button>
+        <button
           class="h-8 w-[78px] rounded-md bg-gray-600 text-base font-medium text-white disabled:opacity-50"
           @click="setSelectMode(true)"
         >
@@ -113,7 +118,6 @@
               </button>
               <div v-if="!selectMode" class="flex flex-shrink-0 gap-4">
                 <button
-                  :disabled="isLoading"
                   class="h-8 w-[78px] rounded-md bg-gray-600 text-base font-medium text-white disabled:opacity-50"
                   @click="setSelectMode(true)"
                 >
@@ -249,7 +253,7 @@ const loadObserver = ref<IntersectionObserver | null>(null);
 const updateBtn = ref<HTMLElement | null>(null);
 const updateObserver = ref<IntersectionObserver | null>(null);
 
-const shouldUpdate = ref(false);
+const shouldUpdate = ref(true);
 const topIntersection = ref(true);
 
 const isLoading = ref(false);
@@ -289,15 +293,6 @@ watch(shouldFetch, (newVal) => {
     documentStore.setShouldFetch(false);
     initLoad();
   }
-});
-
-onMounted(() => {
-  initLoad();
-  setObserver();
-});
-
-onUnmounted(() => {
-  unsetObserver();
 });
 
 onActivated(() => {

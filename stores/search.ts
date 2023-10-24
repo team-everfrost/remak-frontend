@@ -54,6 +54,12 @@ export const useSearchStore = defineStore(
     const config = useRuntimeConfig();
     const apiBaseUrl = config.public.apiBaseUrl;
 
+    function $reset() {
+      documents.value = [];
+      searchHistory.value = [];
+      endOfDocuments.value = false;
+    }
+
     const cleanTextSearch = async (query: string) => {
       documents.value = [];
       endOfDocuments.value = false;
@@ -121,6 +127,7 @@ export const useSearchStore = defineStore(
     };
 
     return {
+      $reset,
       searchHistory,
       getDocuments,
       isEndOfDocuments,
