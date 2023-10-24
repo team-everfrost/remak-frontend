@@ -59,6 +59,10 @@ onMounted(() => {
   collectionStore.initalFetch();
 });
 
+onActivated(() => {
+  collectionStore.initalFetch();
+});
+
 const collections = computed(() => {
   return collectionStore.getCollections().map((collection) => {
     return {

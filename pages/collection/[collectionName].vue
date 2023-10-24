@@ -8,6 +8,16 @@
       @update:is-open="handleIsOpenUpdate"
     />
 
+    <DeleteAlert
+      :is-open="isDeleteModalOpen"
+      :modal-title="'정말 삭제하시겠어요?'"
+      :modal-subtitle="'나중에 다시 추가할 수 있어요.'"
+      :cancel-button-text="'취소하기'"
+      :confirm-button-text="'삭제하기'"
+      @update:is-open="handleDeleteIsOpenUpdate"
+      @confirm="handleDeleteConfirmClick"
+    />
+
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="3" class="mt-20"> </SideNavigation>
       <div class="bg-[#F4F6F8] ml-48 mt-20 flex flex-grow">
@@ -33,14 +43,34 @@
           </div>
           <div class="flex w-full flex-row justify-end gap-6 mt-9">
             <button
-              v-if="documents.length > 0"
+              v-if="documents.length > 0 && !selectMode"
               class="flex justify-end items-end px-3 py-2 rounded-md bg-[#475161] text-white"
-              @click="openModal"
+              @click="setSelectMode(true)"
             >
               편집하기
             </button>
+
+            <div v-else class="flex flex-shrink-0 gap-4 h-10">
+              <button
+                :disabled="isLoading || selectedList.length === 0"
+                class="h-8 w-[78px] rounded-md bg-white text-base font-medium border border-gray-200 text-red-500 disabled:opacity-50"
+                @click="openDeleteModal"
+              >
+                삭제하기
+              </button>
+              <button
+                :disabled="isLoading"
+                class="h-8 w-[78px] rounded-md bg-white text-base font-medium border border-gray-200 text-slate-800 disabled:opacity-50"
+                @click="setSelectMode(false)"
+              >
+                이전으로
+              </button>
+            </div>
           </div>
-          <div v-if="documents.length === 0" class="flex flex-grow">
+          <div
+            v-if="documents.length === 0 && isLoading == false"
+            class="flex flex-grow"
+          >
             <NoItemBox :discription="'등록된 자료가 없어요'" />
           </div>
           <div v-show="documents.length > 0" class="mt-9">
@@ -53,6 +83,8 @@
                   :title="item.title"
                   :summary="item.summary"
                   :info="item.info"
+                  :select-mode="selectMode"
+                  @is-selected="setSelected($event, item.docId)"
                 />
               </template>
             </MasonryWall>
@@ -72,11 +104,45 @@ const documents = ref([] as any[]);
 const collectionName = route.params.collectionName as string;
 const collectionDescription = ref('');
 const isModalOpen = ref(false);
+const isLoading = ref(true);
+
+const selectMode = ref(false);
+const selectedList = ref([] as string[]);
+
+const setSelectMode = (value: boolean) => {
+  selectMode.value = value;
+  selectedList.value = [];
+};
+
+const setSelected = (value: boolean, docId: string) => {
+  if (value) {
+    selectedList.value.push(docId);
+  } else {
+    selectedList.value = selectedList.value.filter((id) => id !== docId);
+  }
+};
+
 const handleIsOpenUpdate = (value: boolean) => {
   isModalOpen.value = value;
 };
 const openModal = () => {
   isModalOpen.value = true;
+};
+
+const isDeleteModalOpen = ref(false);
+const openDeleteModal = () => {
+  isDeleteModalOpen.value = true;
+};
+const handleDeleteConfirmClick = async () => {
+  isDeleteModalOpen.value = false;
+  await collectionStore.deleteDocuments(selectedList.value, collectionName);
+  documents.value = documents.value.filter(
+    (doc) => !selectedList.value.includes(doc.docId),
+  );
+  selectMode.value = false;
+};
+const handleDeleteIsOpenUpdate = (value: boolean) => {
+  isDeleteModalOpen.value = value;
 };
 
 const initalFetch = async () => {
@@ -86,9 +152,14 @@ const initalFetch = async () => {
   if (result) {
     documents.value = cardParser(result);
   }
+  isLoading.value = false;
 };
 
 onMounted(() => {
+  initalFetch();
+});
+
+onActivated(() => {
   initalFetch();
 });
 </script>

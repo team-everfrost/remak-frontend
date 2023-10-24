@@ -146,6 +146,25 @@ export const useCollectionStore = defineStore('collection', () => {
     return false;
   };
 
+  const deleteDocuments = async (removedDocIds: string[], name: string) => {
+    if (!authStore.isSignedIn) return false;
+
+    const { data, error }: any = await useFetch(`/collection/${name}`, {
+      baseURL: apiBaseUrl,
+      method: 'PATCH',
+      body: { removedDocIds },
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    });
+
+    if (data.value && !error.value) {
+      return true;
+    }
+    return false;
+  };
+
   return {
     collections,
     endOfCollections,
@@ -157,5 +176,6 @@ export const useCollectionStore = defineStore('collection', () => {
     getCollectionDescription,
     fetchCollectionDetail,
     editCollection,
+    deleteDocuments,
   };
 });

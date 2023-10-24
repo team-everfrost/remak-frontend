@@ -132,6 +132,7 @@
                     :title="item.title"
                     :summary="item.summary"
                     :info="item.info"
+                    :select-mode="false"
                   />
                 </template>
               </MasonryWall>

@@ -1,6 +1,6 @@
 <template>
   <HeadlessTransitionRoot appear :show="isOpen" as="template">
-    <HeadlessDialog as="div" class="relative z-10" @close="closeModal">
+    <HeadlessDialog as="div" class="relative z-50" @close="closeModal">
       <HeadlessTransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -128,16 +128,6 @@ const props = withDefaults(
   },
 );
 
-watch(
-  () => props.isOpen,
-  (newValue, oldValue) => {
-    if (newValue === true && oldValue === false) {
-      newCollectionName.value = props.previousCollectionName;
-      newCollectionDescription.value = props.previousCollectionDescription;
-    }
-  },
-);
-
 const newCollectionName = ref('');
 const newCollectionDescription = ref('');
 
@@ -150,6 +140,8 @@ const emit = defineEmits<{
 const closeModal = () => {
   collectionName.value = '';
   collectionDescription.value = '';
+  newCollectionName.value = props.previousCollectionName;
+  newCollectionDescription.value = props.previousCollectionDescription;
   emit('update:isOpen', false);
 };
 </script>

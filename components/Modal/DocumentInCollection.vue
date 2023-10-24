@@ -1,6 +1,6 @@
 <template>
   <HeadlessTransitionRoot appear :show="isOpen" as="template">
-    <HeadlessDialog as="div" class="relative z-10" @close="closeModal">
+    <HeadlessDialog as="div" class="relative z-50" @close="closeModal">
       <HeadlessTransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -209,7 +209,7 @@ import { useCollectionStore } from '~/stores/collection';
 const collectionStore = useCollectionStore();
 
 onMounted(() => {
-  collectionStore.initalFetch();
+  init();
 });
 
 const computedCollections = computed(() => {
@@ -226,11 +226,6 @@ const computedCollections = computed(() => {
 const collections = ref<
   { name: string; description: string; count: number; isSelected: boolean }[]
 >([]);
-
-// computedCollections 값이 변경될 때마다 collections 변수를 업데이트합니다.
-watch(computedCollections, (newCollections) => {
-  collections.value = [...newCollections];
-});
 
 const handleClick = () => {
   collections.value.forEach((collection) => {
@@ -260,16 +255,18 @@ const emit = defineEmits<{
 
 // Update the 'closeModal' function to emit the updated 'isOpen' value
 const closeModal = () => {
+  collections.value.forEach((collection) => {
+    collection.isSelected = false;
+  });
   emit('update:isOpen', false);
 };
 
-watch(
-  () => props.isOpen,
-  () => {
-    collections.value = collections.value.map((collection) => ({
-      ...collection,
-      isSelected: false,
-    }));
-  },
-);
+onActivated(() => {
+  init();
+});
+
+const init = async () => {
+  await collectionStore.initalFetch();
+  collections.value = computedCollections.value;
+};
 </script>

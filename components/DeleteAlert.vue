@@ -1,6 +1,6 @@
 <template>
   <HeadlessTransitionRoot appear :show="isOpen" as="template">
-    <HeadlessDialog as="div" class="relative z-10" @close="closeModal">
+    <HeadlessDialog as="div" class="relative z-50" @close="closeModal">
       <HeadlessTransitionChild
         as="template"
         enter="duration-300 ease-out"

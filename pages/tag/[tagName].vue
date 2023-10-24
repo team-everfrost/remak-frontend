@@ -9,7 +9,10 @@
             <p class="font-bold text-[32px]">{{ tagName }}</p>
           </div>
 
-          <div v-if="documents.length === 0" class="flex flex-grow">
+          <div
+            v-if="documents.length === 0 && isLoading == false"
+            class="flex flex-grow"
+          >
             <NoItemBox :discription="'등록된 자료가 없어요'" />
           </div>
           <div v-show="documents.length > 0" class="mt-9">
@@ -22,6 +25,7 @@
                   :title="item.title"
                   :summary="item.summary"
                   :info="item.info"
+                  :select-mode="false"
                 />
               </template>
             </MasonryWall>
@@ -40,12 +44,14 @@ const tagStore = useTagStore();
 
 const tagName = route.params.tagName as string;
 const documents = ref([] as any[]);
+const isLoading = ref(true);
 
 const initalFetch = async () => {
   const result = await tagStore.fetchTagDetail(tagName);
   if (result) {
     documents.value = cardParser(result);
   }
+  isLoading.value = false;
 };
 
 onMounted(() => {
