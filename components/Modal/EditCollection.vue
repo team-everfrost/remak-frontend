@@ -110,7 +110,9 @@ const handleClick = () => {
       newCollectionDescription.value,
     )
     .then(() => {
-      router.replace(`/collection/${newCollectionName.value}`);
+      router.replace(
+        `/collection/${encodeURIComponent(newCollectionName.value)}`,
+      );
       closeModal();
     });
 };

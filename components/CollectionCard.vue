@@ -1,5 +1,8 @@
 <template>
-  <NuxtLink :to="`/collection/${name}`" class="cursor-pointer">
+  <NuxtLink
+    :to="`/collection/${encodeURIComponent(name)}`"
+    class="cursor-pointer"
+  >
     <div
       class="flex min-h-[124px] min-w-[140px] overflow-hidden rounded-2xl border border-[#e6e8eb] bg-white"
       style="
