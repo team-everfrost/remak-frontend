@@ -16,14 +16,17 @@
           <div class="flex w-full justify-between flex-row">
             <p class="font-bold text-[32px]">컬렉션</p>
             <button
-              v-if="collections.length > 0"
+              v-if="collections && collections.length > 0"
               class="flex items-center my-1 rounded-md bg-[#cce8ff] px-2 text-base font-medium text-[#1f8ce6]"
               @click="openCollectionModal"
             >
               추가하기
             </button>
           </div>
-          <div v-if="collections.length === 0" class="flex flex-grow">
+          <div
+            v-if="collections && collections.length === 0"
+            class="flex flex-grow"
+          >
             <NoItemBox
               :discription="'등록된 컬렉션이 없어요'"
               :button-text="'새 컬렉션 만들기'"
@@ -54,24 +57,26 @@ import AddCollection from '~/components/AddCollection.vue';
 import { useCollectionStore } from '~/stores/collection';
 
 const collectionStore = useCollectionStore();
-
-onMounted(() => {
-  collectionStore.initalFetch();
-});
+const collections = ref<any[]>();
+const isLoading = ref(false);
 
 onActivated(() => {
-  collectionStore.initalFetch();
+  initCollection();
 });
 
-const collections = computed(() => {
-  return collectionStore.getCollections().map((collection) => {
+const initCollection = async () => {
+  if (isLoading.value) return;
+  isLoading.value = true;
+  await collectionStore.initalFetch();
+  collections.value = collectionStore.getCollections().map((collection) => {
     return {
       name: collection.name,
       description: collection.description,
       count: collection.count,
     };
   });
-});
+  isLoading.value = false;
+};
 
 const isModalOpen = ref(false);
 
