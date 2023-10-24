@@ -19,8 +19,8 @@ export const useDocumentStore = defineStore(
   () => {
     const authStore = useAuthStore();
 
-    const shouldFetch = ref(false);
-    const setShouldFetch = (value: boolean) => {
+    const shouldFetch = ref<boolean | string>(false);
+    const setShouldFetch = (value: boolean | string) => {
       shouldFetch.value = value;
     };
 
@@ -84,6 +84,33 @@ export const useDocumentStore = defineStore(
       return false;
     };
 
+    const updateMemo = async (docId: string, content: string) => {
+      if (!authStore.isSignedIn) return false;
+
+      const { data, error }: any = await useFetch(`/document/memo/${docId}`, {
+        baseURL: apiBaseUrl,
+        method: 'PATCH',
+        body: { content },
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${authStore.accessToken}`,
+        },
+      });
+
+      if (data.value && !error.value) {
+        documents.value = documents.value.map((document) => {
+          if (document.docId === docId) {
+            return { ...document, content };
+          }
+          return document;
+        });
+        shouldFetch.value = 'cache';
+        return true;
+      }
+
+      return false;
+    };
+
     /* 디테일 및 파일 다운로드 */
 
     const fetchDocumentDetail = async (docId: string) => {
@@ -137,9 +164,36 @@ export const useDocumentStore = defineStore(
       });
 
       if (data.value && !error.value) {
+        documents.value = documents.value.filter(
+          (document) => document.docId !== docId,
+        );
+        shouldFetch.value = 'cache';
         return true;
       }
 
+      return false;
+    };
+
+    const deleteDocuments = async (docIds: string[]) => {
+      if (!authStore.isSignedIn) return false;
+
+      const jobList: string[] = docIds;
+
+      // 여러개 지우는 API가 없어서 10회 재시도
+      for (let i = 0; i < 10; i++) {
+        if (jobList.length === 0) return true;
+        for (const docId of jobList) {
+          const result = await deleteDocument(docId);
+
+          if (result) {
+            documents.value = documents.value.filter(
+              (document) => document.docId !== docId,
+            );
+            jobList.splice(jobList.indexOf(docId), 1);
+          }
+        }
+      }
+      shouldFetch.value = 'cache';
       return false;
     };
 
@@ -153,8 +207,10 @@ export const useDocumentStore = defineStore(
       fetchCached,
       fetchMore,
       fetchDocumentDetail,
+      updateMemo,
       fetchFileDownloadUrl,
       deleteDocument,
+      deleteDocuments,
     };
   },
   {

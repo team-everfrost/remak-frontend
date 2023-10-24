@@ -3,7 +3,9 @@
     class="flex grow min-h-[372px] w-full max-w-[480px] flex-col rounded-[20px] bg-white"
   >
     <div class="flex flex-row items-center justify-between pl-5 pr-4 pt-5">
-      <p class="leading-18 text-lg font-bold text-[#1b1c1f]">메모</p>
+      <p class="leading-18 text-lg font-bold text-[#1b1c1f] line-clamp-1">
+        {{ memo ? memo.split('\n')[0] : '메모' }}
+      </p>
       <button
         :disabled="isUploading"
         :class="isUploading ? 'cursor-not-allowed opacity-50' : ''"
@@ -31,10 +33,17 @@
     <textarea
       ref="textarea"
       placeholder="메모를 입력해주세요"
+      :disabled="isUploading"
       :value="memo"
       maxlength="1000000"
       class="ml-5 mr-5 mt-8 grow resize-none self-stretch overflow-auto rounded-xl border border-[#e6e8eb] bg-[#fefefe] p-4 outline-none"
       @input="inputTextarea"
+      @keydown.meta.s.prevent
+      @keydown.ctrl.s.prevent
+      @keydown.meta.s="handleClick"
+      @keydown.ctrl.s="handleClick"
+      @keydown.meta.enter="handleClick"
+      @keydown.ctrl.enter="handleClick"
     ></textarea>
 
     <button

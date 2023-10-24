@@ -1,46 +1,159 @@
 <template>
   <div class="flex h-screen flex-col">
     <ModalAddModal :is-open="isModalOpen" />
-    <TopBarApp />
+    <ModalDocumentInCollection
+      :is-open="isCollectionModalOpen"
+      :doc-id="selectedList"
+      @update:is-open="handleCollectionIsOpenUpdate"
+    />
+    <DeleteAlert
+      :is-open="isDeleteModalOpen"
+      :modal-title="'정말 삭제하시겠어요?'"
+      :modal-subtitle="'삭제시 복구가 불가능해요'"
+      :cancel-button-text="'취소하기'"
+      :confirm-button-text="'삭제하기'"
+      @update:is-open="handleDeleteIsOpenUpdate"
+      @confirm="handleDeleteConfirmClick"
+    />
+    <div v-show="selectMode || !topIntersection">
+      <TopBar />
+    </div>
+    <div v-show="!selectMode && topIntersection">
+      <TopBarApp />
+    </div>
+    <div
+      v-show="!topIntersection"
+      v-auto-animate
+      class="fixed z-20 h-20 w-screen pr-[94px] items-center justify-end"
+    >
+      <div
+        v-if="!topIntersection && !selectMode"
+        class="flex h-20 items-center justify-end"
+      >
+        <button
+          :disabled="isLoading"
+          class="h-8 w-[78px] rounded-md bg-gray-600 text-base font-medium text-white disabled:opacity-50"
+          @click="setSelectMode(true)"
+        >
+          편집하기
+        </button>
+      </div>
+      <div
+        v-if="!topIntersection && selectMode"
+        class="flex h-20 items-center justify-end gap-4"
+      >
+        <button
+          :disabled="isLoading || !selectedList.length"
+          class="h-8 w-[78px] rounded-md bg-gray-600 text-base font-medium text-white flex items-center justify-center disabled:opacity-50"
+          @click="openCollectionModal"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 -ml-2"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+            />
+          </svg>
+          컬렉션
+        </button>
+        <button
+          :disabled="isLoading"
+          class="h-8 w-[78px] rounded-md bg-white text-base font-medium border border-gray-200 text-red-500 disabled:opacity-50"
+          @click="openDeleteModal"
+        >
+          삭제하기
+        </button>
+        <button
+          :disabled="isLoading"
+          class="h-8 w-[78px] rounded-md bg-white text-base font-medium border border-gray-200 text-slate-800 disabled:opacity-50"
+          @click="setSelectMode(false)"
+        >
+          이전으로
+        </button>
+      </div>
+    </div>
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="0" class="mt-20" />
       <main class="mt-20 flex flex-grow bg-[#F4F6F8] ml-48">
         <div class="flex flex-grow flex-col m-20">
-          <div class="flex items-center gap-4">
-            <p class="text-neutral-900 text-[32px] font-bold leading-[44.80px]">
+          <div v-auto-animate class="flex items-center gap-4 justify-between">
+            <p
+              class="flex-shrink-0 text-neutral-900 text-[32px] font-bold leading-[44.80px]"
+            >
               메인
             </p>
-            <div class="flex-grow"></div>
-            <button
-              ref="updateBtn"
-              class="h-8 w-8"
-              :disabled="isLoading"
-              @click="cleanLoad()"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="28"
-                viewBox="0 -960 960 960"
-                width="28"
-                :class="
-                  isLoading
-                    ? 'animate-spin text-gray-400'
-                    : hasError
-                    ? 'text-red-500'
-                    : ''
-                "
-                fill="currentColor"
+            <div class="flex flex-shrink-0 gap-4">
+              <button
+                ref="updateBtn"
+                class="h-8 w-8"
+                :disabled="isLoading"
+                @click="cleanLoad()"
               >
-                <path
-                  d="M482-160q-134 0-228-93t-94-227v-7l-64 64-56-56 160-160 160 160-56 56-64-64v7q0 100 70.5 170T482-240q26 0 51-6t49-18l60 60q-38 22-78 33t-82 11Zm278-161L600-481l56-56 64 64v-7q0-100-70.5-170T478-720q-26 0-51 6t-49 18l-60-60q38-22 78-33t82-11q134 0 228 93t94 227v7l64-64 56 56-160 160Z"
-                />
-              </svg>
-            </button>
-            <button
-              class="h-8 w-[78px] rounded-md bg-gray-600 text-base font-medium text-white"
-            >
-              편집하기
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="28"
+                  viewBox="0 -960 960 960"
+                  width="28"
+                  :class="
+                    isLoading
+                      ? 'animate-spin text-gray-400'
+                      : hasError
+                      ? 'text-red-500'
+                      : ''
+                  "
+                  fill="currentColor"
+                >
+                  <path
+                    d="M482-160q-134 0-228-93t-94-227v-7l-64 64-56-56 160-160 160 160-56 56-64-64v7q0 100 70.5 170T482-240q26 0 51-6t49-18l60 60q-38 22-78 33t-82 11Zm278-161L600-481l56-56 64 64v-7q0-100-70.5-170T478-720q-26 0-51 6t-49 18l-60-60q38-22 78-33t82-11q134 0 228 93t94 227v7l64-64 56 56-160 160Z"
+                  />
+                </svg>
+              </button>
+              <div v-if="!selectMode" class="flex flex-shrink-0 gap-4">
+                <button
+                  :disabled="isLoading"
+                  class="h-8 w-[78px] rounded-md bg-gray-600 text-base font-medium text-white disabled:opacity-50"
+                  @click="setSelectMode(true)"
+                >
+                  편집하기
+                </button>
+              </div>
+              <div v-else class="flex flex-shrink-0 gap-4">
+                <button
+                  :disabled="isLoading || !selectedList.length"
+                  class="h-8 w-[78px] rounded-md bg-gray-600 text-base font-medium text-white flex items-center justify-center disabled:opacity-50"
+                  @click="openCollectionModal"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 -ml-2"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+                    />
+                  </svg>
+                  컬렉션
+                </button>
+                <button
+                  :disabled="isLoading"
+                  class="h-8 w-[78px] rounded-md bg-white text-base font-medium border border-gray-200 text-red-500 disabled:opacity-50"
+                  @click="openDeleteModal"
+                >
+                  삭제하기
+                </button>
+                <button
+                  :disabled="isLoading"
+                  class="h-8 w-[78px] rounded-md bg-white text-base font-medium border border-gray-200 text-slate-800 disabled:opacity-50"
+                  @click="setSelectMode(false)"
+                >
+                  이전으로
+                </button>
+              </div>
+            </div>
           </div>
           <div
             v-if="isInitialLoad === 'error'"
@@ -98,12 +211,15 @@
                 <MasonryWall :items="list.docs" :column-width="258" :gap="16">
                   <template #default="{ item }">
                     <MainDocumentCard
+                      :key="item.docId"
+                      :select-mode="selectMode"
                       :type="item.type"
                       :image-url="item.imageUrl"
                       :doc-id="item.docId"
                       :title="item.title"
                       :summary="item.summary"
                       :info="item.info"
+                      @is-selected="setSelected($event, item.docId)"
                     />
                   </template>
                 </MasonryWall>
@@ -134,6 +250,7 @@ const updateBtn = ref<HTMLElement | null>(null);
 const updateObserver = ref<IntersectionObserver | null>(null);
 
 const shouldUpdate = ref(false);
+const topIntersection = ref(true);
 
 const isLoading = ref(false);
 const hasError = ref(false);
@@ -164,9 +281,13 @@ const shouldFetch = computed(() => {
 
 // 모달 생성 주체가 Topbar라서 일단 이렇게 처리
 watch(shouldFetch, (newVal) => {
-  if (newVal) {
+  if (newVal === true) {
     documentStore.setShouldFetch(false);
     cleanLoad();
+  }
+  if (newVal === 'cache') {
+    documentStore.setShouldFetch(false);
+    initLoad();
   }
 });
 
@@ -181,7 +302,7 @@ onUnmounted(() => {
 
 onActivated(() => {
   setObserver();
-  if (shouldUpdate.value) {
+  if (shouldUpdate.value || shouldFetch.value === 'cache') {
     initLoad();
   }
 });
@@ -212,10 +333,12 @@ const setObserver = () => {
       (entries) => {
         if (entries[0].isIntersecting) {
           shouldUpdate.value = true;
+          topIntersection.value = true;
           // 뭔가 이상해서 비활성화
           // cleanLoad();
         } else {
           shouldUpdate.value = false;
+          topIntersection.value = false;
         }
       },
       {
@@ -252,11 +375,12 @@ const initLoad = async () => {
   isLoading.value = false;
   hasError.value = false;
 
-  if (shouldUpdate) cleanLoad();
+  if (shouldUpdate.value) cleanLoad();
 };
 
 const cleanLoad = async () => {
   isLoading.value = true;
+  window.scrollTo(0, 0);
   const result = await documentStore.cleanFetch();
   if (!result) {
     isLoading.value = false;
@@ -300,5 +424,55 @@ const loadMore = async () => {
 
   isLoading.value = false;
   hasError.value = false;
+};
+
+const selectMode = ref(false);
+const selectedList = ref([] as string[]);
+
+const setSelectMode = (value: boolean) => {
+  selectMode.value = value;
+  selectedList.value = [];
+};
+
+const setSelected = (value: boolean, docId: string) => {
+  if (value) {
+    selectedList.value.push(docId);
+  } else {
+    selectedList.value = selectedList.value.filter((id) => id !== docId);
+  }
+};
+
+const deleteDocuments = async (docIds: string[]) => {
+  if (isLoading.value) return;
+  isLoading.value = true;
+
+  await documentStore.deleteDocuments(docIds);
+  // 오류처리
+
+  isLoading.value = false;
+  setSelectMode(false);
+};
+
+const isDeleteModalOpen = ref(false);
+const openDeleteModal = () => {
+  isDeleteModalOpen.value = true;
+};
+const handleDeleteConfirmClick = async () => {
+  isDeleteModalOpen.value = false;
+  await deleteDocuments(selectedList.value);
+};
+const handleDeleteIsOpenUpdate = (value: boolean) => {
+  isDeleteModalOpen.value = value;
+};
+const isCollectionModalOpen = ref(false);
+const openCollectionModal = () => {
+  isCollectionModalOpen.value = true;
+};
+const handleCollectionIsOpenUpdate = (newIsOpen: boolean) => {
+  isCollectionModalOpen.value = newIsOpen;
+
+  if (!newIsOpen) {
+    setSelectMode(false);
+  }
 };
 </script>

@@ -6,7 +6,7 @@ export default function (
 ) {
   if (type === 'MEMO') {
     // 최대 3줄까지
-    return content.split('\n').slice(0, 3).join('\n') ?? '';
+    return content.split('\n').slice(1, 4).join('\n') ?? '';
   }
   if (type === 'IMAGE') {
     switch (status) {

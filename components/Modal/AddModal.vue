@@ -35,7 +35,10 @@
                 </div>
 
                 <div v-else-if="existType === 2">
-                  <ModalAddLink @change-component="handleChangeComponent" />
+                  <ModalAddLink
+                    @change-component="handleChangeComponent"
+                    @is-uploading="handleComponentWorking"
+                  />
                 </div>
 
                 <div v-else-if="existType === 3">
@@ -46,7 +49,10 @@
                 </div>
 
                 <div v-else-if="existType === 4">
-                  <ModalAddMemo @change-component="handleChangeComponent" />
+                  <ModalAddMemo
+                    @change-component="handleChangeComponent"
+                    @is-uploading="handleComponentWorking"
+                  />
                 </div>
               </div>
             </HeadlessDialogPanel>
@@ -105,6 +111,6 @@ const closeModal = () => {
     return;
   }
   emit('update:isOpen', false);
-  documentStore.setShouldFetch(true);
+  if (existType.value !== 1) documentStore.setShouldFetch(true);
 };
 </script>
