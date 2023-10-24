@@ -1,6 +1,5 @@
 <template>
   <div class="flex min-h-screen flex-col">
-    <TopBar />
     <ModalEditCollection
       :is-open="isModalOpen"
       :previous-collection-name="collectionName"
@@ -17,6 +16,44 @@
       @update:is-open="handleDeleteIsOpenUpdate"
       @confirm="handleDeleteConfirmClick"
     />
+    <TopBar />
+    <div
+      v-show="!topIntersection"
+      v-auto-animate
+      class="fixed z-20 h-20 w-screen pr-[94px] items-center justify-end"
+    >
+      <div
+        v-if="!topIntersection && !selectMode"
+        class="flex h-20 items-center justify-end"
+      >
+        <button
+          :disabled="isLoading"
+          class="h-8 w-[78px] rounded-md bg-gray-600 text-base font-medium text-white disabled:opacity-50"
+          @click="setSelectMode(true)"
+        >
+          편집하기
+        </button>
+      </div>
+      <div
+        v-if="!topIntersection && selectMode"
+        class="flex h-20 items-center justify-end gap-4"
+      >
+        <button
+          :disabled="isLoading || !selectedList.length"
+          class="h-8 w-[78px] rounded-md bg-white text-base font-medium border border-gray-200 text-red-500 disabled:opacity-50"
+          @click="openDeleteModal"
+        >
+          삭제하기
+        </button>
+        <button
+          :disabled="isLoading"
+          class="h-8 w-[78px] rounded-md bg-white text-base font-medium border border-gray-200 text-slate-800 disabled:opacity-50"
+          @click="setSelectMode(false)"
+        >
+          이전으로
+        </button>
+      </div>
+    </div>
 
     <div class="flex flex-grow flex-row">
       <SideNavigation :active-button="3" class="mt-20"> </SideNavigation>
@@ -42,6 +79,7 @@
             </button>
           </div>
           <div class="flex w-full flex-row justify-end gap-6 mt-9">
+            <div ref="editBtn" class="h-full"></div>
             <button
               v-if="documents.length > 0 && !selectMode"
               class="flex justify-end items-end px-3 py-2 rounded-md bg-[#475161] text-white"
@@ -109,6 +147,53 @@ const isLoading = ref(true);
 const selectMode = ref(false);
 const selectedList = ref([] as string[]);
 
+const editBtn = ref<HTMLElement | null>(null);
+const editObserver = ref<IntersectionObserver | null>(null);
+const topIntersection = ref(true);
+
+onMounted(() => {
+  initalFetch();
+  setObserver();
+});
+
+onUnmounted(() => {
+  unsetObserver();
+});
+
+onActivated(() => {
+  initalFetch();
+  setObserver();
+});
+
+onDeactivated(() => {
+  unsetObserver();
+});
+
+const setObserver = () => {
+  if (!editObserver.value)
+    editObserver.value = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          topIntersection.value = true;
+          // 뭔가 이상해서 비활성화
+          // cleanLoad();
+        } else {
+          topIntersection.value = false;
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 1,
+      },
+    );
+  if (editBtn.value) editObserver.value?.observe(editBtn.value);
+};
+
+const unsetObserver = () => {
+  if (editBtn.value) editObserver.value?.disconnect();
+};
+
 const setSelectMode = (value: boolean) => {
   selectMode.value = value;
   selectedList.value = [];
@@ -154,12 +239,4 @@ const initalFetch = async () => {
   }
   isLoading.value = false;
 };
-
-onMounted(() => {
-  initalFetch();
-});
-
-onActivated(() => {
-  initalFetch();
-});
 </script>
