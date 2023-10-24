@@ -90,7 +90,7 @@
               <div class="w-full flex-col justify-start items-start gap-5 flex">
                 <div v-for="entry in history" :key="entry" class="w-full flex">
                   <button
-                    class="text-start text-slate-800 text-base font-normal leading-none grow"
+                    class="text-start text-slate-800 text-base font-normal grow"
                     @click="clickHistoryEntry(entry)"
                   >
                     <div class="line-clamp-1">
