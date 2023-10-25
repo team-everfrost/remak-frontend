@@ -60,7 +60,7 @@
       <div class="bg-[#F4F6F8] ml-48 mt-20 flex flex-grow">
         <div class="m-20 flex flex-grow flex-col">
           <div class="flex w-full justify-start">
-            <p class="font-bold text-[32px] break-all">
+            <p class="font-bold text-[32px] break-all line-clamp-1">
               {{ collectionName }}
             </p>
             <button class="ml-3" @click="openModal">
@@ -90,7 +90,10 @@
               편집하기
             </button>
 
-            <div v-else class="flex flex-shrink-0 gap-4 h-10">
+            <div
+              v-if="documents.length > 0 && selectMode"
+              class="flex flex-shrink-0 gap-4 h-10"
+            >
               <button
                 :disabled="isLoading || selectedList.length === 0"
                 class="h-8 w-[78px] rounded-md bg-white text-base font-medium border border-gray-200 text-red-500 disabled:opacity-50"
@@ -142,7 +145,10 @@ const collectionStore = useCollectionStore();
 const documents = ref([] as any[]);
 
 const collectionName = route.params.collectionName as string;
-const collectionDescription = ref('');
+const collectionDescription = computed(() => {
+  return collectionStore.getCollectionDescription(collectionName);
+});
+
 const isModalOpen = ref(false);
 const isLoading = ref(true);
 
@@ -152,15 +158,6 @@ const selectedList = ref([] as string[]);
 const editBtn = ref<HTMLElement | null>(null);
 const editObserver = ref<IntersectionObserver | null>(null);
 const topIntersection = ref(true);
-
-onMounted(() => {
-  initalFetch();
-  setObserver();
-});
-
-onUnmounted(() => {
-  unsetObserver();
-});
 
 onActivated(() => {
   initalFetch();
@@ -233,8 +230,6 @@ const handleDeleteIsOpenUpdate = (value: boolean) => {
 };
 
 const initalFetch = async () => {
-  collectionDescription.value =
-    collectionStore.getCollectionDescription(collectionName);
   const result = await collectionStore.fetchCollectionDetail(collectionName);
   if (result) {
     documents.value = cardParser(result);

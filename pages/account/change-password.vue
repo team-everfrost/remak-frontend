@@ -70,4 +70,8 @@ const currentComponent = computed(() => {
       return ChangePwVerifyCode;
   }
 });
+
+onMounted(() => {
+  accountStore.resetPage = 1;
+});
 </script>

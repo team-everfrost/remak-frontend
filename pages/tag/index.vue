@@ -27,7 +27,7 @@
               @input="onInput"
             />
           </div>
-          <div v-if="!isTagExists" class="flex flex-grow">
+          <div v-if="!isTagExists && !isLoading" class="flex flex-grow">
             <NoItemBox :discription="'등록된 태그가 없어요'" />
           </div>
 
@@ -41,6 +41,11 @@
               :count="tag.count"
             />
           </div>
+          <div
+            v-if="!isEndOfTags"
+            ref="loadObserverTarget"
+            class="bottom-0 -z-50 h-[500px] w-full -mt-[500px]"
+          ></div>
         </div>
       </div>
     </div>
@@ -52,9 +57,52 @@ import { useTagStore } from '~/stores/tag';
 
 const tagStore = useTagStore();
 const search = ref('');
-onMounted(() => {
-  tagStore.initalFetch();
+const isLoading = ref(true);
+const isEndOfTags = computed(() => {
+  return tagStore.isEndOfTags();
 });
+const loadObserverTarget = ref<HTMLElement | null>(null);
+const loadObserver = ref<IntersectionObserver | null>(null);
+
+onActivated(() => {
+  setObserver();
+});
+
+onDeactivated(() => {
+  unsetObserver();
+});
+
+const setObserver = () => {
+  if (!loadObserver.value)
+    loadObserver.value = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchTagsMore(search.value);
+          console.log('fetch more');
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1,
+      },
+    );
+  if (loadObserverTarget.value)
+    loadObserver.value?.observe(loadObserverTarget.value);
+};
+
+const unsetObserver = () => {
+  if (loadObserverTarget.value) loadObserver.value?.disconnect();
+};
+
+onMounted(() => {
+  inital();
+});
+
+const inital = async () => {
+  await tagStore.initalFetch();
+  isLoading.value = false;
+};
 
 const isModalOpen = ref(false);
 
@@ -63,7 +111,7 @@ const handleIsOpenUpdate = (value: boolean) => {
 };
 
 const tagSearch = async (query: string) => {
-  await tagStore.fetchTags(query);
+  await tagStore.fetchTags(false, query, 20, undefined);
 };
 
 const isTagExists = computed(() => {
@@ -83,4 +131,11 @@ const tags = computed(() => {
     };
   });
 });
+
+const fetchTagsMore = async (query?: string) => {
+  isLoading.value = true;
+  console.log('fetch more');
+  await tagStore.fetchTagsMore(query);
+  isLoading.value = false;
+};
 </script>

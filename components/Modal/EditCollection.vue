@@ -142,8 +142,12 @@ const emit = defineEmits<{
 const closeModal = () => {
   collectionName.value = '';
   collectionDescription.value = '';
-  newCollectionName.value = props.previousCollectionName;
-  newCollectionDescription.value = props.previousCollectionDescription;
+
   emit('update:isOpen', false);
 };
+
+onActivated(() => {
+  newCollectionName.value = props.previousCollectionName;
+  newCollectionDescription.value = props.previousCollectionDescription;
+});
 </script>

@@ -15,6 +15,10 @@ export const useCollectionStore = defineStore('collection', () => {
     },
   ]);
 
+  const isEndOfCollections = computed(() => () => {
+    return endOfCollections.value;
+  });
+
   const getCollectionDescription = (name: string) => {
     const collection = collections.value.find((c) => c.name === name);
     return collection ? collection.description : '';
@@ -25,10 +29,16 @@ export const useCollectionStore = defineStore('collection', () => {
     return await fetchCollections();
   };
 
+  const fetchCollectionsMore = async () => {
+    const offset = collections.value.length;
+    const limit = 20;
+    return await fetchCollections(offset, limit);
+  };
+
   const fetchCollections = async (offset?: number, limit?: number) => {
+    console.log(offset);
     if (!authStore.isSignedIn) return false;
     if (endOfCollections.value) return false;
-
     const { data, error }: any = await useFetch('/collection', {
       baseURL: apiBaseUrl,
       method: 'GET',
@@ -177,5 +187,7 @@ export const useCollectionStore = defineStore('collection', () => {
     fetchCollectionDetail,
     editCollection,
     deleteDocuments,
+    fetchCollectionsMore,
+    isEndOfCollections,
   };
 });

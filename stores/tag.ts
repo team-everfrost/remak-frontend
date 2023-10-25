@@ -7,6 +7,10 @@ export const useTagStore = defineStore('tag', () => {
   const apiBaseUrl = config.public.apiBaseUrl;
   const isTagExists = ref(false);
 
+  const isEndOfTags = computed(() => () => {
+    return endOfTags.value;
+  });
+
   const tags = ref([
     {
       name: '',
@@ -16,10 +20,21 @@ export const useTagStore = defineStore('tag', () => {
 
   const initalFetch = async () => {
     tags.value = [];
-    return await fetchTags();
+    return await fetchTags(false);
   };
 
-  const fetchTags = async (query?: string, limit?: number, offset?: number) => {
+  const fetchTagsMore = async (query?: string) => {
+    const offset = tags.value.length;
+    const limit = 20;
+    return await fetchTags(true, query, limit, offset);
+  };
+
+  const fetchTags = async (
+    isMoreData: boolean,
+    query?: string,
+    limit?: number,
+    offset?: number,
+  ) => {
     if (!authStore.isSignedIn) return false;
     if (endOfTags.value) return false;
 
@@ -37,6 +52,8 @@ export const useTagStore = defineStore('tag', () => {
       if (query === undefined) {
         tags.value.push(...data.value.data);
         isTagExists.value = data.value.data.length > 0;
+      } else if (isMoreData) {
+        tags.value.push(...data.value.data);
       } else {
         tags.value = data.value.data;
       }
@@ -88,5 +105,7 @@ export const useTagStore = defineStore('tag', () => {
     initalFetch,
     isTagExists,
     fetchTagDetail,
+    fetchTagsMore,
+    isEndOfTags,
   };
 });
