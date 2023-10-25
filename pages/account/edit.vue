@@ -63,11 +63,12 @@
                 </button>
               </div>
             </div>
-            <button
+            <NuxtLink
               class="flex mt-6 justify-end items-end text-xs font-medium text-[#646f7c] underline underline-offset-1"
+              to="/account/withdraw"
             >
               탈퇴하기
-            </button>
+            </NuxtLink>
           </div>
         </div>
       </div>

@@ -39,7 +39,7 @@
                     {{ modalTitle }}
                   </p>
                   <p
-                    class="w-[448px] flex-shrink-0 flex-grow-0 self-stretch text-center text-sm text-[#757779]"
+                    class="w-[448px] flex-shrink-0 flex-grow-0 self-stretch text-center text-sm whitespace-pre-line text-[#757779]"
                   >
                     {{ modalSubtitle }}
                   </p>

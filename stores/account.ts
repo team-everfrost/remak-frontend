@@ -142,6 +142,54 @@ export const useAccountStore = defineStore('account', () => {
     return false;
   };
 
+  const getWithDrawCode = async () => {
+    const { data, error }: any = await useFetch('/auth/withdraw-code', {
+      baseURL: apiBaseUrl,
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    });
+    if (data.value && !error.value) {
+      return true;
+    }
+    return false;
+  };
+
+  const checkWithDrawCode = async (code: string) => {
+    const { data, error }: any = await useFetch('/auth/verify-withdraw-code', {
+      baseURL: apiBaseUrl,
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+      body: {
+        code,
+      },
+    });
+    if (data.value && !error.value) {
+      return true;
+    }
+    return false;
+  };
+
+  const withDraw = async () => {
+    const { data, error }: any = await useFetch('/auth/withdraw', {
+      baseURL: apiBaseUrl,
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${authStore.accessToken}`,
+      },
+    });
+    if (data.value && !error.value) {
+      return true;
+    }
+    return false;
+  };
+
   return {
     $reset,
     getUserInfo,
@@ -154,5 +202,8 @@ export const useAccountStore = defineStore('account', () => {
     verifyResetCode,
     setPassword,
     resetPassword,
+    getWithDrawCode,
+    checkWithDrawCode,
+    withDraw,
   };
 });
