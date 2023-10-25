@@ -137,6 +137,7 @@
                 </template>
               </MasonryWall>
               <div
+                v-if="!isEndOfDocuments"
                 ref="loadObserverTarget"
                 class="bottom-0 -z-50 h-[500px] w-full -mt-[500px]"
               ></div>
