@@ -9,6 +9,12 @@ export const useRegisterStore = defineStore('register', () => {
   const apiBaseUrl = config.public.apiBaseUrl;
   const authStore = useAuthStore();
 
+  function $reset() {
+    registerEmail.value = '';
+    registerPage.value = 1;
+    registerPassword.value = '';
+  }
+
   const checkEmail = async (email: string) => {
     if (!email) return false;
 
@@ -82,6 +88,7 @@ export const useRegisterStore = defineStore('register', () => {
     registerPage.value = 4;
   }
   return {
+    $reset,
     registerEmail,
     registerPage,
     registerPassword,

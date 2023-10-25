@@ -38,6 +38,11 @@ export const useDocumentStore = defineStore(
     const config = useRuntimeConfig();
     const apiBaseUrl = config.public.apiBaseUrl;
 
+    function $reset() {
+      documents.value = [];
+      endOfDocuments.value = false;
+    }
+
     const cleanFetch = async () => {
       documents.value = [];
       endOfDocuments.value = false;
@@ -177,27 +182,40 @@ export const useDocumentStore = defineStore(
     const deleteDocuments = async (docIds: string[]) => {
       if (!authStore.isSignedIn) return false;
 
-      const jobList: string[] = docIds;
+      let jobList: string[] = [...docIds];
+      const successfullyDeleted = new Set<string>();
 
       // 여러개 지우는 API가 없어서 10회 재시도
-      for (let i = 0; i < 10; i++) {
-        if (jobList.length === 0) return true;
+      for (let i = 0; i < 10 && jobList.length > 0; i++) {
+        const nextJobList: string[] = [];
+
         for (const docId of jobList) {
           const result = await deleteDocument(docId);
 
           if (result) {
-            documents.value = documents.value.filter(
-              (document) => document.docId !== docId,
-            );
-            jobList.splice(jobList.indexOf(docId), 1);
+            successfullyDeleted.add(docId);
+          } else {
+            nextJobList.push(docId);
           }
         }
+
+        jobList = nextJobList;
       }
+
+      if (successfullyDeleted.size > 0) {
+        documents.value = documents.value.filter(
+          (document) => !successfullyDeleted.has(document.docId),
+        );
+      }
+
+      if (jobList.length === 0) return true;
+
       shouldFetch.value = 'cache';
       return false;
     };
 
     return {
+      $reset,
       shouldFetch,
       setShouldFetch,
       documents,

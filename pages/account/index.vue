@@ -69,9 +69,11 @@
 import DeleteAlert from '~/components/DeleteAlert.vue';
 import { useAccountStore } from '~/stores/account';
 import { useAuthStore } from '~/stores/auth';
+import { useResetPersistStore } from '~/stores/resetPersist';
 
 const authStore = useAuthStore();
 const accountStore = useAccountStore();
+const resetPersistStore = useResetPersistStore();
 
 const progress = ref(0);
 const usedUsage = ref(0);
@@ -89,8 +91,10 @@ const openModal = () => {
 const handleConfirmClick = () => {
   isModalOpen.value = false;
   authStore.signOut();
-  navigateTo('/');
+  resetPersistStore.resetPersist();
+  reloadNuxtApp({ path: '/' });
 };
+
 const handleIsOpenUpdate = (value: boolean) => {
   isModalOpen.value = value;
 };

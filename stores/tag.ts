@@ -13,10 +13,16 @@ export const useTagStore = defineStore('tag', () => {
 
   const tags = ref([
     {
-      name: '',
-      count: 0,
-    },
-  ]);
+      name: string;
+      count: number;
+    }[]
+  >([]);
+
+  function $reset() {
+    tags.value = [];
+    endOfTags.value = false;
+    isTagExists.value = false;
+  }
 
   const initalFetch = async () => {
     tags.value = [];
@@ -98,6 +104,7 @@ export const useTagStore = defineStore('tag', () => {
   };
 
   return {
+    $reset,
     tags,
     endOfTags,
     fetchTags,

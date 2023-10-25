@@ -62,7 +62,9 @@
                     class="flex h-11 flex-row items-center justify-between shrink-0 pl-5 pr-3 mx-1"
                     @click="collection.isSelected = !collection.isSelected"
                   >
-                    <p class="leading-18 text-sm font-bold text-neutral-900">
+                    <p
+                      class="leading-18 text-sm font-bold text-neutral-900 line-clamp-1 break-all"
+                    >
                       {{ collection.name }}
                     </p>
                     <svg
@@ -207,10 +209,6 @@
 import { useCollectionStore } from '~/stores/collection';
 
 const collectionStore = useCollectionStore();
-
-onMounted(() => {
-  init();
-});
 
 const computedCollections = computed(() => {
   return collectionStore.getCollections().map((collection) => {

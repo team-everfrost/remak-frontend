@@ -14,6 +14,17 @@ export const useAccountStore = defineStore('account', () => {
   const resetPage = ref(1);
   const newPassword = ref('');
 
+  function $reset() {
+    userInfo.value = {
+      email: '',
+      name: '',
+      imageUrl: '',
+      role: '',
+    };
+    resetPage.value = 1;
+    newPassword.value = '';
+  }
+
   const getUserInfo = computed(() => () => {
     return userInfo.value;
   });
@@ -132,6 +143,7 @@ export const useAccountStore = defineStore('account', () => {
   };
 
   return {
+    $reset,
     getUserInfo,
     userInfo,
     resetPage,

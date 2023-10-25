@@ -9,6 +9,11 @@ export const useAuthStore = defineStore(
 
     const allowNavigationToHome = ref(false);
 
+    function $reset() {
+      accessToken.value = '';
+      allowNavigationToHome.value = false;
+    }
+
     const checkEmail = async (email: string) => {
       if (!email) return false;
 
@@ -56,6 +61,7 @@ export const useAuthStore = defineStore(
     };
 
     return {
+      $reset,
       accessToken,
       isSignedIn,
       allowNavigationToHome,

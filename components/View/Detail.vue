@@ -18,7 +18,7 @@
     />
     <div v-auto-animate class="flex w-full flex-col justify-start">
       <div class="flex items-center justify-between">
-        <div class="flex items-center justify-start gap-2">
+        <div class="flex items-center justify-start gap-2 pr-2">
           <p class="text-left text-sm font-medium text-[#646f7c] flex-shrink-0">
             {{ typeKorean }}
           </p>
@@ -27,7 +27,11 @@
             {{ date }}
           </p>
           <div class="h-3 w-px bg-[#646f7c]"></div>
-          <NuxtLink :to="props.document.url" target="_blank">
+          <NuxtLink
+            :to="props.document.url"
+            target="_blank"
+            class="flex gap-2 items-center"
+          >
             <p
               class="text-left text-sm font-medium text-[#646f7c] line-clamp-1"
             >
@@ -37,6 +41,24 @@
                   : updatedText.length + '자'
               }}
             </p>
+            <svg
+              v-if="props.document.type === 'WEBPAGE'"
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              class="align-bottom shrink-0"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"
+              />
+            </svg>
           </NuxtLink>
         </div>
         <HeadlessMenu as="div" class="relative inline-block text-left">
@@ -137,7 +159,7 @@
       <div
         v-if="props.document.type === 'IMAGE' || props.document.type === 'FILE'"
         class="flex mt-4 items-center justify-center gap-2.5 self-stretch rounded-xl border border-[#e6e8eb] bg-[#F4F6F8] cursor-pointer"
-        :class="imageClick ? 'h-auto' : 'h-60'"
+        :class="imageClick ? 'max-h-[1440px]' : 'h-60'"
         @click="imageClick = !imageClick"
       >
         <img
@@ -203,9 +225,37 @@
       </div>
       <div
         v-if="props.document.type === 'FILE' || props.document.type === 'IMAGE'"
+        class="flex gap-4"
       >
         <button
-          class="relative mt-12 flex flex-col h-[52px] w-full items-start justify-center overflow-hidden rounded-xl bg-[#1f8ce6]"
+          class="basis-1/2 mt-12 flex grow h-[52px] w-full items-center justify-center overflow-hidden rounded-xl bg-[#e6e8eb]"
+          @click="openFile"
+        >
+          <p
+            class="grow flex gap-2 items-center justify-center w-full text-center text-lg font-bold text-gray-900"
+          >
+            원본 열기
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              class="align-bottom shrink-0"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"
+              />
+            </svg>
+          </p>
+        </button>
+        <button
+          class="basis-1/2 relative mt-12 flex flex-col h-[52px] w-full items-start justify-center overflow-hidden rounded-xl bg-[#1f8ce6]"
           @click="fileDownload"
         >
           <div
@@ -444,13 +494,61 @@ useResizeObserver(textarea, () => {
   inputTextarea();
 });
 
+let signedUrl = '';
+
+// singedUrl 유효성 검사 (남은 시간 30분 이상)
+const isValidSignedUrl = () => {
+  // X-Amz-Date 및 X-Amz-Expires 값 추출을 위한 정규 표현식
+  const dateRegex = /X-Amz-Date=([\dT]*)Z/;
+  const expiresRegex = /X-Amz-Expires=(\d+)/;
+
+  const dateMatch = dateRegex.exec(signedUrl);
+  const expiresMatch = expiresRegex.exec(signedUrl);
+
+  if (dateMatch && expiresMatch) {
+    const dateString = dateMatch[1];
+    const expiresInSeconds = Number(expiresMatch[1]);
+
+    // X-Amz-Date 값으로 Date 객체 생성 (UTC) ex: 20231024T194018Z
+    const dateObject = new Date(
+      Date.UTC(
+        Number(dateString.slice(0, 4)),
+        Number(dateString.slice(4, 6)) - 1,
+        Number(dateString.slice(6, 8)),
+        Number(dateString.slice(9, 11)),
+        Number(dateString.slice(11, 13)),
+        Number(dateString.slice(13, 15)),
+      ),
+    );
+
+    // 유효한 최종 시각 계산
+    dateObject.setSeconds(dateObject.getSeconds() + expiresInSeconds);
+
+    // 현재 시각과의 차이 계산
+    const timeDifference = dateObject.getTime() - new Date().getTime();
+
+    // 남은 시간이 30분 이상인지 확인
+    return timeDifference > 30 * 60 * 1000;
+  } else {
+    return false;
+  }
+};
+
+const openFile = async () => {
+  if (!signedUrl || !isValidSignedUrl())
+    signedUrl = await documentStore.fetchFileDownloadUrl(props.document.docId);
+
+  window.open(signedUrl, '_blank');
+};
+
 const fileDownload = async () => {
   if (progress.value) return;
 
   try {
-    const signedUrl = await documentStore.fetchFileDownloadUrl(
-      props.document.docId,
-    );
+    if (!signedUrl || !isValidSignedUrl())
+      signedUrl = await documentStore.fetchFileDownloadUrl(
+        props.document.docId,
+      );
 
     const response = await fetch(signedUrl, {
       method: 'GET',

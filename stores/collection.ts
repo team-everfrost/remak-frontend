@@ -7,13 +7,18 @@ export const useCollectionStore = defineStore('collection', () => {
 
   const apiBaseUrl = config.public.apiBaseUrl;
 
-  const collections = ref([
+  const collections = ref<
     {
-      name: '',
-      description: '',
-      count: 0,
-    },
-  ]);
+      name: string;
+      description: string;
+      count: number;
+    }[]
+  >([]);
+
+  function $reset() {
+    collections.value = [];
+    endOfCollections.value = false;
+  }
 
   const isEndOfCollections = computed(() => () => {
     return endOfCollections.value;
@@ -176,6 +181,7 @@ export const useCollectionStore = defineStore('collection', () => {
   };
 
   return {
+    $reset,
     collections,
     endOfCollections,
     fetchCollections,

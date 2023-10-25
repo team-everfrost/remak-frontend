@@ -6,6 +6,12 @@ export const useAddStore = defineStore('add', () => {
   const config = useRuntimeConfig();
   const apiBaseUrl = config.public.apiBaseUrl;
 
+  const fileUploadProgress = ref(0);
+
+  function $reset() {
+    fileUploadProgress.value = 0;
+  }
+
   const addLink = async (url: string) => {
     if (!authStore.isSignedIn) return false;
     if (!url) return false;
@@ -26,16 +32,14 @@ export const useAddStore = defineStore('add', () => {
     return false;
   };
 
-  const fileUploadProgress = ref(0);
-
   const addFiles = async (files: FileList) => {
     if (!authStore.isSignedIn) return false;
     if (!files) return false;
     fileUploadProgress.value = 0;
 
     const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
+    for (const element of files) {
+      formData.append('files', element);
     }
 
     try {
@@ -49,7 +53,7 @@ export const useAddStore = defineStore('add', () => {
         },
         onUploadProgress: (progressEvent) => {
           fileUploadProgress.value = Math.round(
-            (progressEvent.loaded * 100) / (progressEvent.total || 1),
+            (progressEvent.loaded * 100) / (progressEvent.total ?? 1),
           );
         },
       });
@@ -84,6 +88,7 @@ export const useAddStore = defineStore('add', () => {
   };
 
   return {
+    $reset,
     addLink,
     fileUploadProgress,
     addFiles,
