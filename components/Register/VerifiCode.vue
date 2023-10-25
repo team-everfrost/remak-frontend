@@ -37,10 +37,13 @@
             type="text"
             pattern="[0-9]*"
             maxlength="1"
-            class="h-[54px] w-12 rounded-lg border border-gray-200 bg-neutral-100 text-center outline-none focus:border-2"
+            :readonly="index !== currentFocusIndex"
+            class="h-[54px] w-12 rounded-lg border border-gray-200 bg-neutral-100 text-center outline-none"
             :class="{
+              'focus:border-2': index === currentFocusIndex,
               'border-red-500': !isValidCode,
-              'focus:border-remak-blue': isValidCode,
+              'focus:border-remak-blue':
+                isValidCode && index === currentFocusIndex,
             }"
             @input="checkNumber($event, index)"
             @paste="handlePaste"
@@ -69,6 +72,7 @@ const registerStore = useRegisterStore();
 const inputFields = ref<HTMLElement[]>([]);
 const inputs = ref(Array(6).fill(''));
 const isValidCode = ref(true);
+const currentFocusIndex = ref(0);
 
 const allFieldsFilled = computed(() => {
   return inputs.value.every((input) => /^[0-9]$/.test(input));
@@ -81,10 +85,12 @@ const checkNumber = (event: Event, index: number) => {
     inputs.value.splice(index, 1, value);
     if (value && index < inputs.value.length - 1) {
       inputFields.value[index + 1].focus();
+      currentFocusIndex.value = index + 1;
     }
     // 입력값이 삭제되었고, 첫 번째 입력창이 아닌 경우
     else if (!value && index > 0) {
       inputFields.value[index - 1].focus();
+      currentFocusIndex.value = index - 1;
     }
   } else {
     (inputEvent.target as HTMLInputElement).value = inputs.value[index];
@@ -108,6 +114,7 @@ const handlePaste = (event: Event) => {
   if (lastValidIndex !== -1) {
     inputFields.value[lastValidIndex].focus(); // 수정된 부분
   }
+  currentFocusIndex.value = lastValidIndex;
 };
 
 const checkCode = async () => {
