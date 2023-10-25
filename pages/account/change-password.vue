@@ -71,7 +71,7 @@ const currentComponent = computed(() => {
   }
 });
 
-onMounted(() => {
+onActivated(() => {
   accountStore.resetPage = 1;
 });
 </script>
