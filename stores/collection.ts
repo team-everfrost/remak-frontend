@@ -31,6 +31,7 @@ export const useCollectionStore = defineStore('collection', () => {
 
   const initalFetch = async () => {
     collections.value = [];
+    endOfCollections.value = false;
     return await fetchCollections();
   };
 
@@ -41,9 +42,9 @@ export const useCollectionStore = defineStore('collection', () => {
   };
 
   const fetchCollections = async (offset?: number, limit?: number) => {
-    console.log(offset);
     if (!authStore.isSignedIn) return false;
     if (endOfCollections.value) return false;
+
     const { data, error }: any = await useFetch('/collection', {
       baseURL: apiBaseUrl,
       method: 'GET',
@@ -56,6 +57,7 @@ export const useCollectionStore = defineStore('collection', () => {
 
     if (data.value && !error.value) {
       collections.value.push(...data.value.data);
+      endOfCollections.value = false;
       return true;
     }
 

@@ -9,7 +9,7 @@
       "
     >
       <div class="flex w-full flex-col">
-        <p class="flex ml-4 mt-5 text-base font-medium line-clamp-1">
+        <p class="ml-4 mt-5 text-base font-medium line-clamp-1 break-all">
           {{ name }}
         </p>
         <div class="flex-grow"></div>

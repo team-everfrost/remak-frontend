@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-show="y > 200" class="fixed bottom-4 right-4 z-10">
+    <div class="fixed bottom-4 right-4 z-10">
       <button
         class="h-10 w-10 bg-white border border-gray-200 text-gray-500 rounded-full flex items-center justify-center"
         onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
@@ -22,7 +22,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-const { y } = useScroll(window);
-</script>

@@ -1,6 +1,9 @@
 <template>
   <div class="flex h-screen flex-col">
-    <ModalAddModal :is-open="isModalOpen" />
+    <ModalAddModal
+      :is-open="isModalOpen"
+      @update:is-open="handleIsOpenUpdate"
+    />
     <ModalDocumentInCollection
       :is-open="isCollectionModalOpen"
       :doc-id="selectedList"
@@ -24,7 +27,7 @@
     <div
       v-show="!topIntersection"
       v-auto-animate
-      class="fixed z-20 h-20 w-screen pr-[94px] items-center justify-end"
+      class="fixed z-20 h-20 right-20 items-center justify-end"
     >
       <div
         v-if="!topIntersection && !selectMode"
@@ -277,6 +280,9 @@ const olderDocuments = ref([] as any[]);
 const isModalOpen = ref(false);
 const openModal = () => {
   isModalOpen.value = true;
+};
+const handleIsOpenUpdate = (value: boolean) => {
+  isModalOpen.value = value;
 };
 
 const shouldFetch = computed(() => {

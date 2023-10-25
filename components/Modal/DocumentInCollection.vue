@@ -225,6 +225,15 @@ const collections = ref<
   { name: string; description: string; count: number; isSelected: boolean }[]
 >([]);
 
+onActivated(() => {
+  init();
+});
+
+const init = async () => {
+  await collectionStore.initalFetch();
+  collections.value = computedCollections.value;
+};
+
 const handleClick = () => {
   collections.value.forEach((collection) => {
     if (collection.isSelected) {
@@ -257,14 +266,5 @@ const closeModal = () => {
     collection.isSelected = false;
   });
   emit('update:isOpen', false);
-};
-
-onActivated(() => {
-  init();
-});
-
-const init = async () => {
-  await collectionStore.initalFetch();
-  collections.value = computedCollections.value;
 };
 </script>

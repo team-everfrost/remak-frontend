@@ -20,7 +20,7 @@
     <div
       v-show="!topIntersection"
       v-auto-animate
-      class="fixed z-20 h-20 w-screen pr-[94px] items-center justify-end"
+      class="fixed z-20 h-20 right-20 items-center justify-end"
     >
       <div
         v-if="!topIntersection && !selectMode"

@@ -159,16 +159,16 @@
       <div
         v-if="props.document.type === 'IMAGE' || props.document.type === 'FILE'"
         class="flex mt-4 items-center justify-center gap-2.5 self-stretch rounded-xl border border-[#e6e8eb] bg-[#F4F6F8] cursor-pointer"
-        :class="imageClick ? 'max-h-[1440px]' : 'h-60'"
+        :class="imageClick ? 'h-auto' : 'h-60'"
         @click="imageClick = !imageClick"
       >
         <img
           sizes="100vw"
           class="object-cover h-full w-full mx-auto rounded-xl"
-          :src="props.document.thumbnailUrl"
+          :src="props.document.thumbnailUrl || '/image/imageHolderDetail.svg'"
           :alt="props.document.title || 'image placeholder'"
-          placeholder="~/assets/imageHolder.svg"
-          onerror="this.onerror = null; this.src = '/image/imageHolder.svg'"
+          placeholder="~/assets/imageHolderDetail.svg"
+          onerror="this.onerror = null; this.src = '/image/imageHolderDetail.svg';"
         />
       </div>
       <NuxtLink :to="props.document.url" target="_blank" class="inline-block">

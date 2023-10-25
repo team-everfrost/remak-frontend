@@ -44,7 +44,7 @@
           <div
             v-if="!isEndOfTags"
             ref="loadObserverTarget"
-            class="bottom-0 -z-50 h-[500px] w-full -mt-[500px]"
+            class="bottom-0 -z-50 h-20 w-full -mt-20"
           ></div>
         </div>
       </div>
@@ -78,13 +78,12 @@ const setObserver = () => {
       (entries) => {
         if (entries[0].isIntersecting) {
           fetchTagsMore(search.value);
-          console.log('fetch more');
         }
       },
       {
         root: null,
         rootMargin: '0px',
-        threshold: 0.1,
+        threshold: 1.0,
       },
     );
   if (loadObserverTarget.value)

@@ -12,13 +12,10 @@
       "
     >
       <div class="flex w-full flex-col break-all">
-        <p class="flex mx-4 mt-5 text-base text-left font-medium line-clamp-1">
+        <p class="mx-4 mt-5 text-base text-left font-medium line-clamp-1">
           {{ name }}
         </p>
-        <p
-          class="flex ml-4 mt-1 text-sm text-[#646f7c] text-left line-clamp-1"
-          style="display: -webkit-box; -webkit-box-orient: vertical"
-        >
+        <p class="ml-4 mt-1 text-sm text-[#646f7c] text-left line-clamp-1">
           {{ description }}
         </p>
         <div class="flex-grow"></div>
