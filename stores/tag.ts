@@ -11,7 +11,7 @@ export const useTagStore = defineStore('tag', () => {
     return endOfTags.value;
   });
 
-  const tags = ref([
+  const tags = ref<
     {
       name: string;
       count: number;
