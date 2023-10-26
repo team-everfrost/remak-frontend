@@ -1,5 +1,4 @@
 <script setup></script>
-
 <template>
   <div>
     <TopBarBase />
@@ -47,6 +46,7 @@
             }"
             @input="checkNumber($event, index)"
             @paste="handlePaste"
+            @keydown="handleKeydown($event, index)"
           />
         </div>
         <button
@@ -88,10 +88,6 @@ const checkNumber = (event: Event, index: number) => {
       currentFocusIndex.value = index + 1;
     }
     // 입력값이 삭제되었고, 첫 번째 입력창이 아닌 경우
-    else if (!value && index > 0) {
-      inputFields.value[index - 1].focus();
-      currentFocusIndex.value = index - 1;
-    }
   } else {
     (inputEvent.target as HTMLInputElement).value = inputs.value[index];
   }
@@ -124,6 +120,14 @@ const checkCode = async () => {
     } else {
       isValidCode.value = false;
     }
+  }
+};
+
+const handleKeydown = (event: KeyboardEvent, index: number) => {
+  const inputElement = event.target as HTMLInputElement;
+  if (event.key === 'Backspace' && !inputElement.value && index > 0) {
+    inputFields.value[index - 1].focus();
+    currentFocusIndex.value = index - 1;
   }
 };
 
