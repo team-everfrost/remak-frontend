@@ -35,6 +35,7 @@
             :value="input"
             type="text"
             pattern="[0-9]*"
+            autofocus
             maxlength="1"
             :readonly="index !== currentFocusIndex"
             class="h-[54px] w-12 rounded-lg border border-gray-200 bg-neutral-100 text-center outline-none"
@@ -137,5 +138,8 @@ watchEffect(() => {
 
 onMounted(() => {
   inputFields.value = Array.from(document.querySelectorAll('input'));
+});
+onActivated(() => {
+  inputFields.value[currentFocusIndex.value].focus();
 });
 </script>

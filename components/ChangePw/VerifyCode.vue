@@ -37,6 +37,7 @@
             'focus:border-remak-blue':
               isValidCode && index === currentFocusIndex,
           }"
+          autofocus
           @input="checkNumber($event, index)"
           @paste="handlePaste"
           @keydown="handleKeydown($event, index)"

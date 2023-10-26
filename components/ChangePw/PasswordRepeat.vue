@@ -16,8 +16,10 @@
         비밀번호 재확인
       </div>
       <input
+        ref="passwordInput"
         v-model="password"
         type="password"
+        autofocus
         placeholder="비밀번호를 입력해주세요"
         class="mt-3 inline-flex h-14 w-[432px] items-center justify-start gap-2 rounded-xl border border-gray-200 bg-white px-4"
         :class="{
@@ -25,6 +27,7 @@
           'border-red-500 focus:outline-red-500': !isValidPassword,
         }"
         @input="resetState"
+        @keyup.enter="handleNextClick"
       />
       <div class="h-4">
         <span v-if="!isValidPassword" class="text-xs text-red-500"
@@ -55,6 +58,12 @@ const authStore = useAuthStore();
 const accountStore = useAccountStore();
 const password = ref('');
 const isValidPassword = ref(true);
+
+const passwordInput = ref<HTMLInputElement | null>(null);
+
+onActivated(() => {
+  passwordInput.value?.focus();
+});
 
 const isModalOpen = ref(false);
 const handleIsOpenUpdate = (value: boolean) => {

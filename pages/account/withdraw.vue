@@ -28,8 +28,8 @@
           <div class="flex relative flex-col mt-20 mx-20">
             <div>
               <button
-                class="flex flex-row justify-center items-center"
-                @click="navigateTo('/account/edit')"
+                class="flex flex-row justify-start items-center h-8 pl-2 pr-4 rounded-lg hover:bg-[#e9ecef]"
+                @click="$router.back()"
               >
                 <svg
                   width="20"
@@ -37,7 +37,7 @@
                   viewBox="0 0 20 20"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  class="flex-grow-0 flex-shrink-0 w-5 h-5 relative"
+                  class="w-5 h-5"
                   preserveAspectRatio="xMidYMid meet"
                 >
                   <path
@@ -83,6 +83,7 @@
                     :key="index"
                     ref="inputField"
                     :value="input"
+                    autofocus
                     type="text"
                     pattern="[0-9]*"
                     maxlength="1"

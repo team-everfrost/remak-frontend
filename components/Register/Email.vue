@@ -14,6 +14,7 @@
         이메일
       </div>
       <input
+        ref="emailInput"
         v-model="email"
         type="email"
         placeholder="이메일 주소를 입력하세요"
@@ -49,6 +50,11 @@ import { useRegisterStore } from '~/stores/register';
 const registerStore = useRegisterStore();
 const email = ref('');
 const emailAvailable = ref(true);
+const emailInput = ref<HTMLInputElement | null>(null);
+
+onActivated(() => {
+  emailInput.value?.focus();
+});
 
 const handleNextClick = async () => {
   if (await registerStore.getSignUpCode(email.value)) {

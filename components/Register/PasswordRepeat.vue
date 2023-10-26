@@ -16,6 +16,7 @@
           비밀번호 재확인
         </div>
         <input
+          ref="passwordInput"
           v-model="password"
           type="password"
           placeholder="비밀번호를 입력해주세요"
@@ -25,6 +26,7 @@
             'border-red-500 focus:outline-red-500': !isValidPassword,
           }"
           @input="resetState"
+          @keyup.enter="handleNextClick"
         />
         <div class="h-4">
           <span v-if="!isValidPassword" class="text-xs text-red-500"
@@ -54,6 +56,7 @@ import { useRegisterStore } from '~/stores/register';
 const registerStore = useRegisterStore();
 const password = ref('');
 const isValidPassword = ref(true);
+const passwordInput = ref<HTMLInputElement | null>(null);
 
 const handleNextClick = async () => {
   if (await registerStore.signUp(password.value)) {

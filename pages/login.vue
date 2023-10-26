@@ -8,6 +8,7 @@
           <span class="text-gray-800">Remak</span>
         </div>
         <input
+          ref="emailInput"
           v-model="email"
           type="email"
           placeholder="이메일 주소를 입력하세요"
@@ -16,7 +17,6 @@
             'border-gray-300 focus:outline-remak-blue': !emailNotExists,
             'border-red-500 focus:outline-red-500': emailNotExists,
           }"
-          autofocus
           @input="checkEmail"
           @keyup.enter="handleNextClick"
         />
@@ -84,11 +84,14 @@ const password = ref('');
 const showPasswordInput = ref(false);
 const emailNotExists = ref(false);
 const passwordWrong = ref(false);
-
 const passwordInput = ref<HTMLInputElement | null>(null);
-
 const authStore = useAuthStore();
 const accountStore = useAccountStore();
+const emailInput = ref<HTMLInputElement | null>(null);
+
+onActivated(() => {
+  emailInput.value?.focus();
+});
 
 const checkEmail = () => {
   isValidEmail(email.value);

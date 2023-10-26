@@ -16,11 +16,13 @@
           비밀번호
         </div>
         <input
+          ref="passwordInput"
           v-model="password"
           type="password"
           placeholder="비밀번호를 입력해주세요"
           class="mt-3 inline-flex h-14 w-[432px] items-center justify-start gap-2 rounded-xl border border-gray-200 bg-white px-4"
           @input="checkPassword"
+          @keyup.enter="handleNextClick"
         />
 
         <div class="mt-4 flex">
@@ -60,6 +62,11 @@ import { useRegisterStore } from '~/stores/register';
 
 const registerStore = useRegisterStore();
 const password = ref('');
+const passwordInput = ref<HTMLInputElement | null>(null);
+
+onActivated(() => {
+  passwordInput.value?.focus();
+});
 const passwordClass = computed(() => {
   return isValidPassword(password.value)
     ? 'bg-remak-blue text-white'

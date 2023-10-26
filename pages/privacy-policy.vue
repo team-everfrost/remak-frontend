@@ -214,7 +214,12 @@
       경우에 한해 열람을 허용함 7.영상정보처리기기 설치근거·목적 : <br />
       <br />
       <br />
-      제18조(개인정보 처리방침 변경)
     </div>
   </div>
 </template>
+
+<script setup>
+definePageMeta({
+  onlyLogout: true,
+});
+</script>

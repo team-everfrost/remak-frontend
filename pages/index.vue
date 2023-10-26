@@ -213,7 +213,8 @@
               <p
                 class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
               >
-                내 자료와 대화하는 AI 채팅
+                <span>내 자료와 대화하는 AI 채팅 </span>
+                <span class="text-gray-500 font-medium">(출시예정)</span>
               </p>
               <p
                 class="mt-5 flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
@@ -248,19 +249,15 @@
     <div
       class="relative flex h-[240px] w-full flex-shrink-0 flex-grow-0 flex-col items-center justify-center bg-black"
     >
-      <p class="flex-shrink-0 flex-grow-0 text-center text-sm">
+      <NuxtLink
+        class="flex-shrink-0 flex-grow-0 text-center text-sm"
+        to="/privacy-policy"
+      >
         <span
           class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
           >개인정보 처리방침</span
-        ><span
-          class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#464749]"
         >
-          ㅣ </span
-        ><span
-          class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
-          >이용약관</span
-        >
-      </p>
+      </NuxtLink>
       <p
         class="mt-3 flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
       >
