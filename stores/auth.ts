@@ -3,7 +3,6 @@ export const useAuthStore = defineStore(
   () => {
     const accessToken = ref('');
     const isSignedIn = computed(() => !!accessToken.value);
-
     const config = useRuntimeConfig();
     const apiBaseUrl = config.public.apiBaseUrl;
 
@@ -13,19 +12,6 @@ export const useAuthStore = defineStore(
       accessToken.value = '';
       allowNavigationToHome.value = false;
     }
-
-    const checkEmail = async (email: string) => {
-      if (!email) return false;
-
-      const { data }: any = await useFetch('/auth/check-email', {
-        baseURL: apiBaseUrl,
-        method: 'POST',
-        body: { email },
-      });
-
-      if (data?.value?.message === 'success') return true;
-      return false;
-    };
 
     const signIn = async (email: string, password: string) => {
       if (!email || !password) return false;
@@ -65,7 +51,6 @@ export const useAuthStore = defineStore(
       accessToken,
       isSignedIn,
       allowNavigationToHome,
-      checkEmail,
       signIn,
       signOut,
       setAccessToken,

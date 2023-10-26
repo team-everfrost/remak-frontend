@@ -121,7 +121,7 @@ const handleNextClick = async () => {
     return;
   }
 
-  if (await authStore.checkEmail(email.value)) {
+  if (await accountStore.checkEmail(email.value)) {
     showPasswordInput.value = true;
     emailNotExists.value = false;
     nextTick(() => {

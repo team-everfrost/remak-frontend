@@ -189,6 +189,18 @@ export const useAccountStore = defineStore('account', () => {
     }
     return false;
   };
+  const checkEmail = async (email: string) => {
+    if (!email) return false;
+
+    const { data }: any = await useFetch('/auth/check-email', {
+      baseURL: apiBaseUrl,
+      method: 'POST',
+      body: { email },
+    });
+
+    if (data?.value?.message === 'success') return true;
+    return false;
+  };
 
   return {
     $reset,
@@ -205,5 +217,6 @@ export const useAccountStore = defineStore('account', () => {
     getWithDrawCode,
     checkWithDrawCode,
     withDraw,
+    checkEmail,
   };
 });

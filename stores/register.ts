@@ -15,19 +15,6 @@ export const useRegisterStore = defineStore('register', () => {
     registerPassword.value = '';
   }
 
-  const checkEmail = async (email: string) => {
-    if (!email) return false;
-
-    const { data }: any = await useFetch('/auth/check-email', {
-      baseURL: apiBaseUrl,
-      method: 'POST',
-      body: { email },
-    });
-
-    if (data?.value?.message === 'success') return true;
-    return false;
-  };
-
   const getSignUpCode = async (email: string) => {
     if (!email) return false;
 
@@ -92,7 +79,6 @@ export const useRegisterStore = defineStore('register', () => {
     registerEmail,
     registerPage,
     registerPassword,
-    checkEmail,
     getSignUpCode,
     checkSignUpCode,
     signUp,
