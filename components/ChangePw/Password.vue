@@ -79,7 +79,7 @@ const checkPassword = () => {
 };
 
 function isValidPassword(password: string): boolean {
-  const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{9,}$/;
+  const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{9,}$/;
   return regex.test(password);
 }
 
