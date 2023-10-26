@@ -65,7 +65,7 @@
             </div>
             <NuxtLink
               class="flex mt-6 justify-end items-end text-xs font-medium text-[#646f7c] underline underline-offset-1"
-              to="/account/withdraw"
+              to="/profile/withdraw"
             >
               탈퇴하기
             </NuxtLink>
@@ -91,6 +91,6 @@ const userEmail = computed(() => {
 
 const hanleEditBtnClick = () => {
   accountStore.resetCode(userEmail.value);
-  navigateTo('/account/change-password');
+  navigateTo('/profile/change-password');
 };
 </script>

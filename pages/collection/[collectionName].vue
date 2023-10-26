@@ -19,7 +19,7 @@
     <TopBar />
     <div
       v-show="!topIntersection"
-      v-auto-animate
+      auto-animate
       class="fixed z-20 h-20 right-20 items-center justify-end"
     >
       <div
@@ -114,7 +114,9 @@
             v-if="documents.length === 0 && isLoading == false"
             class="flex flex-grow"
           >
-            <NoItemBox :discription="'등록된 자료가 없어요'" />
+            <NoItemBox
+              :discription="'등록된 자료가 없어요\n자료에서 컬렉션을 추가해보세요'"
+            />
           </div>
           <div v-show="documents.length > 0" class="mt-9">
             <MasonryWall :items="documents" :column-width="258" :gap="16">
@@ -132,6 +134,11 @@
               </template>
             </MasonryWall>
           </div>
+          <div
+            v-if="!isEndOfDocuments"
+            ref="loadObserverTarget"
+            class="bottom-0 -z-50 h-[500px] w-full -mt-[500px]"
+          ></div>
         </div>
       </div>
     </div>
@@ -143,6 +150,7 @@ import { useCollectionStore } from '~/stores/collection';
 const route = useRoute();
 const collectionStore = useCollectionStore();
 const documents = ref([] as any[]);
+let lastUpdatedAt = '';
 
 const collectionName = route.params.collectionName as string;
 const collectionDescription = computed(() => {
@@ -159,8 +167,12 @@ const editBtn = ref<HTMLElement | null>(null);
 const editObserver = ref<IntersectionObserver | null>(null);
 const topIntersection = ref(true);
 
+const isEndOfDocuments = ref(false);
+const loadObserverTarget = ref<HTMLElement | null>(null);
+const loadObserver = ref<IntersectionObserver | null>(null);
+
 onActivated(() => {
-  initalFetch();
+  initalLoad();
   setObserver();
 });
 
@@ -169,6 +181,22 @@ onDeactivated(() => {
 });
 
 const setObserver = () => {
+  if (!loadObserver.value)
+    loadObserver.value = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1,
+      },
+    );
+  if (loadObserverTarget.value)
+    loadObserver.value?.observe(loadObserverTarget.value);
+
   if (!editObserver.value)
     editObserver.value = new IntersectionObserver(
       (entries) => {
@@ -190,6 +218,7 @@ const setObserver = () => {
 };
 
 const unsetObserver = () => {
+  if (loadObserverTarget.value) loadObserver.value?.disconnect();
   if (editBtn.value) editObserver.value?.disconnect();
 };
 
@@ -229,11 +258,42 @@ const handleDeleteIsOpenUpdate = (value: boolean) => {
   isDeleteModalOpen.value = value;
 };
 
-const initalFetch = async () => {
-  const result = await collectionStore.fetchCollectionDetail(collectionName);
+const initalLoad = async () => {
+  isLoading.value = true;
+  const result =
+    await collectionStore.cleanFetchCollectionDetail(collectionName);
+
+  if (!result || result.length < 20) {
+    isEndOfDocuments.value = true;
+  }
+
   if (result) {
+    lastUpdatedAt = result[result.length - 1].updatedAt;
     documents.value = cardParser(result);
   }
+
+  isLoading.value = false;
+};
+
+const loadMore = async () => {
+  if (isEndOfDocuments.value || isLoading.value) return;
+  isLoading.value = true;
+
+  const result = await collectionStore.fetchCollectionDetailMore(
+    collectionName,
+    lastUpdatedAt,
+    documents.value[documents.value.length - 1].docId,
+  );
+
+  if (!result || result.length < 20) {
+    isEndOfDocuments.value = true;
+  }
+
+  if (result) {
+    lastUpdatedAt = result[result.length - 1].updatedAt;
+    documents.value = [...documents.value, ...cardParser(result)];
+  }
+
   isLoading.value = false;
 };
 </script>

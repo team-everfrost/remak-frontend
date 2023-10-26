@@ -15,19 +15,54 @@
           </div>
 
           <div
-            v-if="isTagExists"
-            class="flex h-[56px] w-full flex-row mt-9 px-4 items-center rounded-xl bg-white border border-[#e6e8eb] focus-within:border-remak-blue"
+            v-if="!tagNotExists"
+            class="flex h-[56px] w-full flex-row mt-9 items-center rounded-xl bg-white border border-[#e6e8eb]"
           >
-            <img src="~/assets/icons/icon_search.svg" alt="검색" />
+            <img class="pl-4" src="~/assets/icons/icon_search.svg" alt="검색" />
             <input
-              v-model="search"
+              v-model="searchQuery"
               type="text"
               class="w-full h-full text-[#646f7c] text-base font-medium outline-none mx-2"
               placeholder="태그를 검색해보세요"
               @input="onInput"
+              @keyup.esc="queryClear"
             />
+            <button v-show="searchQuery" class="pr-4" @click="queryClear">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                  fill="#28323C"
+                  stroke="#28323C"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path d="M9 9L12 12L15 15" fill="white" />
+                <path
+                  d="M9 9L12 12L15 15"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path d="M15 9L12 12L9 15" fill="white" />
+                <path
+                  d="M15 9L12 12L9 15"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
           </div>
-          <div v-if="!isTagExists && !isLoading" class="flex flex-grow">
+          <div v-if="tagNotExists && !isLoading" class="flex flex-grow">
             <NoItemBox :discription="'등록된 태그가 없어요'" />
           </div>
 
@@ -42,9 +77,8 @@
             />
           </div>
           <div
-            v-if="!isEndOfTags"
             ref="loadObserverTarget"
-            class="bottom-0 -z-50 h-20 w-full -mt-20"
+            class="bottom-0 -z-50 h-40 w-full -mt-40"
           ></div>
         </div>
       </div>
@@ -56,16 +90,30 @@
 import { useTagStore } from '~/stores/tag';
 
 const tagStore = useTagStore();
-const search = ref('');
+const searchQuery = ref('');
 const isLoading = ref(true);
 const isEndOfTags = computed(() => {
   return tagStore.isEndOfTags();
 });
+const tagNotExists = ref(false);
+
+const tags = ref<
+  {
+    name: string;
+    count: number;
+  }[]
+>([]);
+
 const loadObserverTarget = ref<HTMLElement | null>(null);
 const loadObserver = ref<IntersectionObserver | null>(null);
 
+onMounted(() => {
+  inital();
+});
+
 onActivated(() => {
   setObserver();
+  if (!searchQuery.value) inital();
 });
 
 onDeactivated(() => {
@@ -77,13 +125,13 @@ const setObserver = () => {
     loadObserver.value = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          fetchTagsMore(search.value);
+          fetchTagsMore();
         }
       },
       {
         root: null,
         rootMargin: '0px',
-        threshold: 1.0,
+        threshold: 0.5,
       },
     );
   if (loadObserverTarget.value)
@@ -94,12 +142,57 @@ const unsetObserver = () => {
   if (loadObserverTarget.value) loadObserver.value?.disconnect();
 };
 
-onMounted(() => {
-  inital();
-});
+const onInput = (event: Event) => {
+  searchQuery.value = (event.target as HTMLInputElement).value;
+  tagSearch(searchQuery.value);
+};
+
+const queryClear = () => {
+  searchQuery.value = '';
+  tagSearch(searchQuery.value);
+};
 
 const inital = async () => {
-  await tagStore.initalFetch();
+  isLoading.value = true;
+  await tagStore.cleanFetch();
+  tags.value = tagStore.getTags().map((tag) => {
+    return {
+      name: tag.name,
+      count: tag.count,
+    };
+  });
+  if (!tags.value.length) tagNotExists.value = true;
+  isLoading.value = false;
+};
+
+const tagSearch = useDebounceFn(
+  async (query) => {
+    isLoading.value = true;
+    const result = await tagStore.cleanFetch(query?.trim());
+    tags.value = result.map((tag: any) => {
+      return {
+        name: tag.name,
+        count: tag.count,
+      };
+    });
+    isLoading.value = false;
+  },
+  300,
+  { maxWait: 1000 },
+);
+
+const fetchTagsMore = async () => {
+  if (isEndOfTags.value || isLoading.value) return;
+  isLoading.value = true;
+  const result = await tagStore.fetchMore(searchQuery.value.trim());
+  tags.value.push(
+    ...result.map((tag: any) => {
+      return {
+        name: tag.name,
+        count: tag.count,
+      };
+    }),
+  );
   isLoading.value = false;
 };
 
@@ -107,34 +200,5 @@ const isModalOpen = ref(false);
 
 const handleIsOpenUpdate = (value: boolean) => {
   isModalOpen.value = value;
-};
-
-const tagSearch = async (query: string) => {
-  await tagStore.fetchTags(false, query, 20, undefined);
-};
-
-const isTagExists = computed(() => {
-  return tagStore.isTagExists;
-});
-
-const onInput = (event: Event) => {
-  const currentInput = event.target as HTMLInputElement;
-  tagSearch(currentInput.value);
-};
-
-const tags = computed(() => {
-  return tagStore.getTags().map((tag) => {
-    return {
-      name: tag.name,
-      count: tag.count,
-    };
-  });
-});
-
-const fetchTagsMore = async (query?: string) => {
-  isLoading.value = true;
-  console.log('fetch more');
-  await tagStore.fetchTagsMore(query);
-  isLoading.value = false;
 };
 </script>

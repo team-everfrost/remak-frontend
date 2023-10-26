@@ -31,7 +31,10 @@
                 <div
                   class="flex flex-row items-center justify-between pl-5 pr-3 pt-5 mb-10"
                 >
-                  <p class="leading-18 text-lg font-bold text-[#1b1c1f]">
+                  <p
+                    ref="popupName"
+                    class="leading-18 text-lg font-bold text-[#1b1c1f]"
+                  >
                     컬렉션에 등록
                   </p>
                   <button @click="closeModal">
@@ -57,7 +60,7 @@
 
                 <div class="flex w-full flex-col overflow-y-auto max-h-72">
                   <button
-                    v-for="(collection, index) in collections"
+                    v-for="(collection, index) in collectionsList"
                     :key="index"
                     class="flex h-11 flex-row items-center justify-between shrink-0 pl-5 pr-3 mx-1"
                     @click="collection.isSelected = !collection.isSelected"
@@ -102,10 +105,14 @@
                       </defs>
                     </svg>
                   </button>
+                  <div
+                    ref="loadObserverTarget"
+                    class="bottom-0 -z-50 h-40 w-full -mt-40"
+                  ></div>
                 </div>
 
                 <div
-                  v-if="collections.length === 0"
+                  v-if="collectionsList.length === 0"
                   class="relative flex flex-col items-center justify-start gap-6 mt-9"
                 >
                   <svg
@@ -221,21 +228,85 @@ const computedCollections = computed(() => {
   });
 });
 
-const collections = ref<
+const collectionsList = ref<
   { name: string; description: string; count: number; isSelected: boolean }[]
 >([]);
 
-onActivated(() => {
-  init();
+const isEndOfCollections = computed(() => {
+  return collectionStore.isEndOfCollections();
 });
+
+const popupName = ref<HTMLElement | null>(null);
+const popupObserver = ref<ResizeObserver | null>(null);
+
+const loadObserverTarget = ref<HTMLElement | null>(null);
+const loadObserver = ref<IntersectionObserver | null>(null);
+
+watch(
+  () => props.isOpen,
+  (isOpen) => {
+    if (isOpen) {
+      // init();
+      nextTick(() => {
+        setObserver();
+      });
+    } else {
+      unsetObserver();
+    }
+  },
+);
+
+const setObserver = () => {
+  if (!popupObserver.value)
+    popupObserver.value = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          init();
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 1.0,
+      },
+    );
+  if (popupName.value) popupObserver.value?.observe(popupName.value);
+
+  if (!loadObserver.value)
+    loadObserver.value = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5,
+      },
+    );
+  if (loadObserverTarget.value)
+    loadObserver.value?.observe(loadObserverTarget.value);
+};
+
+const unsetObserver = () => {
+  if (popupName.value) popupObserver.value?.disconnect();
+  if (loadObserverTarget.value) loadObserver.value?.disconnect();
+};
 
 const init = async () => {
   await collectionStore.initalFetch();
-  collections.value = computedCollections.value;
+  collectionsList.value = computedCollections.value;
+};
+
+const fetchMore = async () => {
+  if (isEndOfCollections.value) return;
+  await collectionStore.fetchCollectionsMore();
+  collectionsList.value = computedCollections.value;
 };
 
 const handleClick = () => {
-  collections.value.forEach((collection) => {
+  collectionsList.value.forEach((collection) => {
     if (collection.isSelected) {
       collectionStore.addDocInCollection(collection.name, props.docId);
     }
@@ -262,7 +333,7 @@ const emit = defineEmits<{
 
 // Update the 'closeModal' function to emit the updated 'isOpen' value
 const closeModal = () => {
-  collections.value.forEach((collection) => {
+  collectionsList.value.forEach((collection) => {
     collection.isSelected = false;
   });
   emit('update:isOpen', false);

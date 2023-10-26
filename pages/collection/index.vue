@@ -45,7 +45,10 @@
               :count="collection.count"
             />
           </div>
-          <ScrollTop />
+          <div
+            ref="loadObserverTarget"
+            class="bottom-0 -z-50 h-40 w-full -mt-40"
+          ></div>
         </div>
       </div>
     </div>
@@ -59,15 +62,62 @@ import { useCollectionStore } from '~/stores/collection';
 const collectionStore = useCollectionStore();
 const collections = ref<any[]>();
 const isLoading = ref(false);
+const isEndOfCollections = computed(() => {
+  return collectionStore.isEndOfCollections();
+});
+
+const loadObserverTarget = ref<HTMLElement | null>(null);
+const loadObserver = ref<IntersectionObserver | null>(null);
 
 onActivated(() => {
   initCollection();
+  setObserver();
 });
+
+onDeactivated(() => {
+  unsetObserver();
+});
+
+const setObserver = () => {
+  if (!loadObserver.value)
+    loadObserver.value = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5,
+      },
+    );
+  if (loadObserverTarget.value)
+    loadObserver.value?.observe(loadObserverTarget.value);
+};
+
+const unsetObserver = () => {
+  if (loadObserverTarget.value) loadObserver.value?.disconnect();
+};
 
 const initCollection = async () => {
   if (isLoading.value) return;
   isLoading.value = true;
   await collectionStore.initalFetch();
+  collections.value = collectionStore.getCollections().map((collection) => {
+    return {
+      name: collection.name,
+      description: collection.description,
+      count: collection.count,
+    };
+  });
+  isLoading.value = false;
+};
+
+const fetchMore = async () => {
+  if (isEndOfCollections.value || isLoading.value) return;
+  isLoading.value = true;
+  await collectionStore.fetchCollectionsMore();
   collections.value = collectionStore.getCollections().map((collection) => {
     return {
       name: collection.name,
@@ -91,7 +141,15 @@ const openCollectionModal = () => {
   isCollectionModalOpen.value = true;
 };
 
-const handleCollectionIsOpenUpdate = (newIsOpen: boolean) => {
+const handleCollectionIsOpenUpdate = async (newIsOpen: boolean) => {
   isCollectionModalOpen.value = newIsOpen;
+  await initCollection();
+  collections.value = collectionStore.getCollections().map((collection) => {
+    return {
+      name: collection.name,
+      description: collection.description,
+      count: collection.count,
+    };
+  });
 };
 </script>

@@ -100,8 +100,8 @@ const collectionStore = useCollectionStore();
 const collectionName = ref('');
 const collectionDescription = ref('');
 
-const handleClick = () => {
-  collectionStore.createCollection(
+const handleClick = async () => {
+  await collectionStore.createCollection(
     collectionName.value,
     collectionDescription.value,
   );

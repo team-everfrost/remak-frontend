@@ -107,7 +107,7 @@ const handleSearchClick = () => {
 };
 
 const handleAccountClick = () => {
-  navigateTo('/account');
+  navigateTo('/profile');
 };
 
 const handleCollectionClick = () => {

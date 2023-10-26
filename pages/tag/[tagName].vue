@@ -30,6 +30,11 @@
               </template>
             </MasonryWall>
           </div>
+          <div
+            v-if="!isEndOfDocuments"
+            ref="loadObserverTarget"
+            class="bottom-0 -z-50 h-[500px] w-full -mt-[500px]"
+          ></div>
         </div>
       </div>
     </div>
@@ -44,17 +49,79 @@ const tagStore = useTagStore();
 
 const tagName = route.params.tagName as string;
 const documents = ref([] as any[]);
-const isLoading = ref(true);
+let lastUpdatedAt = '';
 
-const initalFetch = async () => {
-  const result = await tagStore.fetchTagDetail(tagName);
+const isLoading = ref(true);
+const isEndOfDocuments = ref(false);
+const loadObserverTarget = ref<HTMLElement | null>(null);
+const loadObserver = ref<IntersectionObserver | null>(null);
+
+onActivated(() => {
+  initalLoad();
+  setObserver();
+});
+
+onDeactivated(() => {
+  unsetObserver();
+});
+
+const setObserver = () => {
+  if (!loadObserver.value)
+    loadObserver.value = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1,
+      },
+    );
+  if (loadObserverTarget.value)
+    loadObserver.value?.observe(loadObserverTarget.value);
+};
+
+const unsetObserver = () => {
+  if (loadObserverTarget.value) loadObserver.value?.disconnect();
+};
+
+const initalLoad = async () => {
+  isLoading.value = true;
+  const result = await tagStore.cleanFetchTagDetail(tagName);
+
+  if (!result || result.length < 20) {
+    isEndOfDocuments.value = true;
+  }
+
   if (result) {
+    lastUpdatedAt = result[result.length - 1].updatedAt;
     documents.value = cardParser(result);
   }
+
   isLoading.value = false;
 };
 
-onMounted(() => {
-  initalFetch();
-});
+const loadMore = async () => {
+  if (isEndOfDocuments.value || isLoading.value) return;
+  isLoading.value = true;
+
+  const result = await tagStore.fetchTagDetailMore(
+    tagName,
+    lastUpdatedAt,
+    documents.value[documents.value.length - 1].docId,
+  );
+
+  if (!result || result.length < 20) {
+    isEndOfDocuments.value = true;
+  }
+
+  if (result) {
+    lastUpdatedAt = result[result.length - 1].updatedAt;
+    documents.value = [...documents.value, ...cardParser(result)];
+  }
+
+  isLoading.value = false;
+};
 </script>

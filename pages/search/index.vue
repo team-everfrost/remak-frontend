@@ -136,11 +136,6 @@
                   />
                 </template>
               </MasonryWall>
-              <div
-                v-if="!isEndOfDocuments"
-                ref="loadObserverTarget"
-                class="bottom-0 -z-50 h-[500px] w-full -mt-[500px]"
-              ></div>
             </div>
             <div
               v-show="documents.length == 0 && !isLoading && !hasError && idle"
@@ -157,6 +152,10 @@
               </div>
             </div>
           </div>
+          <div
+            ref="loadObserverTarget"
+            class="bottom-0 -z-50 h-40 w-full -mt-40"
+          ></div>
         </div>
       </div>
     </div>
@@ -204,7 +203,7 @@ const setObserver = () => {
       {
         root: null,
         rootMargin: '0px',
-        threshold: 0.1,
+        threshold: 0.5,
       },
     );
   if (loadObserverTarget.value)
@@ -252,8 +251,8 @@ const onInput = (event: Event) => {
 const onEnter = () => {
   if (query.value.trim()) {
     getHybridSearch(query.value);
+    searchStore.addSearchHistory(query.value.trim());
   }
-  searchStore.addSearchHistory(query.value);
 };
 
 const getTextSearch = useDebounceFn(
@@ -296,6 +295,7 @@ const textSearch = async (query: string) => {
 };
 
 const textSearchMore = async (query: string) => {
+  if (isEndOfDocuments.value || isLoading.value) return;
   if (query.trim()) {
     isLoading.value = true;
     textSearchCanceled.value = false;

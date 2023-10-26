@@ -18,7 +18,7 @@
               <p class="text-[32px] font-bold">내 정보</p>
               <button
                 class="justify-center h-8 items-center px-3 rounded-md ml-4 bg-[#475161] text-white"
-                @click="navigateTo('/account/edit')"
+                @click="navigateTo('/profile/edit')"
               >
                 프로필 편집
               </button>
