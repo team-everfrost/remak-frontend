@@ -16,13 +16,13 @@
 
           <div
             v-if="isTagExists"
-            class="flex h-[56px] w-full flex-row mt-9 px-4 items-center rounded-xl bg-white border border-[#e6e8eb]"
+            class="flex h-[56px] w-full flex-row mt-9 px-4 items-center rounded-xl bg-white border border-[#e6e8eb] focus-within:border-remak-blue"
           >
             <img src="~/assets/icons/icon_search.svg" alt="검색" />
             <input
               v-model="search"
               type="text"
-              class="w-full h-full text-[#646f7c] text-base font-medium outline-none"
+              class="w-full h-full text-[#646f7c] text-base font-medium outline-none mx-2"
               placeholder="태그를 검색해보세요"
               @input="onInput"
             />

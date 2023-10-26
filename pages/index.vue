@@ -249,15 +249,21 @@
     <div
       class="relative flex h-[240px] w-full flex-shrink-0 flex-grow-0 flex-col items-center justify-center bg-black"
     >
-      <NuxtLink
-        class="flex-shrink-0 flex-grow-0 text-center text-sm"
-        to="/privacy-policy"
-      >
-        <span
+      <p class="flex-shrink-0 flex-grow-0 text-center text-sm">
+        <NuxtLink
+          to="/privacy-policy"
           class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
-          >개인정보 처리방침</span
+          >개인정보 처리방침</NuxtLink
+        ><span
+          class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#464749]"
         >
-      </NuxtLink>
+          ㅣ </span
+        ><NuxtLink
+          to="/terms-of-service"
+          class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
+          >이용약관</NuxtLink
+        >
+      </p>
       <p
         class="mt-3 flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
       >

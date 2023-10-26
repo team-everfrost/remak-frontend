@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen flex-col">
+  <div class="flex h-screen flex-col items-center">
     <TopBar :is-fixed="true" />
     <div class="mx-96 mt-28 prose">
       &lt; Everfrost &gt;(&apos;remak.io&apos;이하 &apos;remak&apos;)은(는)
