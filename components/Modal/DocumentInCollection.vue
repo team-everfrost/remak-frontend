@@ -25,16 +25,13 @@
             leave-to="opacity-0 scale-95"
           >
             <HeadlessDialogPanel
-              class="flex w-full max-w-[480px] max-h-[480px] overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
+              class="flex w-[480px] h-[480px] overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all"
             >
               <div class="flex flex-col bg-white w-full h-full">
                 <div
                   class="flex flex-row items-center justify-between pl-5 pr-3 pt-5 mb-10"
                 >
-                  <p
-                    ref="popupName"
-                    class="leading-18 text-lg font-bold text-[#1b1c1f]"
-                  >
+                  <p class="leading-18 text-lg font-bold text-[#1b1c1f]">
                     컬렉션에 등록
                   </p>
                   <button @click="closeModal">
@@ -112,7 +109,7 @@
                 </div>
 
                 <div
-                  v-if="collectionsList.length === 0"
+                  v-if="collectionsList.length === 0 && !isLoading"
                   class="relative flex flex-col items-center justify-start gap-6 mt-9"
                 >
                   <svg
@@ -232,12 +229,10 @@ const collectionsList = ref<
   { name: string; description: string; count: number; isSelected: boolean }[]
 >([]);
 
+const isLoading = ref(false);
 const isEndOfCollections = computed(() => {
   return collectionStore.isEndOfCollections();
 });
-
-const popupName = ref<HTMLElement | null>(null);
-const popupObserver = ref<ResizeObserver | null>(null);
 
 const loadObserverTarget = ref<HTMLElement | null>(null);
 const loadObserver = ref<IntersectionObserver | null>(null);
@@ -246,7 +241,7 @@ watch(
   () => props.isOpen,
   (isOpen) => {
     if (isOpen) {
-      // init();
+      init();
       nextTick(() => {
         setObserver();
       });
@@ -257,21 +252,6 @@ watch(
 );
 
 const setObserver = () => {
-  if (!popupObserver.value)
-    popupObserver.value = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          init();
-        }
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 1.0,
-      },
-    );
-  if (popupName.value) popupObserver.value?.observe(popupName.value);
-
   if (!loadObserver.value)
     loadObserver.value = new IntersectionObserver(
       (entries) => {
@@ -290,19 +270,22 @@ const setObserver = () => {
 };
 
 const unsetObserver = () => {
-  if (popupName.value) popupObserver.value?.disconnect();
   if (loadObserverTarget.value) loadObserver.value?.disconnect();
 };
 
 const init = async () => {
+  isLoading.value = true;
   await collectionStore.initalFetch();
   collectionsList.value = computedCollections.value;
+  isLoading.value = false;
 };
 
 const fetchMore = async () => {
-  if (isEndOfCollections.value) return;
+  if (isEndOfCollections.value || isLoading.value) return;
+  isLoading.value = true;
   await collectionStore.fetchCollectionsMore();
   collectionsList.value = computedCollections.value;
+  isLoading.value = false;
 };
 
 const handleClick = () => {
