@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
   content: [],
   theme: {
@@ -8,6 +11,13 @@ module.exports = {
         'remak-blue': '#1F8CE6',
         'remak-background-gray': '#F4F6F8',
         'topbar-background': '#FEFEFE',
+      },
+      fontFamily: {
+        sans: [
+          '"Pretendard Variable"',
+          '"Pretendard"',
+          ...defaultTheme.fontFamily.sans,
+        ],
       },
       animation: {
         'infinite-flow': 'infinite-flow 40s linear infinite',

@@ -194,6 +194,7 @@
                     등록된 컬렉션이 없어요
                   </p>
                 </div>
+                <div class="grow"></div>
                 <button
                   class="h-[52px] text-center justify-center items-center rounded-xl bg-[#1f8ce6] text-white mx-5 mt-9 mb-5"
                   @click="handleClick"
