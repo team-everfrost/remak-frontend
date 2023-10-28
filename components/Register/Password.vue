@@ -27,17 +27,20 @@
 
         <div class="mt-4 flex">
           <div class="flex items-center">
-            <img :src="letterCheckImg" alt="" />
+            <img v-if="letterCheckImg" src="/assets/check.svg" alt="" />
+            <img v-else src="/assets/uncheck.svg" alt="" />
             <span class="ml-1 text-sm leading-[14px] text-gray-500"
               >영문자</span
             >
           </div>
-          <div class="flex items-center">
-            <img :src="numberCheckImg" alt="" class="ml-2" />
+          <div class="flex items-center ml-2">
+            <img v-if="numberCheckImg" src="/assets/check.svg" alt="" />
+            <img v-else src="/assets/uncheck.svg" alt="" />
             <span class="ml-1 text-sm leading-[14px] text-gray-500">숫자</span>
           </div>
-          <div class="flex items-center">
-            <img :src="lengthCheckImg" alt="" class="ml-2" />
+          <div class="flex items-center ml-2">
+            <img v-if="lengthCheckImg" src="/assets/check.svg" alt="" />
+            <img v-else src="/assets/uncheck.svg" alt="" />
             <span class="ml-1 text-sm leading-[14px] text-gray-500"
               >9자 이상</span
             >
@@ -74,19 +77,15 @@ const passwordClass = computed(() => {
 });
 
 const lengthCheckImg = computed(() => {
-  return password.value.length >= 9
-    ? '/assets/check.svg'
-    : '/assets/uncheck.svg';
+  return password.value.length >= 9;
 });
 
 const numberCheckImg = computed(() => {
-  return /\d/.test(password.value) ? 'assets/check.svg' : 'assets/uncheck.svg';
+  return /\d/.test(password.value);
 });
 
 const letterCheckImg = computed(() => {
-  return /[A-Za-z]/.test(password.value)
-    ? 'assets/check.svg'
-    : 'assets/uncheck.svg';
+  return /[A-Za-z]/.test(password.value);
 });
 
 const checkPassword = () => {
