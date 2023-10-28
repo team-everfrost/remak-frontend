@@ -10,27 +10,35 @@
       </p>
     </div>
     <img
-      :src="imageType"
+      v-if="type === 'file'"
+      src="/assets/icons/icon_add_file.svg"
+      alt="remak cards"
+      class="absolute bottom-4 right-4 h-[125px] w-[125px]"
+    />
+    <img
+      v-else-if="type === 'photo'"
+      src="/assets/icons/icon_add_photo.svg"
+      alt="remak cards"
+      class="absolute bottom-4 right-4 h-[125px] w-[125px]"
+    />
+    <img
+      v-else-if="type === 'memo'"
+      src="/assets/icons/icon_add_memo.svg"
+      alt="remak cards"
+      class="absolute bottom-4 right-4 h-[125px] w-[125px]"
+    />
+    <img
+      v-else-if="type === 'link'"
+      src="/assets/icons/icon_add_link.svg"
+      alt="remak cards"
       class="absolute bottom-4 right-4 h-[125px] w-[125px]"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   title: string;
   type: string;
 }>();
-
-const imageType = computed(() => {
-  if (props.type === 'file') {
-    return '/assets/icons/icon_add_file.svg';
-  } else if (props.type === 'photo') {
-    return '/assets/icons/icon_add_photo.svg';
-  } else if (props.type === 'memo') {
-    return '/assets/icons/icon_add_memo.svg';
-  } else if (props.type === 'link') {
-    return '/assets/icons/icon_add_link.svg';
-  }
-});
 </script>
