@@ -107,13 +107,9 @@ const tags = ref<
 const loadObserverTarget = ref<HTMLElement | null>(null);
 const loadObserver = ref<IntersectionObserver | null>(null);
 
-onMounted(() => {
-  inital();
-});
-
 onActivated(() => {
+  if (!searchQuery || !searchQuery.value) inital();
   setObserver();
-  if (!searchQuery.value) inital();
 });
 
 onDeactivated(() => {
@@ -162,6 +158,7 @@ const inital = async () => {
     };
   });
   if (!tags.value.length) tagNotExists.value = true;
+  else tagNotExists.value = false;
   isLoading.value = false;
 };
 
