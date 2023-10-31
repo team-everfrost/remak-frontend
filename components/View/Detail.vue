@@ -490,7 +490,7 @@ const inputTextarea = () => {
   }
 };
 
-useResizeObserver(textarea, () => {
+const { stop } = useResizeObserver(textarea, () => {
   inputTextarea();
 });
 
@@ -610,5 +610,9 @@ onMounted(() => {
     updatedText.value = props.document.content;
     inputTextarea();
   }
+});
+
+onDeactivated(() => {
+  stop();
 });
 </script>
