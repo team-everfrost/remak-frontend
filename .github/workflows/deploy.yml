@@ -32,6 +32,9 @@ jobs:
 
       - name: Build
         run: npm run generate
+        env:
+          NODE_ENV: production
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - uses: jakejarvis/s3-sync-action@master
         with:
@@ -42,4 +45,3 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'ap-northeast-2'
           SOURCE_DIR: '.output/public'
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
