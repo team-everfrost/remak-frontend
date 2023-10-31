@@ -157,7 +157,7 @@
         </HeadlessMenu>
       </div>
       <div
-        v-if="props.document.type === 'IMAGE' || props.document.type === 'FILE'"
+        v-if="props.document.type !== 'MEMO'"
         class="flex mt-4 items-center justify-center gap-2.5 self-stretch rounded-xl border border-[#e6e8eb] bg-[#F4F6F8] cursor-pointer"
         :class="imageClick ? 'h-auto' : 'h-60'"
         @click="imageClick = !imageClick"
