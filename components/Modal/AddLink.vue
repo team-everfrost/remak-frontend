@@ -122,19 +122,11 @@ const checkUrl = (url: string) => {
 onMounted(() => {
   if (textarea.value) {
     textarea.value.focus();
+    setResizeObserver();
   }
-  setResizeObserver();
 });
 
-onActivated(() => {
-  setResizeObserver();
-});
-
-onDeactivated(() => {
-  unsetResizeObserver();
-});
-
-onUnmounted(() => {
+onBeforeUnmount(() => {
   unsetResizeObserver();
 });
 

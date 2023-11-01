@@ -87,18 +87,11 @@ const emit = defineEmits<{
 onMounted(() => {
   if (textarea.value) {
     textarea.value.focus();
+    setResizeObserver();
   }
 });
 
-onActivated(() => {
-  setResizeObserver();
-});
-
-onDeactivated(() => {
-  unsetResizeObserver();
-});
-
-onUnmounted(() => {
+onBeforeUnmount(() => {
   unsetResizeObserver();
 });
 

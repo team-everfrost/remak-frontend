@@ -397,15 +397,13 @@ onMounted(() => {
     updatedText.value = props.document.content;
     inputTextarea();
   }
-});
 
-onActivated(() => {
   if (props.document.type === 'MEMO') {
     setResizeObserver();
   }
 });
 
-onDeactivated(() => {
+onBeforeUnmount(() => {
   if (props.document.type === 'MEMO') {
     unsetResizeObserver();
   }
