@@ -49,7 +49,7 @@ jobs:
       - name: Find all index.html paths in .output/public directory
         id: find_paths
         run: |
-          paths=$(find .output/public -name index.html | sed 's/\.output\/public\///g' | awk 'BEGIN{ORS=" "} {print}')
+          paths=$(find .output/public -name index.html | sed 's/\.output\/public//g' | awk 'BEGIN{ORS=" "} {print}')
           echo "Found paths: $paths"
           echo "PATHS=\"$paths\"" >> $GITHUB_ENV
 
