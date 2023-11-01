@@ -97,6 +97,7 @@ import { useAddStore } from '~/stores/add';
 const addStore = useAddStore();
 const link = ref('');
 const textarea = ref<HTMLTextAreaElement | null>(null);
+const textareaObserver = ref<ResizeObserver | null>(null);
 
 const isUploading = ref(false);
 const progress = ref(0);
@@ -122,7 +123,35 @@ onMounted(() => {
   if (textarea.value) {
     textarea.value.focus();
   }
+  setResizeObserver();
 });
+
+onActivated(() => {
+  setResizeObserver();
+});
+
+onDeactivated(() => {
+  unsetResizeObserver();
+});
+
+onUnmounted(() => {
+  unsetResizeObserver();
+});
+
+const setResizeObserver = () => {
+  if (!textareaObserver.value)
+    textareaObserver.value = new ResizeObserver(() => {
+      if (textarea.value) {
+        inputTextarea();
+      }
+    });
+
+  if (textarea.value) textareaObserver.value?.observe(textarea.value);
+};
+
+const unsetResizeObserver = () => {
+  if (textarea.value) textareaObserver.value?.unobserve(textarea.value);
+};
 
 const emit = defineEmits<{
   (event: 'changeComponent', componentName: string): void;
@@ -155,10 +184,6 @@ const pasteTextarea = (e: ClipboardEvent) => {
   }
   inputTextarea();
 };
-
-useResizeObserver(textarea, () => {
-  inputTextarea();
-});
 
 const handleClick = async () => {
   await saveLink();

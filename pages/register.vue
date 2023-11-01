@@ -1,7 +1,10 @@
 <template>
   <div>
     <TopBar />
-    <component :is="currenComponent" />
+    <RegisterEmail v-if="current === 1" />
+    <RegisterVerifiCode v-if="current === 2" />
+    <RegisterPassword v-if="current === 3" />
+    <RegisterPasswordRepeat v-if="current === 4" />
   </div>
 </template>
 
@@ -14,32 +17,8 @@ definePageMeta({
 
 const registerStore = useRegisterStore();
 
-const RegisterEmail = defineAsyncComponent(
-  () => import('@/components/Register/Email.vue'),
-);
-const RegisterVerifiCode = defineAsyncComponent(
-  () => import('@/components/Register/VerifiCode.vue'),
-);
-const RegisterPassword = defineAsyncComponent(
-  () => import('@/components/Register/Password.vue'),
-);
-const RegisterPasswordRepeat = defineAsyncComponent(
-  () => import('@/components/Register/PasswordRepeat.vue'),
-);
-
-const currenComponent = computed(() => {
-  switch (registerStore.registerPage) {
-    case 1:
-      return RegisterEmail;
-    case 2:
-      return RegisterVerifiCode;
-    case 3:
-      return RegisterPassword;
-    case 4:
-      return RegisterPasswordRepeat;
-    default:
-      return RegisterEmail;
-  }
+const current = computed(() => {
+  return registerStore.registerPage;
 });
 
 const handlePopState = () => {

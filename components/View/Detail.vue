@@ -328,7 +328,6 @@
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver } from '@vueuse/core';
 import hljs from 'highlight.js';
 import { useRouter } from 'nuxt/app';
 import { useDocumentStore } from '~/stores/document';
@@ -358,8 +357,11 @@ const props = defineProps<{
 const documentStore = useDocumentStore();
 
 const imageClick = ref(false);
+
 const textarea = ref<HTMLTextAreaElement | null>(null);
 const updatedText = ref('');
+const textareaObserver = ref<ResizeObserver | null>(null);
+
 const progress = ref<number | null>(null);
 const downloadBtnText = ref('다운로드');
 
@@ -388,6 +390,41 @@ const handleCollectionIsOpenUpdate = (newIsOpen: boolean) => {
 const emit = defineEmits<{
   (event: 'shouldFetch'): void;
 }>();
+
+onMounted(() => {
+  if (props.document.type === 'MEMO' && textarea.value) {
+    textarea.value.value = props.document.content;
+    updatedText.value = props.document.content;
+    inputTextarea();
+  }
+});
+
+onActivated(() => {
+  if (props.document.type === 'MEMO') {
+    setResizeObserver();
+  }
+});
+
+onDeactivated(() => {
+  if (props.document.type === 'MEMO') {
+    unsetResizeObserver();
+  }
+});
+
+const setResizeObserver = () => {
+  if (!textareaObserver.value)
+    textareaObserver.value = new ResizeObserver(() => {
+      if (textarea.value) {
+        inputTextarea();
+      }
+    });
+
+  if (textarea.value) textareaObserver.value?.observe(textarea.value);
+};
+
+const unsetResizeObserver = () => {
+  if (textarea.value) textareaObserver.value?.unobserve(textarea.value);
+};
 
 const saveMemo = async () => {
   if (textarea.value || updatedText.value !== props.document.content) {
@@ -489,10 +526,6 @@ const inputTextarea = () => {
     textarea.value.style.height = textarea.value.scrollHeight + 5 + 'px';
   }
 };
-
-const { stop } = useResizeObserver(textarea, () => {
-  inputTextarea();
-});
 
 let signedUrl = '';
 
@@ -603,16 +636,4 @@ const fileDownload = async () => {
     progress.value = null; // 에러 발생 시 진행 상황을 리셋
   }
 };
-
-onMounted(() => {
-  if (props.document.type === 'MEMO' && textarea.value) {
-    textarea.value.value = props.document.content;
-    updatedText.value = props.document.content;
-    inputTextarea();
-  }
-});
-
-onDeactivated(() => {
-  stop();
-});
 </script>
