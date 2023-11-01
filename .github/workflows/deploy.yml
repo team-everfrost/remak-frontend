@@ -49,8 +49,9 @@ jobs:
       - name: Find all index.html paths in .output/public directory
         id: find_paths
         run: |
-          paths=$(find .output/public -name index.html | sed 's/\.output\/public\///g' | tr '\n' ' ')
-          echo "PATHS=$paths" >> $GITHUB_ENV
+          paths=$(find .output/public -name index.html | sed 's/\.output\/public\///g' | awk 'BEGIN{ORS=" "} {print}')
+          echo "Found paths: $paths"
+          echo "PATHS=\"$paths\"" >> $GITHUB_ENV
 
       - name: Invalidate CloudFront
         uses: chetan/invalidate-cloudfront-action@v2
