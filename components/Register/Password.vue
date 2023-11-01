@@ -21,7 +21,6 @@
           type="password"
           placeholder="비밀번호를 입력해주세요"
           class="mt-3 inline-flex h-14 w-[432px] items-center justify-start gap-2 rounded-xl border border-gray-200 bg-white px-4"
-          @input="checkPassword"
           @keyup.enter="handleNextClick"
         />
 
@@ -48,7 +47,7 @@
         </div>
         <button
           :class="passwordClass"
-          :disabled="!isValidPassword(password)"
+          :disabled="!isValidPassword"
           class="mt-12 inline-flex h-[52px] w-[432px] items-center justify-center rounded-xl px-2 py-4"
           @click="handleNextClick"
         >
@@ -71,7 +70,7 @@ onActivated(() => {
   passwordInput.value?.focus();
 });
 const passwordClass = computed(() => {
-  return isValidPassword(password.value)
+  return isValidPassword.value
     ? 'bg-remak-blue text-white'
     : 'bg-gray-200 text-gray-500';
 });
@@ -88,14 +87,9 @@ const letterCheckImg = computed(() => {
   return /[A-Za-z]/.test(password.value);
 });
 
-const checkPassword = () => {
-  isValidPassword(password.value);
-};
-
-function isValidPassword(password: string): boolean {
-  const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{9,}$/;
-  return regex.test(password);
-}
+const isValidPassword = computed(() => {
+  return lengthCheckImg.value && numberCheckImg.value && letterCheckImg.value;
+});
 
 const handleNextClick = () => {
   registerStore.setPassword(password.value);
