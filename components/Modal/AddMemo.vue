@@ -126,10 +126,6 @@ const inputTextarea = () => {
   }
 };
 
-useResizeObserver(textarea, () => {
-  inputTextarea();
-});
-
 const handleClick = async () => {
   await saveMemo();
 };
