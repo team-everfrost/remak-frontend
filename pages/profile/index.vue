@@ -33,7 +33,7 @@
             <div
               class="mt-10 flex flex-col w-full h-[128px] bg-white rounded-[20px] gap-4 p-5"
             >
-              <p class="text-xl font-bold text-start">무료플랜</p>
+              <p class="text-xl font-bold text-start">{{ userPlan }}</p>
               <div
                 class="bar-container bg-[#EEEEEE] rounded-lg overflow-hidden"
               >
@@ -44,13 +44,13 @@
               </div>
               <div class="flex flex-row justify-start">
                 <p class="text-sm font-bold text-start text-[#1F8CE6]">
-                  {{ usedUsage }}
+                  {{ usedUsageStr }}
                 </p>
                 <p class="text-sm font-bold text-start ml-1 text-[#464749]">
                   /
                 </p>
                 <p class="text-sm font-bold text-start ml-1 text-[#464749]">
-                  {{ totalUsage }}GB
+                  {{ totalUsageStr }}
                 </p>
                 <p class="text-sm font-bold text-start ml-1 text-[#757779]">
                   ({{ usedPercentage }}% 사용 중)
@@ -66,6 +66,7 @@
 </template>
 
 <script setup lang="ts">
+import { jwtDecode } from 'jwt-decode';
 import DeleteAlert from '~/components/DeleteAlert.vue';
 import { useAccountStore } from '~/stores/account';
 import { useAuthStore } from '~/stores/auth';
@@ -74,6 +75,41 @@ import { useResetPersistStore } from '~/stores/resetPersist';
 const authStore = useAuthStore();
 const accountStore = useAccountStore();
 const resetPersistStore = useResetPersistStore();
+
+const userPlan = computed(() => {
+  const token = authStore.accessToken;
+  if (!token) return '';
+  const decodedToken = jwtDecode(token);
+  const role = (decodedToken as any).role;
+  if (role === 'BASIC') {
+    return '무료 플랜';
+  } else if (role === 'PLUS') {
+    return '플러스 플랜';
+  } else if (role === 'ADMIN') {
+    return '관리자';
+  }
+  return '';
+});
+
+const totalUsageStr = computed(() => {
+  const total = totalUsage.value;
+  if (total < 1024) {
+    return `${total}GB`;
+  } else {
+    return `${Math.round(total / 1024)}TB`;
+  }
+});
+
+const usedUsageStr = computed(() => {
+  const used = usedUsage.value;
+  if (used < 1) {
+    return `${Math.round(used * 1024)} MB`;
+  } else if (used < 1024) {
+    return `${used}GB`;
+  } else {
+    return `${Math.round(used / 1024)} TB`;
+  }
+});
 
 const progress = ref(0);
 const usedUsage = ref(0);

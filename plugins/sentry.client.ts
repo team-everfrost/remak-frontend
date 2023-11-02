@@ -1,4 +1,6 @@
 import * as Sentry from '@sentry/vue';
+import { jwtDecode } from 'jwt-decode';
+import { useAuthStore } from '~/stores/auth';
 
 export default defineNuxtPlugin((nuxtApp) => {
   const router = useRouter();
@@ -36,4 +38,11 @@ export default defineNuxtPlugin((nuxtApp) => {
       'ResizeObserver loop completed with undelivered notifications.',
     ],
   });
+
+  const authStore = useAuthStore();
+  const token = authStore.accessToken;
+  if (token && token !== '') {
+    const decoded = jwtDecode(token);
+    Sentry.setUser({ email: decoded.aud as string });
+  }
 });

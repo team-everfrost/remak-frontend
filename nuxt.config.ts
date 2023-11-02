@@ -4,13 +4,11 @@ import { sentryVitePlugin } from '@sentry/vite-plugin';
 export default defineNuxtConfig({
   ssr: false,
   css: [
-    'vue-final-modal/style.css',
     'highlight.js/styles/atom-one-dark-reasonable.css',
     'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css',
   ],
   devtools: { enabled: true },
   modules: [
-    '@nuxt/image',
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
