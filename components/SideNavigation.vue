@@ -3,6 +3,27 @@
     class="fixed left-0 flex h-screen w-48 flex-col border-r border-gray-200 bg-white"
   >
     <button
+      :class="buttonClass(0)"
+      class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm hover:bg-[#e1f1ff] hover:text-[#1F8CE6]"
+      @click="handleMainClick"
+    >
+      <svg
+        width="28"
+        height="28"
+        viewBox="0 0 33 32"
+        fill="none"
+        class="flex-grow-0 flex-shrink-0 w-7 h-7"
+        :class="svgClass(0)"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M17.0666 6.67496C16.5333 6.27496 15.8 6.27496 15.2666 6.67496L7.76663 12.3C7.38892 12.5832 7.16663 13.0278 7.16663 13.5V24.75C7.16663 25.5784 7.8382 26.25 8.66663 26.25H11.2916C12.1201 26.25 12.7916 25.5784 12.7916 24.75V19.875C12.7916 19.0465 13.4632 18.375 14.2916 18.375H18.0416C18.8701 18.375 19.5416 19.0465 19.5416 19.875V24.75C19.5416 25.5784 20.2132 26.25 21.0416 26.25H23.6666C24.4951 26.25 25.1666 25.5784 25.1666 24.75V13.5C25.1666 13.0278 24.9443 12.5832 24.5666 12.3L17.0666 6.67496Z"
+          fill-rule="evenodd"
+        />
+      </svg>
+      메인
+    </button>
+    <button
       :class="buttonClass(1)"
       class="inline-flex h-12 w-full items-center justify-start gap-2 border-b border-gray-200 px-4 text-sm hover:bg-[#e1f1ff] hover:text-[#1F8CE6]"
       @click="handleSearchClick"
@@ -101,6 +122,10 @@
 const props = defineProps<{
   activeButton: number;
 }>();
+
+const handleMainClick = () => {
+  navigateTo('/main');
+};
 
 const handleSearchClick = () => {
   navigateTo('/search');

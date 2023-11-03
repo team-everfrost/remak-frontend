@@ -220,6 +220,6 @@
 
 <script setup>
 definePageMeta({
-  onlyLogout: true,
+  publicPage: true,
 });
 </script>

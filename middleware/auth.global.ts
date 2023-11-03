@@ -4,8 +4,9 @@ export default defineNuxtRouteMiddleware((to) => {
   const authStore = useAuthStore();
 
   const onlyLogout = to.matched.some((record) => record.meta.onlyLogout);
+  const publicPage = to.matched.some((record) => record.meta.publicPage);
 
-  if (!onlyLogout && !authStore.isSignedIn) {
+  if (!onlyLogout && !publicPage && !authStore.isSignedIn) {
     return navigateTo('/login');
   }
 

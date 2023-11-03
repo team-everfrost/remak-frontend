@@ -33,7 +33,7 @@ export default defineNuxtConfig({
         {
           key: 'og:description',
           property: 'og:description',
-          content: 'Remak, Your Personal AI Knowledge Base.',
+          content: 'Your Personal AI Knowledge Base.',
         },
         {
           key: 'og:image',
@@ -59,7 +59,7 @@ export default defineNuxtConfig({
         {
           key: 'twitter:description',
           property: 'twitter:description',
-          content: 'Remak, Your Personal AI Knowledge Base.',
+          content: 'Your Personal AI Knowledge Base.',
         },
         {
           key: 'twitter:image',
