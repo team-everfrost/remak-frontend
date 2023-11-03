@@ -7,7 +7,7 @@
         <SideNavigation :active-button="4" class="mt-20"> </SideNavigation>
         <div class="mt-20 w-full bg-[#F4F6F8] ml-48 flex-col">
           <div class="flex relative flex-col mt-20 mx-20">
-            <div class="">
+            <div>
               <button
                 class="flex flex-row justify-start items-center h-8 pl-2 pr-4 rounded-lg hover:bg-[#e9ecef]"
                 @click="$router.back()"
