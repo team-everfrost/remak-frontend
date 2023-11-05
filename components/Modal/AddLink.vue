@@ -171,8 +171,12 @@ const pasteTextarea = (e: ClipboardEvent) => {
     const splitText = pastedText.split(/\n|\s/);
     const urlList = splitText.map((item) => item.trim()).filter(checkUrl);
 
-    // 필터링된 URL을 공백으로 구분하여 합칩니다.
-    if (textarea.value) textarea.value.value = urlList.join('\n');
+    // 필터링된 URL을 공백으로 구분하여 합치고, textarea에 입력합니다. textarea에 텍스트가 존재한다면 합칩니다.
+    if (textarea.value) {
+      textarea.value.value = textarea.value.value
+        ? textarea.value.value + '\n' + urlList.join('\n')
+        : urlList.join('\n');
+    }
   }
   inputTextarea();
 };
