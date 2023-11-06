@@ -56,5 +56,11 @@ export const useAuthStore = defineStore(
       setAccessToken,
     };
   },
-  { persist: true },
+  {
+    persist: {
+      storage: persistedState.cookiesWithOptions({
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+      }),
+    },
+  },
 );
