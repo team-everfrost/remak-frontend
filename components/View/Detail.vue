@@ -196,7 +196,9 @@
         <div
           class="flex items-start justify-start gap-2.5 self-stretch rounded-xl border border-[#e6e8eb] bg-[#fefefe] px-4 py-5"
         >
-          <p class="flex-grow text-left text-md font-medium text-[#111]">
+          <p
+            class="flex-grow text-left text-md font-medium text-[#111] whitespace-pre-wrap"
+          >
             {{ summary }}
           </p>
         </div>
@@ -290,7 +292,7 @@
             class="mt-12 flex h-[52px] w-full items-center justify-center overflow-hidden rounded-xl bg-[#1f8ce6]"
           >
             <p class="flex-grow text-center text-lg font-bold text-white">
-              웹 페이지로 이동하기
+              원문으로 이동하기
             </p>
           </div>
         </NuxtLink>
@@ -449,7 +451,11 @@ const summary = computed(() => {
       case 'EMBED_PROCESSING':
         return 'AI가 이미지를 분석중이에요!';
       case 'EMBED_REJECTED':
-        return 'AI가 이미지 분석에 실패했어요.';
+        return `AI가 이미지 분석에 실패했어요. 다음과 같은 이유일 수 있어요.
+ 1. AI가 분석할 수 없는 이미지 형식이에요.
+ 2. AI 서버가 과부하 상태에요.
+ 3. 이미지가 너무 크거나 너무 작아요.
+등록 후 2시간 동안 자동으로 여러 번 재시도해요. 직접 다시 시도하기를 원한다면 삭제 후 다시 추가해주세요.`;
       default:
         return props.document.summary?.split('\n')[1] ?? '';
     }
@@ -460,13 +466,20 @@ const summary = computed(() => {
     case 'SCRAPE_PROCESSING':
       return '스크랩이 진행중이에요!';
     case 'SCRAPE_REJECTED':
-      return '스크랩에 실패했어요.';
+      return `스크랩에 실패했어요. 다음과 같은 이유일 수 있어요.
+ 1. 해당 웹페이지가 존재하지 않거나, 접속할 수 없어요.
+ 2. 해당 웹페이지가 본문을 스크랩할 수 없는 형식이에요.
+ 3. 해당 웹페이지가 스크랩을 거부했어요.
+등록 후 2시간동안 자동으로 여러 번 재시도해요. 직접 다시 시도하기를 원한다면 삭제 후 다시 추가해주세요.`;
     case 'EMBED_PENDING':
       return 'AI가 곧 자료를 요약할거에요.';
     case 'EMBED_PROCESSING':
       return 'AI가 자료를 요약중이에요!';
     case 'EMBED_REJECTED':
-      return 'AI가 자료를 요약하지 못했어요.';
+      return `AI가 자료를 요약하지 못했어요. 다음과 같은 이유일 수 있어요.
+ 1. AI가 요약할 수 없는 형식이에요.
+ 2. AI 서버가 과부하 상태에요.
+등록 후 2시간동안 자동으로 여러 번 재시도해요. 직접 다시 시도하기를 원한다면 삭제 후 다시 추가해주세요.`;
     default:
       return props.document.summary?.split('\n')[1] ?? '';
   }

@@ -11,7 +11,7 @@
               <div ref="backBtn" class="flex justify-start items-center w-full">
                 <button
                   class="flex flex-row justify-start items-center h-8 mb-6 pl-2 pr-4 rounded-lg hover:bg-[#e9ecef]"
-                  @click="$router.back()"
+                  @click="goBack"
                 >
                   <svg
                     width="20"
@@ -64,7 +64,7 @@
                   >
                     <button
                       class="flex flex-row justify-start items-center p-2 rounded-lg hover:bg-[#e9ecef]"
-                      @click="$router.back()"
+                      @click="goBack"
                     >
                       <svg
                         viewBox="0 0 20 20"
@@ -101,6 +101,7 @@
 import { useDocumentStore } from '~/stores/document';
 
 const route = useRoute();
+const router = useRouter();
 const documentStore = useDocumentStore();
 
 const docId = route.params.docId as string;
@@ -151,5 +152,18 @@ const setObserver = () => {
 
 const unsetObserver = () => {
   if (backBtn.value) backBtnObserver.value?.disconnect();
+};
+
+const goBack = () => {
+  const historyLengthBefore = window.history.length;
+
+  router.back();
+
+  nextTick(() => {
+    const historyLengthAfter = window.history.length;
+    if (historyLengthBefore === historyLengthAfter) {
+      router.push('/main');
+    }
+  });
 };
 </script>

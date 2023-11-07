@@ -33,7 +33,7 @@
       :value="link"
       :disabled="isUploading"
       maxlength="1000000"
-      placeholder="www.naver.com, www.google.com..."
+      placeholder="www.google.com"
       class="ml-5 mr-5 mt-8 flex-grow resize-none self-stretch overflow-auto rounded-xl border border-[#e6e8eb] bg-[#fefefe] p-4 outline-none"
       @input="inputTextarea"
       @paste="pasteTextarea"
