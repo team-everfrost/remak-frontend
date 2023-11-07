@@ -447,9 +447,11 @@ const summary = computed(() => {
   if (props.document.type === 'IMAGE') {
     switch (props.document.status) {
       case 'EMBED_PENDING':
-        return 'AI가 곧 이미지를 분석할거에요.';
+        return `AI가 곧 이미지를 분석할거에요.
+자동으로 진행상황을 확인하고 있어요. 잠시만 기다려주세요...`;
       case 'EMBED_PROCESSING':
-        return 'AI가 이미지를 분석중이에요!';
+        return `AI가 이미지를 분석중이에요!
+자동으로 진행상황을 확인하고 있어요. 잠시만 기다려주세요...`;
       case 'EMBED_REJECTED':
         return `AI가 이미지 분석에 실패했어요. 다음과 같은 이유일 수 있어요.
  1. AI가 분석할 수 없는 이미지 형식이에요.
@@ -462,9 +464,11 @@ const summary = computed(() => {
   }
   switch (props.document.status) {
     case 'SCRAPE_PENDING':
-      return '스크랩 대기중이에요.';
+      return `스크랩 대기중이에요.
+자동으로 진행상황을 확인하고 있어요. 잠시만 기다려주세요...`;
     case 'SCRAPE_PROCESSING':
-      return '스크랩이 진행중이에요!';
+      return `스크랩이 진행중이에요!
+자동으로 진행상황을 확인하고 있어요. 잠시만 기다려주세요...`;
     case 'SCRAPE_REJECTED':
       return `스크랩에 실패했어요. 다음과 같은 이유일 수 있어요.
  1. 해당 웹페이지가 존재하지 않거나, 접속할 수 없어요.
@@ -472,9 +476,11 @@ const summary = computed(() => {
  3. 해당 웹페이지가 스크랩을 거부했어요.
 등록 후 2시간동안 자동으로 여러 번 재시도해요. 직접 다시 시도하기를 원한다면 삭제 후 다시 추가해주세요.`;
     case 'EMBED_PENDING':
-      return 'AI가 곧 자료를 요약할거에요.';
+      return `AI가 곧 자료를 요약할거에요.
+자동으로 진행상황을 확인하고 있어요. 잠시만 기다려주세요...`;
     case 'EMBED_PROCESSING':
-      return 'AI가 자료를 요약중이에요!';
+      return `AI가 자료를 요약중이에요!
+자동으로 진행상황을 확인하고 있어요. 잠시만 기다려주세요...`;
     case 'EMBED_REJECTED':
       return `AI가 자료를 요약하지 못했어요. 다음과 같은 이유일 수 있어요.
  1. AI가 요약할 수 없는 형식이에요.

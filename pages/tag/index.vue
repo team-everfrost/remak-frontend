@@ -106,6 +106,7 @@ const tags = ref<
 
 const loadObserverTarget = ref<HTMLElement | null>(null);
 const loadObserver = ref<IntersectionObserver | null>(null);
+const loadIntersection = ref(false);
 
 onActivated(() => {
   if (!searchQuery || !searchQuery.value) inital();
@@ -121,7 +122,10 @@ const setObserver = () => {
     loadObserver.value = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
+          loadIntersection.value = true;
           fetchTagsMore();
+        } else {
+          loadIntersection.value = false;
         }
       },
       {
@@ -160,6 +164,8 @@ const inital = async () => {
   if (!tags.value.length) tagNotExists.value = true;
   else tagNotExists.value = false;
   isLoading.value = false;
+
+  if (loadIntersection.value) fetchTagsMore();
 };
 
 const tagSearch = useDebounceFn(
@@ -191,6 +197,8 @@ const fetchTagsMore = async () => {
     }),
   );
   isLoading.value = false;
+
+  if (loadIntersection.value) fetchTagsMore();
 };
 
 const isModalOpen = ref(false);

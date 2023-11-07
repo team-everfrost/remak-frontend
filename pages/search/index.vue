@@ -180,6 +180,7 @@ const isEndOfDocuments = computed(() => {
 });
 const loadObserverTarget = ref<HTMLElement | null>(null);
 const loadObserver = ref<IntersectionObserver | null>(null);
+const loadIntersection = ref(false);
 
 const searchStore = useSearchStore();
 
@@ -197,7 +198,10 @@ const setObserver = () => {
     loadObserver.value = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
+          loadIntersection.value = true;
           textSearchMore(query.value);
+        } else {
+          loadIntersection.value = false;
         }
       },
       {
@@ -292,6 +296,8 @@ const textSearch = async (query: string) => {
     }
   }
   isLoading.value = false;
+
+  if (loadIntersection.value) textSearchMore(query);
 };
 
 const textSearchMore = async (query: string) => {
@@ -309,6 +315,8 @@ const textSearchMore = async (query: string) => {
     }
   }
   isLoading.value = false;
+
+  if (loadIntersection.value) textSearchMore(query);
 };
 
 const hybridSearch = async (query: string) => {

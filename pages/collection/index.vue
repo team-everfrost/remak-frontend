@@ -68,6 +68,7 @@ const isEndOfCollections = computed(() => {
 
 const loadObserverTarget = ref<HTMLElement | null>(null);
 const loadObserver = ref<IntersectionObserver | null>(null);
+const loadIntersection = ref(false);
 
 onActivated(() => {
   initCollection();
@@ -83,7 +84,10 @@ const setObserver = () => {
     loadObserver.value = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
+          loadIntersection.value = true;
           fetchMore();
+        } else {
+          loadIntersection.value = false;
         }
       },
       {
@@ -112,6 +116,8 @@ const initCollection = async () => {
     };
   });
   isLoading.value = false;
+
+  if (loadIntersection.value) fetchMore();
 };
 
 const fetchMore = async () => {
@@ -126,6 +132,8 @@ const fetchMore = async () => {
     };
   });
   isLoading.value = false;
+
+  if (loadIntersection.value) fetchMore();
 };
 
 const isModalOpen = ref(false);

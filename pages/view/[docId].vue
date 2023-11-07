@@ -128,7 +128,39 @@ onDeactivated(() => {
 const initialFetch = async () => {
   isLoading.value = true;
   document.value = await documentStore.fetchDocumentDetail(docId);
+  if (
+    (document.value.status === 'SCRAPE_PENDING' ||
+      document.value.status === 'SCRAPE_PROCESSING' ||
+      (document.value.status === 'EMBED_PENDING' &&
+        document.value.type !== 'MEMO') ||
+      document.value.status === 'EMBED_PROCESSING') &&
+    new Date().getTime() - new Date(document.value.updatedAt).getTime() <
+      43200000
+  ) {
+    autoReload();
+  }
   isLoading.value = false;
+};
+
+let autoReloadInterval: any = null;
+
+const autoReload = () => {
+  autoReloadInterval = setInterval(async () => {
+    document.value = await documentStore.fetchDocumentDetail(docId);
+    if (
+      !(
+        (document.value.status === 'SCRAPE_PENDING' ||
+          document.value.status === 'SCRAPE_PROCESSING' ||
+          (document.value.status === 'EMBED_PENDING' &&
+            document.value.type !== 'MEMO') ||
+          document.value.status === 'EMBED_PROCESSING') &&
+        new Date().getTime() - new Date(document.value.updatedAt).getTime() <
+          43200000
+      )
+    ) {
+      clearInterval(autoReloadInterval);
+    }
+  }, 2000);
 };
 
 const setObserver = () => {

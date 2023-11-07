@@ -97,8 +97,8 @@
               <button
                 ref="updateBtn"
                 class="h-8 w-8"
-                :disabled="isLoading"
-                @click="cleanLoad()"
+                :disabled="isLoading || autoRefresh"
+                @click="initLoad()"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +106,9 @@
                   viewBox="0 -960 960 960"
                   width="28"
                   :class="
-                    isLoading
+                    autoRefresh
+                      ? 'animate-spin text-blue-400'
+                      : isLoading
                       ? 'animate-spin text-gray-400'
                       : hasError
                       ? 'text-red-500'
@@ -253,12 +255,15 @@ const isEndOfDocuments = computed(() => {
 });
 const loadObserverTarget = ref<HTMLElement | null>(null);
 const loadObserver = ref<IntersectionObserver | null>(null);
+const loadIntersection = ref(false);
+
 const updateBtn = ref<HTMLElement | null>(null);
 const updateObserver = ref<IntersectionObserver | null>(null);
 
 const shouldUpdate = ref(true);
 const topIntersection = ref(true);
 
+const autoRefresh = ref(false);
 const isLoading = ref(false);
 const hasError = ref(false);
 const documentStore = useDocumentStore();
@@ -290,15 +295,9 @@ const shouldFetch = computed(() => {
 });
 
 // 모달 생성 주체가 Topbar라서 일단 이렇게 처리
-watch(shouldFetch, (newVal) => {
-  if (newVal === true) {
-    documentStore.setShouldFetch(false);
-    cleanLoad();
-  }
-  if (newVal === 'cache') {
-    documentStore.setShouldFetch(false);
-    initLoad();
-  }
+watch(shouldFetch, async (newVal) => {
+  if (newVal === true || newVal === 'cache') await initLoad();
+  documentStore.setShouldFetch(false);
 });
 
 onActivated(() => {
@@ -309,6 +308,7 @@ onActivated(() => {
 });
 
 onDeactivated(() => {
+  clearInterval(todayLoadInterval);
   unsetObserver();
 });
 
@@ -317,7 +317,10 @@ const setObserver = () => {
     loadObserver.value = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
+          loadIntersection.value = true;
           loadMore();
+        } else {
+          loadIntersection.value = false;
         }
       },
       {
@@ -376,7 +379,9 @@ const initLoad = async () => {
   isLoading.value = false;
   hasError.value = false;
 
-  if (shouldUpdate.value) cleanLoad();
+  if (shouldUpdate.value || shouldFetch.value) await cleanLoad();
+
+  checkAutoRefresh();
 };
 
 const cleanLoad = async () => {
@@ -397,6 +402,9 @@ const cleanLoad = async () => {
 
   isLoading.value = false;
   hasError.value = false;
+
+  // 최초 로드 이후 화면에 loadObserver가 있을경우 추가로드
+  if (loadIntersection.value) loadMore();
 };
 
 const loadMore = async () => {
@@ -425,6 +433,88 @@ const loadMore = async () => {
 
   isLoading.value = false;
   hasError.value = false;
+
+  // 최초 로드 이후 화면에 loadObserver가 있을경우 추가로드
+  if (loadIntersection.value) loadMore();
+};
+
+const todayLoad = async () => {
+  isLoading.value = true;
+  const result = await documentStore.cleanFetch();
+  if (!result) {
+    isLoading.value = false;
+    hasError.value = true;
+    return;
+  }
+  const todayDocs = cardSplitter(result).today;
+
+  while (todayDocuments.value.length > todayDocs.length) {
+    const result = await documentStore.fetchMore();
+    if (!result) {
+      isLoading.value = false;
+      hasError.value = true;
+      return;
+    }
+    const splitedDocs = cardSplitter(result);
+    todayDocs.push(splitedDocs.today);
+    if (splitedDocs.today.length === 0) break;
+  }
+
+  todayDocuments.value = todayDocs;
+
+  isLoading.value = false;
+  hasError.value = false;
+};
+
+let todayLoadInterval: any = null;
+
+const checkAutoRefresh = () => {
+  clearInterval(todayLoadInterval); // 이전 인터벌을 정리합니다.
+  const result = documentStore.getDocuments();
+
+  for (const doc of result) {
+    // 12시간 이내의 문서만 체크합니다.
+    if (Date.now() - new Date(doc.updatedAt).getTime() > 43200000) break;
+
+    // 로드 중인 상태인지 확인합니다.
+    if (
+      doc.status === 'SCRAPE_PENDING' ||
+      doc.status === 'SCRAPE_PROCESSING' ||
+      (doc.status === 'EMBED_PENDING' && doc.type !== 'MEMO') ||
+      doc.status === 'EMBED_PROCESSING'
+    ) {
+      autoRefresh.value = true;
+      // 2초마다 cleanLoad를 실행합니다.
+      todayLoadInterval = setInterval(async () => {
+        await todayLoad();
+        let loopMore = false;
+        const newResult = documentStore.getDocuments();
+        for (const doc of newResult) {
+          // 12시간 이내의 문서만 체크합니다.
+          if (Date.now() - new Date(doc.updatedAt).getTime() > 43200000) break;
+
+          // 로드 중인 상태인지 확인합니다.
+          if (
+            doc.status === 'SCRAPE_PENDING' ||
+            doc.status === 'SCRAPE_PROCESSING' ||
+            (doc.status === 'EMBED_PENDING' && doc.type !== 'MEMO') ||
+            doc.status === 'EMBED_PROCESSING'
+          ) {
+            loopMore = true;
+            break;
+          }
+        }
+        if (!loopMore) {
+          clearInterval(todayLoadInterval);
+          autoRefresh.value = false;
+        }
+      }, 2000);
+      return; // 로드 중인 문서를 찾았으므로 더 이상 체크할 필요가 없습니다.
+    }
+  }
+
+  // 로드 중인 문서가 없으면 autoRefresh 상태를 false로 설정합니다.
+  autoRefresh.value = false;
 };
 
 const selectMode = ref(false);
