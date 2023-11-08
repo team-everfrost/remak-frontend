@@ -468,6 +468,7 @@ const summary = computed(() => {
 자동으로 진행상황을 확인하고 있어요. 잠시만 기다려주세요...`;
     case 'SCRAPE_PROCESSING':
       return `스크랩이 진행중이에요!
+30초 정도 걸릴 수 있어요.
 자동으로 진행상황을 확인하고 있어요. 잠시만 기다려주세요...`;
     case 'SCRAPE_REJECTED':
       return `스크랩에 실패했어요. 다음과 같은 이유일 수 있어요.
@@ -480,6 +481,7 @@ const summary = computed(() => {
 자동으로 진행상황을 확인하고 있어요. 잠시만 기다려주세요...`;
     case 'EMBED_PROCESSING':
       return `AI가 자료를 요약중이에요!
+1분 정도 걸릴 수 있어요.
 자동으로 진행상황을 확인하고 있어요. 잠시만 기다려주세요...`;
     case 'EMBED_REJECTED':
       return `AI가 자료를 요약하지 못했어요. 다음과 같은 이유일 수 있어요.

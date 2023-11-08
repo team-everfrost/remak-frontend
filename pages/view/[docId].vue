@@ -122,6 +122,7 @@ onActivated(() => {
 });
 
 onDeactivated(() => {
+  clearInterval(autoReloadInterval);
   unsetObserver();
 });
 
@@ -145,6 +146,7 @@ const initialFetch = async () => {
 let autoReloadInterval: any = null;
 
 const autoReload = () => {
+  clearInterval(autoReloadInterval);
   autoReloadInterval = setInterval(async () => {
     document.value = await documentStore.fetchDocumentDetail(docId);
     if (

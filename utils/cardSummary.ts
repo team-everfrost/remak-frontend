@@ -24,13 +24,13 @@ export default function (
     case 'SCRAPE_PENDING':
       return '스크랩 대기중이에요.';
     case 'SCRAPE_PROCESSING':
-      return '스크랩이 진행중이에요!';
+      return '스크랩이 진행중이에요!\n30초 정도 걸릴 수 있어요.';
     case 'SCRAPE_REJECTED':
       return '스크랩에 실패했어요.';
     case 'EMBED_PENDING':
       return 'AI가 곧 자료를 요약할거에요.';
     case 'EMBED_PROCESSING':
-      return 'AI가 자료를 요약중이에요!';
+      return 'AI가 자료를 요약중이에요!\n1분 정도 걸릴 수 있어요.';
     case 'EMBED_REJECTED':
       return 'AI가 자료를 요약하지 못했어요.';
     default:
