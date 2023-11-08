@@ -199,7 +199,8 @@ const setObserver = () => {
       (entries) => {
         if (entries[0].isIntersecting) {
           loadIntersection.value = true;
-          textSearchMore(query.value);
+          if (query.value.trim() && !isLoading && !isError)
+            textSearchMore(query.value);
         } else {
           loadIntersection.value = false;
         }
@@ -291,13 +292,12 @@ const textSearch = async (query: string) => {
     if (result) {
       if (textSearchCanceled.value) return;
       documents.value = cardParser(result);
+      if (loadIntersection.value) textSearchMore(query);
     } else {
       hasError.value = true;
     }
   }
   isLoading.value = false;
-
-  if (loadIntersection.value) textSearchMore(query);
 };
 
 const textSearchMore = async (query: string) => {
@@ -310,13 +310,12 @@ const textSearchMore = async (query: string) => {
     if (result) {
       if (textSearchCanceled.value) return;
       documents.value = [...documents.value, ...cardParser(result)];
+      if (loadIntersection.value) textSearchMore(query);
     } else if (result === false) {
       hasError.value = true;
     }
   }
   isLoading.value = false;
-
-  if (loadIntersection.value) textSearchMore(query);
 };
 
 const hybridSearch = async (query: string) => {

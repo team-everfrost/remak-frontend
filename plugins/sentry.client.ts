@@ -1,3 +1,4 @@
+import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/vue';
 import { jwtDecode } from 'jwt-decode';
 import { useAuthStore } from '~/stores/auth';
@@ -23,6 +24,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         routingInstrumentation: Sentry.vueRouterInstrumentation(router),
       }),
       new Sentry.Replay(),
+      new RewriteFrames(),
     ],
 
     trackComponents: true,
@@ -43,6 +45,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   const token = authStore.accessToken;
   if (token && token !== '') {
     const decoded = jwtDecode(token);
-    Sentry.setUser({ email: decoded.aud as string });
+    Sentry.setUser({ uid: decoded.aud as string });
   }
 });
