@@ -289,6 +289,8 @@ const textSearch = async (query: string) => {
     textSearchCanceled.value = false;
     const result = await searchStore.cleanTextSearch(query);
 
+    isLoading.value = false;
+
     if (result) {
       if (textSearchCanceled.value) return;
       documents.value = cardParser(result);
@@ -297,7 +299,6 @@ const textSearch = async (query: string) => {
       hasError.value = true;
     }
   }
-  isLoading.value = false;
 };
 
 const textSearchMore = async (query: string) => {
@@ -307,6 +308,8 @@ const textSearchMore = async (query: string) => {
     textSearchCanceled.value = false;
     const result = await searchStore.textSearchMore(query);
 
+    isLoading.value = false;
+
     if (result) {
       if (textSearchCanceled.value) return;
       documents.value = [...documents.value, ...cardParser(result)];
@@ -315,7 +318,6 @@ const textSearchMore = async (query: string) => {
       hasError.value = true;
     }
   }
-  isLoading.value = false;
 };
 
 const hybridSearch = async (query: string) => {
