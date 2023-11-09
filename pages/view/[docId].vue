@@ -85,7 +85,7 @@
                   </div>
                   <ViewDetail
                     :document="document"
-                    @should-fetch="initialFetch"
+                    @should-fetch="updateFetch"
                   />
                 </div>
               </div>
@@ -141,6 +141,10 @@ const initialFetch = async () => {
     autoReload();
   }
   isLoading.value = false;
+};
+
+const updateFetch = async () => {
+  document.value = await documentStore.fetchDocumentDetail(docId);
 };
 
 let autoReloadInterval: any = null;

@@ -28,12 +28,13 @@
           </p>
           <div class="h-3 w-px bg-[#646f7c]"></div>
           <NuxtLink
-            :to="props.document.url"
+            :to="`/redirect?url=${encodeURIComponent(props.document.url)}`"
             target="_blank"
+            rel="noopener noreferrer"
             class="flex gap-2 items-center"
           >
             <p
-              class="text-left text-sm font-medium text-[#646f7c] line-clamp-1"
+              class="text-left text-sm font-medium text-[#646f7c] line-clamp-1 break-all"
             >
               {{
                 props.document.type !== 'MEMO'
@@ -171,7 +172,12 @@
           onerror="this.onerror = null; this.src = '/image/imageHolderDetail.svg';"
         />
       </div>
-      <NuxtLink :to="props.document.url" target="_blank" class="inline-block">
+      <NuxtLink
+        :to="`/redirect?url=${encodeURIComponent(props.document.url)}`"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block"
+      >
         <h1
           class="text-left text-[28px] font-bold text-[#111] mt-4 mb-8"
           :class="
@@ -287,7 +293,11 @@
         </button>
       </div>
       <div v-if="props.document.type === 'WEBPAGE'">
-        <NuxtLink :to="props.document.url" target="_blank">
+        <NuxtLink
+          :to="`/redirect?url=${encodeURIComponent(props.document.url)}`"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <div
             class="mt-12 flex h-[52px] w-full items-center justify-center overflow-hidden rounded-xl bg-[#1f8ce6]"
           >

@@ -18,7 +18,7 @@
             v-if="!tagNotExists"
             class="flex h-[56px] w-full flex-row mt-9 items-center rounded-xl bg-white border border-[#e6e8eb]"
           >
-            <img class="pl-4" src="~/assets/icons/icon_search.svg" alt="검색" />
+            <img class="pl-4" src="~/assets/search.svg" alt="검색" />
             <input
               v-model="searchQuery"
               type="text"

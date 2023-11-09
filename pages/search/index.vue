@@ -12,59 +12,69 @@
           <div class="flex w-full justify-between">
             <p class="font-bold text-[32px]">검색</p>
           </div>
-          <div
-            class="top-24 flex h-14 w-full mt-9 items-center rounded-xl bg-white border border-[#e6e8eb] focus-within:border-remak-blue"
-            :class="
-              isLoading
-                ? 'transition-shadow duration-1000 shadow-xl shadow-remak-blue/50'
-                : ''
-            "
-          >
-            <img class="pl-4" src="~/assets/icons/icon_search.svg" alt="검색" />
-            <input
-              ref="searchInput"
-              v-model="query"
-              type="text"
-              class="w-full h-full text-[#646f7c] text-base font-medium outline-none mx-2"
-              placeholder="검색어를 입력해주세요"
-              @input="onInput"
-              @keyup.enter="onEnter"
-              @keyup.esc="queryClear"
-            />
-            <button v-show="query" class="pr-4" @click="queryClear">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+          <div class="flex mt-9 gap-2">
+            <div
+              class="flex h-14 w-full items-center rounded-xl bg-white border border-[#e6e8eb] focus-within:outline-none focus-within:ring-1 focus-within:border-[#1f8ce6]"
+              :class="
+                isLoading
+                  ? 'transition-shadow duration-1000 shadow-xl shadow-remak-blue/50'
+                  : ''
+              "
+            >
+              <img class="pl-4" src="~/assets/search.svg" alt="검색" />
+              <input
+                ref="searchInput"
+                v-model="query"
+                type="text"
+                class="w-full h-full text-[#646f7c] text-base font-medium outline-none mx-2"
+                placeholder="검색어를 입력해주세요"
+                @input="onInput"
+                @keyup.enter="onEnter"
+                @keyup.esc="queryClear"
+              />
+              <button v-show="query" class="pr-4" @click="queryClear">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                    fill="#28323C"
+                    stroke="#28323C"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path d="M9 9L12 12L15 15" fill="white" />
+                  <path
+                    d="M9 9L12 12L15 15"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path d="M15 9L12 12L9 15" fill="white" />
+                  <path
+                    d="M15 9L12 12L9 15"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div>
+              <button
+                class="flex items-center justify-center h-14 w-14 rounded-full bg-white border border-[#e6e8eb] hover:shadow-lg hover:shadow-remak-blue/30 focus:outline-none focus:ring-1 focus:border-[#1f8ce6]"
+                @click="$router.push('/search/chat')"
               >
-                <path
-                  d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                  fill="#28323C"
-                  stroke="#28323C"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path d="M9 9L12 12L15 15" fill="white" />
-                <path
-                  d="M9 9L12 12L15 15"
-                  stroke="white"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path d="M15 9L12 12L9 15" fill="white" />
-                <path
-                  d="M15 9L12 12L9 15"
-                  stroke="white"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
+                <img src="~/assets/chat.svg" alt="채팅" />
+              </button>
+            </div>
           </div>
           <div v-if="!query">
             <div
