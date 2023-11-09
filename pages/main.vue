@@ -97,7 +97,7 @@
               <button
                 ref="updateBtn"
                 class="h-8 w-8"
-                :disabled="isLoading || autoRefresh"
+                :disabled="isLoading || autoRefresh || selectMode"
                 @click="initLoad()"
               >
                 <svg
@@ -110,6 +110,8 @@
                       ? 'animate-spin text-blue-400'
                       : isLoading
                       ? 'animate-spin text-gray-400'
+                      : selectMode
+                      ? 'text-gray-400'
                       : hasError
                       ? 'text-red-500'
                       : ''
@@ -523,6 +525,13 @@ const selectedList = ref([] as string[]);
 const setSelectMode = (value: boolean) => {
   selectMode.value = value;
   selectedList.value = [];
+
+  if (value) {
+    clearInterval(todayLoadInterval);
+    autoRefresh.value = false;
+  } else {
+    checkAutoRefresh();
+  }
 };
 
 const setSelected = (value: boolean, docId: string) => {
