@@ -40,6 +40,20 @@
               <div
                 class="grow flex flex-col justify-start items-start gap-9 my-9 mx-10"
               >
+                <div
+                  v-if="!conversation.length"
+                  class="flex flex-col mx-auto items-center gap-4 text-center"
+                >
+                  <div
+                    class="flex justify-center items-center h-14 w-14 rounded-full bg-white border border-[#e6e8eb]"
+                  >
+                    <img src="/assets/chat.svg" alt="채팅" />
+                  </div>
+                  <p>궁금한 내용을 입력해주세요!</p>
+                  <div>
+                    <!-- <p>최근 기록</p> -->
+                  </div>
+                </div>
                 <template v-for="(message, index) in conversation">
                   <template v-if="message.type === 'user'">
                     <div :key="index" class="flex w-full justify-end">
@@ -48,7 +62,10 @@
                   </template>
                   <template v-else-if="message.type === 'assistant'">
                     <div :key="index" class="flex w-full justify-start">
-                      <ChatAssistant :text="message.text" />
+                      <ChatAssistant
+                        :text="message.text"
+                        :has-error="message.hasError"
+                      />
                     </div>
                   </template>
                 </template>
@@ -92,19 +109,23 @@ import { useChatStore } from '~/stores/chat';
 const query = ref('');
 const question = ref('');
 const isLoading = ref(false);
-const hasError = ref(false);
 const currentAnswer = computed(() => {
   return chatStore.lastMessage;
 });
 
-const conversation = ref([
+const conversation = ref<
   {
-    type: 'assistant',
-    text: '궁금하신 내용을 입력해주세요!',
-  },
-]);
+    type: 'user' | 'assistant';
+    text: string;
+    hasError: boolean;
+  }[]
+>([]);
 
 const chatStore = useChatStore();
+
+onActivated(() => {
+  conversation.value = [];
+});
 
 const onInput = (event: Event) => {
   query.value = (event.target as HTMLInputElement).value;
@@ -118,6 +139,7 @@ const onEnter = async () => {
   conversation.value.push({
     type: 'user',
     text: query.value,
+    hasError: false,
   });
 
   query.value = '';
@@ -127,6 +149,7 @@ const onEnter = async () => {
   conversation.value.push({
     type: 'assistant',
     text: '문서를 찾아보고 있어요!',
+    hasError: false,
   });
 
   nextTick(() => {
@@ -142,6 +165,7 @@ const onEnter = async () => {
         conversation.value[conversation.value.length - 1] = {
           type: 'assistant',
           text: value,
+          hasError: false,
         };
         nextTick(() => {
           window.scrollTo(0, document.body.scrollHeight);
@@ -157,10 +181,23 @@ const onEnter = async () => {
     conversation.value[conversation.value.length - 1] = {
       type: 'assistant',
       text: currentAnswer.value,
+      hasError: false,
     };
+    nextTick(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    });
   }
 
-  if (!status) hasError.value = true;
+  if (!status) {
+    conversation.value[conversation.value.length - 1] = {
+      type: 'assistant',
+      text: '오류가 발생했어요. 다음과 같은 문제일 수 있어요.\n1. 네트워크 연결이 끊어졌어요.\n2. 서버에 문제가 생겼어요.\n3. 사용량 제한이 초과되었어요.',
+      hasError: true,
+    };
+    nextTick(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  }
   isLoading.value = false;
 };
 </script>

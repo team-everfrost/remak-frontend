@@ -36,36 +36,40 @@ export const useChatStore = defineStore('chat', () => {
 
     lastMessage.value = '';
 
-    const res = await fetch(
-      apiBaseUrl + '/chat/rag?query=' + encodeURIComponent(query),
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authStore.accessToken}`,
+    try {
+      const res = await fetch(
+        apiBaseUrl + '/chat/rag?query=' + encodeURIComponent(query),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${authStore.accessToken}`,
+          },
         },
-      },
-    );
+      );
 
-    if (res.status !== 200 || !res.body) return false;
+      if (res.status !== 200 || !res.body) return false;
 
-    const eventStream = res.body.getReader();
-    const parser = createParser(onParse);
+      const eventStream = res.body.getReader();
+      const parser = createParser(onParse);
 
-    const decoder = new TextDecoder();
+      const decoder = new TextDecoder();
 
-    while (true) {
-      const { done, value } = await eventStream.read();
-      if (done) break;
+      while (true) {
+        const { done, value } = await eventStream.read();
+        if (done) break;
 
-      const text = decoder.decode(value, { stream: true });
+        const text = decoder.decode(value, { stream: true });
 
-      parser.feed(text);
+        parser.feed(text);
+      }
+
+      const last = decoder.decode();
+      parser.feed(last);
+
+      parser.reset();
+    } catch (e) {
+      return false;
     }
-
-    const last = decoder.decode();
-    parser.feed(last);
-
-    parser.reset();
     return true;
   };
 
