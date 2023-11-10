@@ -11,7 +11,6 @@ import MarkdownItEmoji from 'markdown-it-emoji';
 import MarkdownItFootnote from 'markdown-it-footnote';
 import MarkdownItHighlightjs from 'markdown-it-highlightjs';
 import MarkdownItIns from 'markdown-it-ins';
-import * as MarkdownItLinkAttributes from 'markdown-it-link-attributes';
 import MarkdownItMark from 'markdown-it-mark';
 import MarkdownItSub from 'markdown-it-sub';
 import MarkdownItSup from 'markdown-it-sup';
@@ -32,13 +31,7 @@ const markdown = new MarkdownIt({
   .use(MarkdownItSub)
   .use(MarkdownItSup)
   .use(MarkdownItTaskLists)
-  .use(MarkdownItTocDoneRight)
-  .use(MarkdownItLinkAttributes, {
-    attrs: {
-      target: '_blank',
-      rel: 'noopener noreferrer',
-    },
-  });
+  .use(MarkdownItTocDoneRight);
 
 defineProps({
   source: {
