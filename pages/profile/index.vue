@@ -11,9 +11,10 @@
     />
     <div class="flex h-screen flex-col">
       <div class="flex flex-grow flex-row">
-        <SideNavigation :active-button="4" class="mt-20"> </SideNavigation>
-        <div class="mt-20 w-full bg-[#F4F6F8] ml-48 flex-col">
-          <div class="flex mx-20 mt-20 items-center flex-col">
+        <SideNavigation :active-button="'profile'" class="mt-20">
+        </SideNavigation>
+        <div class="mt-20 w-full bg-[#F4F6F8] flex flex-col">
+          <div class="flex grow mx-20 mt-20 items-center flex-col">
             <div class="flex w-full items-center flex-col md:flex-row">
               <p class="text-[32px] font-bold">내 정보</p>
               <button
@@ -56,6 +57,28 @@
                   ({{ usedPercentage }}% 사용 중)
                 </p>
               </div>
+            </div>
+            <div class="mt-auto mb-4 flex flex-col items-center justify-center">
+              <p class="flex-shrink-0 flex-grow-0 text-center text-sm">
+                <NuxtLink
+                  to="/terms-of-service"
+                  class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
+                  >이용약관</NuxtLink
+                ><span
+                  class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#464749]"
+                >
+                  ㅣ </span
+                ><NuxtLink
+                  to="/privacy-policy"
+                  class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
+                  >개인정보처리방침</NuxtLink
+                >
+              </p>
+              <p
+                class="mt-3 flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
+              >
+                Copyright © 2023 Team Everfrost All rights reserved.
+              </p>
             </div>
           </div>
         </div>

@@ -61,7 +61,9 @@
             >더 이상 헤매지 마세요</span
           >
         </p>
-        <div class="mt-10 flex w-full items-center justify-center">
+        <div
+          class="mt-10 flex flex-col gap-6 w-full items-center justify-center"
+        >
           <NuxtLink to="/register">
             <div
               class="relatvie flex h-16 w-60 items-center justify-center gap-2 rounded-xl bg-[#1f8ce6]"
@@ -73,6 +75,26 @@
               </p>
             </div>
           </NuxtLink>
+          <div class="flex gap-4 items-center">
+            <NuxtLink
+              to="https://play.google.com/store/apps/details?id=com.everfrost.remak"
+            >
+              <img
+                class="h-[58px]"
+                src="~/assets/googleplaybadge.png"
+                alt="google play link"
+              />
+            </NuxtLink>
+            <NuxtLink
+              to="https://chrome.google.com/webstore/detail/remak/hjfblaonkfpphmjgomjmlnhedbmmllog"
+            >
+              <img
+                class="h-[46px]"
+                src="~/assets/chromewebstorebadge.png"
+                alt="chrome store link"
+              />
+            </NuxtLink>
+          </div>
         </div>
         <div
           class="mb-40 mt-14 inline-flex w-full flex-nowrap [mask-image:_linear-gradient(to_right,transparent_0,_white_128px,_white_calc(100%-200px),transparent_100%)]"
@@ -143,9 +165,9 @@
             class="mb-52 mt-10 grid w-full grid-cols-1 content-between items-center justify-center gap-10 lg:grid-cols-2"
           >
             <div
-              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
+              class="relative mx-auto flex max-w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
             >
-              <img src="/assets/icons/main/icon_folder.svg" />
+              <img src="/assets/icons/main/icon_folder.svg" alt="folder_icon" />
               <p
                 class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
               >
@@ -159,9 +181,9 @@
               </p>
             </div>
             <div
-              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
+              class="relative mx-auto flex max-w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
             >
-              <img src="/assets/icons/main/icon_scrap.svg" />
+              <img src="/assets/icons/main/icon_scrap.svg" alt="scrape_icon" />
               <p
                 class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
               >
@@ -175,9 +197,9 @@
               </p>
             </div>
             <div
-              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
+              class="relative mx-auto flex max-w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
             >
-              <img src="/assets/icons/main/icon_search.svg" />
+              <img src="/assets/icons/main/icon_search.svg" alt="search_icon" />
               <p
                 class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
               >
@@ -191,9 +213,12 @@
               </p>
             </div>
             <div
-              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
+              class="relative mx-auto flex max-w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
             >
-              <img src="/assets/icons/main/icon_summary.svg" />
+              <img
+                src="/assets/icons/main/icon_summary.svg"
+                alt="summary_icon"
+              />
               <p
                 class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
               >
@@ -207,14 +232,13 @@
               </p>
             </div>
             <div
-              class="relative mx-auto flex w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
+              class="relative mx-auto flex max-w-[520px] flex-shrink-0 flex-grow-0 flex-col items-start justify-start"
             >
-              <img src="/assets/icons/main/icon_chat.svg" />
+              <img src="/assets/icons/main/icon_chat.svg" alt="chat_icon" />
               <p
                 class="mt-9 flex-shrink-0 flex-grow-0 text-left text-[32px] font-bold text-[#111]"
               >
                 <span>내 자료와 대화하는 AI 채팅 </span>
-                <span class="text-gray-500 font-medium">(출시예정)</span>
               </p>
               <p
                 class="mt-5 flex-shrink-0 flex-grow-0 text-left text-xl font-medium text-[#646f7c]"
@@ -251,17 +275,17 @@
     >
       <p class="flex-shrink-0 flex-grow-0 text-center text-sm">
         <NuxtLink
-          to="/privacy-policy"
+          to="/terms-of-service"
           class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
-          >개인정보 처리방침</NuxtLink
+          >이용약관</NuxtLink
         ><span
           class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#464749]"
         >
           ㅣ </span
         ><NuxtLink
-          to="/terms-of-service"
+          to="/privacy-policy"
           class="flex-shrink-0 flex-grow-0 text-center text-sm text-[#646f7c]"
-          >이용약관</NuxtLink
+          >개인정보처리방침</NuxtLink
         >
       </p>
       <p

@@ -6,9 +6,9 @@
     />
     <TopBarApp />
     <div class="flex flex-grow flex-row">
-      <SideNavigation :active-button="2" class="mt-20"> </SideNavigation>
+      <SideNavigation :active-button="'tag'" class="mt-20"> </SideNavigation>
 
-      <div class="w-full bg-[#F4F6F8] ml-48 flex grow mt-20">
+      <div class="w-full bg-[#F4F6F8] flex grow mt-20">
         <div class="m-20 flex flex-col grow">
           <div class="flex w-full justify-between">
             <p class="font-bold text-[32px]">태그</p>

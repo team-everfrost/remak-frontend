@@ -2,8 +2,8 @@
   <div class="flex min-h-screen flex-col">
     <TopBar />
     <div class="flex flex-grow flex-row">
-      <SideNavigation :active-button="2" class="mt-20"> </SideNavigation>
-      <div class="bg-[#F4F6F8] ml-48 mt-20 flex flex-grow">
+      <SideNavigation :active-button="'tag'" class="mt-20"> </SideNavigation>
+      <div class="bg-[#F4F6F8] mt-20 flex flex-grow">
         <div class="m-20 flex flex-grow flex-col">
           <div class="flex w-full justify-start flex-row">
             <p class="font-bold text-[32px]">{{ tagName }}</p>

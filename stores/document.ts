@@ -1,6 +1,6 @@
 import { useAuthStore } from './auth';
 
-interface Document {
+export type Document = {
   docId: string;
   title: string;
   type: string;
@@ -12,7 +12,7 @@ interface Document {
   createdAt: string;
   updatedAt: string;
   tags: string[];
-}
+};
 
 export const useDocumentStore = defineStore(
   'document',

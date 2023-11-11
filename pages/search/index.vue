@@ -6,8 +6,8 @@
     />
     <TopBarApp />
     <div class="flex grow">
-      <SideNavigation :active-button="1" class="mt-20"> </SideNavigation>
-      <div class="w-full bg-[#F4F6F8] ml-48 mt-20 flex items-stretch">
+      <SideNavigation :active-button="'search'" class="mt-20"> </SideNavigation>
+      <div class="w-full bg-[#F4F6F8] mt-20 flex items-stretch">
         <div class="w-full flex flex-col m-20 bg-[#F4F6F8]">
           <div class="flex w-full justify-between">
             <p class="font-bold text-[32px]">검색</p>
@@ -18,6 +18,8 @@
               :class="
                 isLoading
                   ? 'transition-shadow duration-1000 shadow-xl shadow-remak-blue/50'
+                  : hasError
+                  ? 'shadow-md shadow-red-500/50'
                   : ''
               "
             >
@@ -65,14 +67,6 @@
                     stroke-linejoin="round"
                   />
                 </svg>
-              </button>
-            </div>
-            <div>
-              <button
-                class="flex items-center justify-center h-14 w-14 rounded-full bg-white border border-[#e6e8eb] hover:shadow-lg hover:shadow-remak-blue/30 focus:outline-none focus:ring-1 focus:border-[#1f8ce6]"
-                @click="$router.push('/search/chat')"
-              >
-                <img src="~/assets/chat.svg" alt="채팅" />
               </button>
             </div>
           </div>
@@ -157,7 +151,19 @@
                   >{{ query }}</span
                 >
                 <span class="text-gray-500 text-lg font-normal leading-normal">
-                  검색 결과가 없습니다.<br />다른 검색어를 입력해주세요.</span
+                  검색 결과가 없어요.<br />다른 검색어를 시도해 보는건
+                  어떨까요?</span
+                >
+              </div>
+            </div>
+            <div
+              v-show="hasError"
+              class="grow items-center justify-center flex h-full pb-32"
+            >
+              <div class="text-center">
+                <span class="text-gray-500 text-lg font-normal leading-normal">
+                  오류가 발생했어요.<br />네트워크 연결에 문제가 있거나 서버에
+                  문제가 있는 것 같아요</span
                 >
               </div>
             </div>
@@ -197,6 +203,8 @@ const searchStore = useSearchStore();
 onActivated(() => {
   setObserver();
   searchInput.value?.focus();
+  isLoading.value = false;
+  hasError.value = false;
 });
 
 onDeactivated(() => {
@@ -237,6 +245,7 @@ const handleIsOpenUpdate = (value: boolean) => {
 
 const queryClear = () => {
   query.value = '';
+  hasError.value = false;
 };
 
 const clearHistory = () => {
@@ -315,6 +324,7 @@ const textSearchMore = async (query: string) => {
   if (isEndOfDocuments.value || isLoading.value) return;
   if (query.trim()) {
     isLoading.value = true;
+    hasError.value = false;
     textSearchCanceled.value = false;
     const result = await searchStore.textSearchMore(query);
 
@@ -335,6 +345,7 @@ const hybridSearch = async (query: string) => {
     if (isLoading.value) textSearchCanceled.value = true;
 
     isLoading.value = true;
+    hasError.value = false;
     const result = await searchStore.hybridSearch(query);
 
     if (result) {

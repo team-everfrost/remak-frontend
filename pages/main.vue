@@ -83,8 +83,8 @@
       </div>
     </div>
     <div class="flex flex-grow flex-row">
-      <SideNavigation :active-button="0" class="mt-20" />
-      <main class="mt-20 flex flex-grow bg-[#F4F6F8] ml-48">
+      <SideNavigation :active-button="'main'" class="mt-20" />
+      <main class="mt-20 flex flex-grow bg-[#F4F6F8]">
         <div class="flex flex-grow flex-col m-20">
           <div v-auto-animate class="flex items-center gap-4 justify-between">
             <p

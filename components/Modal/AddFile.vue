@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex min-h-[372px] w-[480px] flex-col rounded-[20px] bg-white"
+    class="relative flex min-h-[372px] max-h-screen w-[480px] flex-col rounded-[20px] bg-white"
   >
     <div class="flex flex-row items-center justify-between pl-5 pr-4 pt-5">
       <p class="leading-18 text-lg font-bold text-[#1b1c1f]">추가하기</p>

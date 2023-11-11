@@ -4,39 +4,118 @@ import {
   type ReconnectInterval,
 } from 'eventsource-parser';
 import { useAuthStore } from './auth';
+import { Document } from './document';
 
-export const useChatStore = defineStore('chat', () => {
-  const authStore = useAuthStore();
-  const config = useRuntimeConfig();
-  const apiBaseUrl = config.public.apiBaseUrl;
+export type Conversation = {
+  chatId: string;
+  title: string;
+  messages: {
+    type: 'user' | 'document' | 'assistant';
+    message?: string;
+    document?: Document;
+    hasError?: boolean;
+  }[];
+};
 
-  const lastMessage = ref('');
+export const useChatStore = defineStore(
+  'chat',
+  () => {
+    const authStore = useAuthStore();
+    const config = useRuntimeConfig();
+    const apiBaseUrl = config.public.apiBaseUrl;
 
-  const $reset = () => {
-    lastMessage.value = '';
-  };
+    const currentConversation = ref<Conversation>({
+      chatId: '',
+      title: '',
+      messages: [],
+    });
+    const chatHistory = ref<Conversation[]>([]);
 
-  const resetChat = () => {
-    if (!authStore.isSignedIn) return false;
+    const $reset = () => {
+      currentConversation.value = {
+        chatId: '',
+        title: '',
+        messages: [],
+      };
+      chatHistory.value = [];
+    };
 
-    lastMessage.value = '';
+    const resetChat = () => {
+      if (!authStore.isSignedIn) return false;
 
-    return true;
-  };
+      currentConversation.value = {
+        chatId: '',
+        title: '',
+        messages: [],
+      };
 
-  const onParse = (event: ParsedEvent | ReconnectInterval) => {
-    if (event.type === 'event') {
-      lastMessage.value += event.data;
-    }
-  };
+      return true;
+    };
 
-  const startChat = async (query: string) => {
-    if (!authStore.isSignedIn) return false;
-    if (!query) return false;
+    const getChatHistories = computed(() => () => {
+      return chatHistory.value.map((conv) => {
+        return {
+          title: conv.title,
+          chatId: conv.chatId,
+        };
+      });
+    });
 
-    lastMessage.value = '';
+    const restoreConversation = (chatId: string) => {
+      const conversation = chatHistory.value.find(
+        (conv) => conv.chatId === chatId,
+      );
+      if (conversation) currentConversation.value = conversation;
+    };
 
-    try {
+    const deleteChatHistory = (chatId: string) => {
+      const index = chatHistory.value.findIndex(
+        (conv) => conv.chatId === chatId,
+      );
+      if (index > -1) chatHistory.value.splice(index, 1);
+    };
+
+    const clearChatHistory = () => {
+      chatHistory.value = [];
+    };
+
+    const saveConversation = () => {
+      const conversation = currentConversation.value;
+
+      const index = chatHistory.value.findIndex(
+        (conv) => conv.chatId === conversation.chatId,
+      );
+      if (index > -1) chatHistory.value.splice(index, 1);
+
+      chatHistory.value.push(conversation);
+    };
+
+    const onParse = (event: ParsedEvent | ReconnectInterval) => {
+      if (event.type === 'event') {
+        currentConversation.value.messages[
+          currentConversation.value.messages.length - 1
+        ].message = event.data;
+      }
+    };
+
+    const useChatFetch = async (query: string) => {
+      // TODO: API 수정 전까진 마지막 user 채팅만 보냄
+
+      if (!authStore.isSignedIn) return false;
+      if (!query) return false;
+
+      currentConversation.value.messages.push({
+        type: 'user',
+        message: query,
+      });
+
+      saveConversation();
+
+      currentConversation.value.messages.push({
+        type: 'assistant',
+        message: '',
+      });
+
       const res = await fetch(
         apiBaseUrl + '/chat/rag?query=' + encodeURIComponent(query),
         {
@@ -47,7 +126,12 @@ export const useChatStore = defineStore('chat', () => {
         },
       );
 
-      if (res.status !== 200 || !res.body) return false;
+      if (res.status !== 200 || !res.body) {
+        currentConversation.value.messages[
+          currentConversation.value.messages.length - 1
+        ].hasError = true;
+        return false;
+      }
 
       const eventStream = res.body.getReader();
       const parser = createParser(onParse);
@@ -67,16 +151,58 @@ export const useChatStore = defineStore('chat', () => {
       parser.feed(last);
 
       parser.reset();
-    } catch (e) {
-      return false;
-    }
-    return true;
-  };
 
-  return {
-    $reset,
-    lastMessage,
-    resetChat,
-    startChat,
-  };
-});
+      saveConversation();
+    };
+
+    const startChat = async (query: string) => {
+      resetChat();
+      currentConversation.value.chatId = crypto.randomUUID();
+      currentConversation.value.title = query
+        .trim()
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 100);
+
+      try {
+        await useChatFetch(query);
+      } catch (e) {
+        currentConversation.value.messages[
+          currentConversation.value.messages.length - 1
+        ].hasError = true;
+        return false;
+      }
+      return true;
+    };
+
+    const continueChat = async (query: string) => {
+      try {
+        await useChatFetch(query);
+      } catch (e) {
+        currentConversation.value.messages[
+          currentConversation.value.messages.length - 1
+        ].hasError = true;
+        return false;
+      }
+      return true;
+    };
+
+    return {
+      $reset,
+      currentConversation,
+      chatHistory,
+      getChatHistories,
+      restoreConversation,
+      deleteChatHistory,
+      clearChatHistory,
+      resetChat,
+      startChat,
+      continueChat,
+    };
+  },
+  {
+    persist: {
+      storage: persistedState.localStorage,
+    },
+  },
+);

@@ -56,8 +56,9 @@
     </div>
 
     <div class="flex flex-grow w-full">
-      <SideNavigation :active-button="3" class="mt-20"> </SideNavigation>
-      <div class="bg-[#F4F6F8] ml-48 mt-20 flex flex-grow">
+      <SideNavigation :active-button="'collection'" class="mt-20">
+      </SideNavigation>
+      <div class="bg-[#F4F6F8] mt-20 flex flex-grow">
         <div class="m-20 flex flex-grow flex-col">
           <div class="flex w-full justify-start">
             <p class="font-bold text-[32px] break-all line-clamp-1">

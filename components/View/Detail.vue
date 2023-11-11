@@ -216,7 +216,7 @@
           class="prose md:prose-lg lg:prose-xl max-w-none"
         ></div>
       </div>
-      <div v-if="props.document.type === 'MEMO'">
+      <div v-if="props.document.type === 'MEMO'" class="relative">
         <textarea
           ref="textarea"
           placeholder="메모를 입력하세요"
@@ -229,6 +229,13 @@
           @keydown.ctrl.s.prevent
           @keydown.meta.s="saveMemo"
           @keydown.ctrl.s="saveMemo"
+        ></textarea>
+        <textarea
+          ref="hiddenTextarea"
+          class="absolute left-0 mt-8 w-full rounded-xl border p-4 outline-none resize-none invisible"
+          rows="6"
+          maxlength="1000000"
+          :value="updatedText"
         ></textarea>
       </div>
       <div
@@ -371,6 +378,7 @@ const documentStore = useDocumentStore();
 const imageClick = ref(false);
 
 const textarea = ref<HTMLTextAreaElement | null>(null);
+const hiddenTextarea = ref<HTMLTextAreaElement | null>(null);
 const updatedText = ref('');
 const textareaObserver = ref<ResizeObserver | null>(null);
 
@@ -549,10 +557,12 @@ const content = computed(() => {
 });
 
 const inputTextarea = () => {
-  if (textarea.value) {
+  if (textarea.value && hiddenTextarea.value) {
     updatedText.value = textarea.value.value;
-    textarea.value.style.height = 'auto';
-    textarea.value.style.height = textarea.value.scrollHeight + 5 + 'px';
+    hiddenTextarea.value.style.height = 'auto';
+    hiddenTextarea.value.style.height =
+      hiddenTextarea.value.scrollHeight + 5 + 'px';
+    textarea.value.style.height = hiddenTextarea.value.scrollHeight + 5 + 'px';
   }
 };
 

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex grow min-h-[372px] w-full max-w-[480px] flex-col rounded-[20px] bg-white"
+    class="flex grow min-h-[372px] max-h-screen w-full max-w-[480px] flex-col rounded-[20px] bg-white"
   >
     <div class="flex flex-row items-center justify-between pl-5 pr-4 pt-5">
       <p class="leading-18 text-lg font-bold text-[#1b1c1f] line-clamp-1">
