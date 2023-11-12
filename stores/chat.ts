@@ -94,7 +94,7 @@ export const useChatStore = defineStore(
       if (event.type === 'event') {
         currentConversation.value.messages[
           currentConversation.value.messages.length - 1
-        ].message = event.data;
+        ].message += event.data;
       }
     };
 

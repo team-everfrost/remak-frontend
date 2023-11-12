@@ -245,7 +245,6 @@ const handleIsOpenUpdate = (value: boolean) => {
 
 const queryClear = () => {
   query.value = '';
-  hasError.value = false;
 };
 
 const clearHistory = () => {
