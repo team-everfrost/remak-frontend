@@ -1,16 +1,26 @@
+import { jwtDecode } from 'jwt-decode';
+
 export const useAuthStore = defineStore(
   'auth',
   () => {
     const accessToken = ref('');
-    const isSignedIn = computed(() => !!accessToken.value);
+    const isSignedIn = computed(() => {
+      try {
+        const token = accessToken.value;
+        const exp = jwtDecode<{ exp: number }>(token).exp;
+        const isValid = exp > Date.now() / 1000;
+        if (!isValid) throw new Error('Token expired');
+        return isValid;
+      } catch (e) {
+        navigateTo('/login');
+        return false;
+      }
+    });
     const config = useRuntimeConfig();
     const apiBaseUrl = config.public.apiBaseUrl;
 
-    const allowNavigationToHome = ref(false);
-
     function $reset() {
       accessToken.value = '';
-      allowNavigationToHome.value = false;
     }
 
     const signIn = async (email: string, password: string) => {
@@ -50,7 +60,6 @@ export const useAuthStore = defineStore(
       $reset,
       accessToken,
       isSignedIn,
-      allowNavigationToHome,
       signIn,
       signOut,
       setAccessToken,

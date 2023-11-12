@@ -35,7 +35,7 @@ export const useAccountStore = defineStore('account', () => {
   }
 
   const fetchUserInfo = async () => {
-    const { data, error }: any = await useFetch('/user', {
+    const { data, error }: any = await useRemak('/user', {
       baseURL: apiBaseUrl,
       method: 'GET',
       headers: {
@@ -51,7 +51,7 @@ export const useAccountStore = defineStore('account', () => {
   };
 
   const getUsageSize = async () => {
-    const { data, error }: any = await useFetch('/user/storage/usage', {
+    const { data, error }: any = await useRemak('/user/storage/usage', {
       baseURL: apiBaseUrl,
       method: 'GET',
       headers: {
@@ -66,7 +66,7 @@ export const useAccountStore = defineStore('account', () => {
   };
 
   const getStorageSize = async () => {
-    const { data, error }: any = await useFetch('/user/storage/size', {
+    const { data, error }: any = await useRemak('/user/storage/size', {
       baseURL: apiBaseUrl,
       method: 'GET',
       headers: {
@@ -82,7 +82,7 @@ export const useAccountStore = defineStore('account', () => {
 
   const resetCode = async (email: string) => {
     userInfo.value.email = email;
-    const { data, error }: any = await useFetch('/auth/reset-code', {
+    const { data, error }: any = await useRemak('/auth/reset-code', {
       baseURL: apiBaseUrl,
       method: 'POST',
       headers: {
@@ -100,7 +100,7 @@ export const useAccountStore = defineStore('account', () => {
   };
 
   const verifyResetCode = async (code: string, email: string) => {
-    const { data, error }: any = await useFetch('/auth/verify-reset-code', {
+    const { data, error }: any = await useRemak('/auth/verify-reset-code', {
       baseURL: apiBaseUrl,
       method: 'POST',
       headers: {
@@ -124,7 +124,7 @@ export const useAccountStore = defineStore('account', () => {
       return false;
     }
     const email = userInfo.value.email;
-    const { data, error }: any = await useFetch('/auth/reset-password', {
+    const { data, error }: any = await useRemak('/auth/reset-password', {
       baseURL: apiBaseUrl,
       method: 'POST',
       headers: {
@@ -143,7 +143,7 @@ export const useAccountStore = defineStore('account', () => {
   };
 
   const getWithDrawCode = async () => {
-    const { data, error }: any = await useFetch('/auth/withdraw-code', {
+    const { data, error }: any = await useRemak('/auth/withdraw-code', {
       baseURL: apiBaseUrl,
       method: 'POST',
       headers: {
@@ -158,7 +158,7 @@ export const useAccountStore = defineStore('account', () => {
   };
 
   const checkWithDrawCode = async (code: string) => {
-    const { data, error }: any = await useFetch('/auth/verify-withdraw-code', {
+    const { data, error }: any = await useRemak('/auth/verify-withdraw-code', {
       baseURL: apiBaseUrl,
       method: 'POST',
       headers: {
@@ -176,7 +176,7 @@ export const useAccountStore = defineStore('account', () => {
   };
 
   const withDraw = async () => {
-    const { data, error }: any = await useFetch('/auth/withdraw', {
+    const { data, error }: any = await useRemak('/auth/withdraw', {
       baseURL: apiBaseUrl,
       method: 'POST',
       headers: {
@@ -192,7 +192,7 @@ export const useAccountStore = defineStore('account', () => {
   const checkEmail = async (email: string) => {
     if (!email) return false;
 
-    const { data }: any = await useFetch('/auth/check-email', {
+    const { data }: any = await useRemak('/auth/check-email', {
       baseURL: apiBaseUrl,
       method: 'POST',
       body: { email },

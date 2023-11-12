@@ -409,7 +409,7 @@ const cleanLoad = async () => {
 };
 
 const loadMore = async () => {
-  if (isLoading.value || isEndOfDocuments.value) return;
+  if (hasError.value || isLoading.value || isEndOfDocuments.value) return;
   isLoading.value = true;
 
   const olderDocs = await documentStore.fetchMore();

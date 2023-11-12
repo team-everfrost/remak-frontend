@@ -2,7 +2,7 @@ import { useAuthStore } from './auth';
 
 export const useRegisterStore = defineStore('register', () => {
   const registerEmail = ref('');
-  const registerPage = ref(1);
+  const registerPage = ref(0);
   const registerPassword = ref('');
 
   const config = useRuntimeConfig();
@@ -11,9 +11,13 @@ export const useRegisterStore = defineStore('register', () => {
 
   function $reset() {
     registerEmail.value = '';
-    registerPage.value = 1;
+    registerPage.value = 0;
     registerPassword.value = '';
   }
+
+  const acceptTerms = () => {
+    registerPage.value = 1;
+  };
 
   const getSignUpCode = async (email: string) => {
     if (!email) return false;
@@ -76,6 +80,7 @@ export const useRegisterStore = defineStore('register', () => {
   }
   return {
     $reset,
+    acceptTerms,
     registerEmail,
     registerPage,
     registerPassword,

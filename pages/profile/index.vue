@@ -141,7 +141,7 @@ const usedPercentage = computed(() => {
   const percentage = (usedUsage.value / totalUsage.value) * 100;
   const roundedPercentage = Math.round(percentage * 10) / 10; // 소수점 첫째 자리까지 반올림
   updateProgress(roundedPercentage);
-  return roundedPercentage;
+  return roundedPercentage ?? '?';
 });
 const isModalOpen = ref(false);
 const openModal = () => {

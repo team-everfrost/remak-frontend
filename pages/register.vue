@@ -1,6 +1,7 @@
 <template>
   <div>
     <TopBar />
+    <RegisterAcceptToS v-if="current === 0" />
     <RegisterEmail v-if="current === 1" />
     <RegisterVerifiCode v-if="current === 2" />
     <RegisterPassword v-if="current === 3" />

@@ -17,7 +17,7 @@ export const useAddStore = defineStore('add', () => {
     if (!url) return false;
     const title = ref(' ');
     const content = ref(' ');
-    const { data, error }: any = await useFetch('/document/webpage', {
+    const { data, error }: any = await useRemak('/document/webpage', {
       baseURL: apiBaseUrl,
       method: 'POST',
       body: { title, url, content },
@@ -72,7 +72,7 @@ export const useAddStore = defineStore('add', () => {
     if (!authStore.isSignedIn) return false;
     if (!content) return false;
 
-    const { data, error }: any = await useFetch('/document/memo', {
+    const { data, error }: any = await useRemak('/document/memo', {
       baseURL: apiBaseUrl,
       method: 'POST',
       body: { content },

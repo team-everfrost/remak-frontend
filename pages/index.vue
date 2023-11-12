@@ -31,12 +31,12 @@
           <div class="flex flex-shrink-0 flex-grow-0 items-start justify-start">
             <NuxtLink to="/register">
               <div
-                class="relative flex h-10 flex-shrink-0 flex-grow-0 items-center justify-center rounded-md bg-[#1f8ce6] px-4"
+                class="relative flex h-10 flex-shrink-0 flex-grow-0 items-center justify-center rounded-md bg-[#1f8ce6] px-6"
               >
                 <p
                   class="flex-shrink-0 flex-grow-0 text-center text-base font-medium text-white"
                 >
-                  무료로 시작하기
+                  회원가입
                 </p>
               </div>
             </NuxtLink>

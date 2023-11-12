@@ -17,6 +17,7 @@
         ref="emailInput"
         v-model="email"
         type="email"
+        name="email"
         placeholder="이메일 주소를 입력하세요"
         class="mt-3 inline-flex h-[56px] w-[432px] items-center justify-start gap-2 rounded-xl border border-gray-200 bg-white px-4"
         :class="{

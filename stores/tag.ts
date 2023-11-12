@@ -44,7 +44,7 @@ export const useTagStore = defineStore(
       if (!authStore.isSignedIn) return false;
       if (endOfTags.value) return false;
 
-      const { data, error }: any = await useFetch('/tag', {
+      const { data, error }: any = await useRemak('/tag', {
         baseURL: apiBaseUrl,
         method: 'GET',
         params: { query, limit, offset },
@@ -88,7 +88,7 @@ export const useTagStore = defineStore(
     ) => {
       if (!authStore.isSignedIn) return false;
 
-      const { data, error }: any = await useFetch('/document/search/tag', {
+      const { data, error }: any = await useRemak('/document/search/tag', {
         baseURL: apiBaseUrl,
         method: 'GET',
         params: { tagName, cursor, docid, limit },

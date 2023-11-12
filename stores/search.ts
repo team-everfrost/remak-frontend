@@ -81,7 +81,7 @@ export const useSearchStore = defineStore(
       if (!authStore.isSignedIn) return false;
       if (endOfDocuments.value) return false;
 
-      const { data, error }: any = await useFetch('/search/text', {
+      const { data, error }: any = await useRemak('/search/text', {
         baseURL: apiBaseUrl,
         method: 'GET',
         params: { query: cleanText, limit, offset },
@@ -108,7 +108,7 @@ export const useSearchStore = defineStore(
 
       if (!authStore.isSignedIn) return false;
 
-      const { data, error }: any = await useFetch('/search/hybrid', {
+      const { data, error }: any = await useRemak('/search/hybrid', {
         baseURL: apiBaseUrl,
         method: 'GET',
         params: { query: cleanText },

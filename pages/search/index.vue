@@ -198,10 +198,20 @@ const loadObserverTarget = ref<HTMLElement | null>(null);
 const loadObserver = ref<IntersectionObserver | null>(null);
 const loadIntersection = ref(false);
 
+const router = useRouter();
+
 const searchStore = useSearchStore();
 
 onActivated(() => {
   setObserver();
+  if (router.currentRoute.value.query.q) {
+    query.value = router.currentRoute.value.query.q as string;
+    if (documents.value.length === 0) {
+      onEnter();
+    }
+  } else {
+    query.value = '';
+  }
   searchInput.value?.focus();
   isLoading.value = false;
   hasError.value = false;
@@ -245,6 +255,7 @@ const handleIsOpenUpdate = (value: boolean) => {
 
 const queryClear = () => {
   query.value = '';
+  router.push({});
 };
 
 const clearHistory = () => {
@@ -255,6 +266,7 @@ const clickHistoryEntry = (entry: string) => {
   deleteHistoryEntry(entry);
   searchStore.addSearchHistory(entry);
   query.value = entry;
+  router.push({ query: { q: entry } });
   onEnter();
 };
 
@@ -266,6 +278,7 @@ const onInput = (event: Event) => {
   idle.value = false;
   query.value = (event.target as HTMLInputElement).value;
   if (query.value.trim()) {
+    router.push({ query: { q: query.value.trim() } });
     getTextSearch(query.value);
     waitedHybridSearch(query.value);
   }
@@ -273,6 +286,7 @@ const onInput = (event: Event) => {
 
 const onEnter = () => {
   if (query.value.trim()) {
+    router.push({ query: { q: query.value.trim() } });
     getHybridSearch(query.value);
     searchStore.addSearchHistory(query.value.trim());
   }

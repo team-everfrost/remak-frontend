@@ -230,7 +230,11 @@ const onEnter = async () => {
     () => {
       // 메시지 배열의 길이가 0보다 크면 마지막 메시지를 반환, 그렇지 않으면 null 반환
       return conversation.value.messages.length > 0
-        ? conversation.value.messages[conversation.value.messages.length - 1]
+        ? [
+            conversation.value.messages.length,
+            conversation.value.messages[conversation.value.messages.length - 1]
+              .message,
+          ]
         : null;
     },
     (newMessage, oldMessage) => {

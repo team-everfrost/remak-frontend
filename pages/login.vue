@@ -11,6 +11,7 @@
           ref="emailInput"
           v-model="email"
           type="email"
+          name="email"
           placeholder="이메일 주소를 입력하세요"
           class="mt-[48px] block h-[56px] w-[440px] rounded-xl border bg-white px-4 py-2"
           :class="{
@@ -30,6 +31,7 @@
           ref="passwordInput"
           v-model="password"
           type="password"
+          name="password"
           placeholder="비밀번호를 입력하세요"
           class="mb-4 mt-4 block h-[56px] w-[440px] rounded-lg border px-4 py-2"
           :class="{
@@ -90,6 +92,8 @@ const accountStore = useAccountStore();
 const emailInput = ref<HTMLInputElement | null>(null);
 
 onActivated(() => {
+  email.value = '';
+  password.value = '';
   emailInput.value?.focus();
 });
 

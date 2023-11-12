@@ -13,9 +13,24 @@
           <div class="flex w-full justify-between">
             <p class="font-bold text-[32px]">태그</p>
           </div>
-
           <div
-            v-if="!tagNotExists"
+            v-if="hasError"
+            class="text-neutral-900 text-xl leading-normal my-7 mx-auto items-center justify-center flex flex-col gap-4"
+          >
+            <p>문서를 불러오는데 오류가 발생했습니다.</p>
+            <button
+              class="relatvie flex h-12 w-32 items-center justify-center rounded-xl bg-[#1f8ce6]"
+              @click="reloadNuxtApp()"
+            >
+              <p
+                class="flex-shrink-0 flex-grow-0 text-center text-xl font-medium text-white"
+              >
+                새로고침
+              </p>
+            </button>
+          </div>
+          <div
+            v-else-if="!tagNotExists"
             class="flex h-[56px] w-full flex-row mt-9 items-center rounded-xl bg-white border border-[#e6e8eb]"
           >
             <img class="pl-4" src="~/assets/search.svg" alt="검색" />
@@ -62,7 +77,7 @@
               </svg>
             </button>
           </div>
-          <div v-if="tagNotExists && !isLoading" class="flex flex-grow">
+          <div v-else-if="tagNotExists && !isLoading" class="flex flex-grow">
             <NoItemBox :discription="'등록된 태그가 없어요'" />
           </div>
 
@@ -92,6 +107,7 @@ import { useTagStore } from '~/stores/tag';
 const tagStore = useTagStore();
 const searchQuery = ref('');
 const isLoading = ref(true);
+const hasError = ref(false);
 const isEndOfTags = computed(() => {
   return tagStore.isEndOfTags();
 });
@@ -172,6 +188,11 @@ const tagSearch = useDebounceFn(
   async (query) => {
     isLoading.value = true;
     const result = await tagStore.cleanFetch(query?.trim());
+    if (result === false) {
+      isLoading.value = false;
+      hasError.value = true;
+      return;
+    }
     tags.value = result.map((tag: any) => {
       return {
         name: tag.name,
@@ -188,6 +209,11 @@ const fetchTagsMore = async () => {
   if (isEndOfTags.value || isLoading.value) return;
   isLoading.value = true;
   const result = await tagStore.fetchMore(searchQuery.value.trim());
+  if (result === false) {
+    isLoading.value = false;
+    hasError.value = true;
+    return;
+  }
   tags.value.push(
     ...result.map((tag: any) => {
       return {

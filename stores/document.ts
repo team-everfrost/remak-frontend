@@ -35,9 +35,6 @@ export const useDocumentStore = defineStore(
       return endOfDocuments.value;
     });
 
-    const config = useRuntimeConfig();
-    const apiBaseUrl = config.public.apiBaseUrl;
-
     function $reset() {
       documents.value = [];
       endOfDocuments.value = false;
@@ -70,8 +67,7 @@ export const useDocumentStore = defineStore(
       if (!authStore.isSignedIn) return false;
       if (endOfDocuments.value) return false;
 
-      const { data, error }: any = await useFetch('/document', {
-        baseURL: apiBaseUrl,
+      const { data, error }: any = await useRemak('/document', {
         method: 'GET',
         params: { cursor, 'doc-id': docId, limit },
         headers: {
@@ -92,8 +88,7 @@ export const useDocumentStore = defineStore(
     const updateMemo = async (docId: string, content: string) => {
       if (!authStore.isSignedIn) return false;
 
-      const { data, error }: any = await useFetch(`/document/memo/${docId}`, {
-        baseURL: apiBaseUrl,
+      const { data, error }: any = await useRemak(`/document/memo/${docId}`, {
         method: 'PATCH',
         body: { content },
         headers: {
@@ -121,8 +116,7 @@ export const useDocumentStore = defineStore(
     const fetchDocumentDetail = async (docId: string) => {
       if (!authStore.isSignedIn) return false;
 
-      const { data, error }: any = await useFetch(`/document/${docId}`, {
-        baseURL: apiBaseUrl,
+      const { data, error }: any = await useRemak(`/document/${docId}`, {
         method: 'GET',
         headers: {
           accept: 'application/json',
@@ -140,8 +134,7 @@ export const useDocumentStore = defineStore(
     const fetchFileDownloadUrl = async (docId: string) => {
       if (!authStore.isSignedIn) return false;
 
-      const { data, error }: any = await useFetch(`/document/file/${docId}`, {
-        baseURL: apiBaseUrl,
+      const { data, error }: any = await useRemak(`/document/file/${docId}`, {
         method: 'GET',
         headers: {
           accept: 'application/json',
@@ -159,8 +152,7 @@ export const useDocumentStore = defineStore(
     const deleteDocument = async (docId: string) => {
       if (!authStore.isSignedIn) return false;
 
-      const { data, error }: any = await useFetch(`/document/${docId}`, {
-        baseURL: apiBaseUrl,
+      const { data, error }: any = await useRemak(`/document/${docId}`, {
         method: 'DELETE',
         headers: {
           accept: 'application/json',

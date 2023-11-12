@@ -19,6 +19,7 @@
           ref="passwordInput"
           v-model="password"
           type="password"
+          name="password"
           placeholder="비밀번호를 입력해주세요"
           class="mt-3 inline-flex h-14 w-[432px] items-center justify-start gap-2 rounded-xl border border-gray-200 bg-white px-4"
           :class="{

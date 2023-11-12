@@ -25,7 +25,23 @@
             </button>
           </div>
           <div
-            v-if="collections && collections.length === 0"
+            v-if="hasError"
+            class="text-neutral-900 text-xl leading-normal my-7 mx-auto items-center justify-center flex flex-col gap-4"
+          >
+            <p>문서를 불러오는데 오류가 발생했습니다.</p>
+            <button
+              class="relatvie flex h-12 w-32 items-center justify-center rounded-xl bg-[#1f8ce6]"
+              @click="reloadNuxtApp()"
+            >
+              <p
+                class="flex-shrink-0 flex-grow-0 text-center text-xl font-medium text-white"
+              >
+                새로고침
+              </p>
+            </button>
+          </div>
+          <div
+            v-else-if="collections && collections.length === 0"
             class="flex flex-grow"
           >
             <NoItemBox
@@ -63,6 +79,7 @@ import { useCollectionStore } from '~/stores/collection';
 const collectionStore = useCollectionStore();
 const collections = ref<any[]>();
 const isLoading = ref(false);
+const hasError = ref(false);
 const isEndOfCollections = computed(() => {
   return collectionStore.isEndOfCollections();
 });
@@ -108,7 +125,12 @@ const unsetObserver = () => {
 const initCollection = async () => {
   if (isLoading.value) return;
   isLoading.value = true;
-  await collectionStore.initalFetch();
+  const res = await collectionStore.initalFetch();
+  if (res === false) {
+    hasError.value = true;
+    isLoading.value = false;
+    return;
+  }
   collections.value = collectionStore.getCollections().map((collection) => {
     return {
       name: collection.name,
@@ -124,7 +146,12 @@ const initCollection = async () => {
 const fetchMore = async () => {
   if (isEndOfCollections.value || isLoading.value) return;
   isLoading.value = true;
-  await collectionStore.fetchCollectionsMore();
+  const res = await collectionStore.fetchCollectionsMore();
+  if (res === false) {
+    hasError.value = true;
+    isLoading.value = false;
+    return;
+  }
   collections.value = collectionStore.getCollections().map((collection) => {
     return {
       name: collection.name,

@@ -47,7 +47,7 @@ export const useCollectionStore = defineStore(
       if (!authStore.isSignedIn) return false;
       if (endOfCollections.value) return false;
 
-      const { data, error }: any = await useFetch('/collection', {
+      const { data, error }: any = await useRemak('/collection', {
         baseURL: apiBaseUrl,
         method: 'GET',
         params: { offset, limit },
@@ -70,7 +70,7 @@ export const useCollectionStore = defineStore(
       if (!authStore.isSignedIn) return false;
       if (name === '') return false;
 
-      const { data, error }: any = await useFetch('/collection', {
+      const { data, error }: any = await useRemak('/collection', {
         baseURL: apiBaseUrl,
         method: 'POST',
         body: { name, description },
@@ -96,7 +96,7 @@ export const useCollectionStore = defineStore(
     ) => {
       if (!authStore.isSignedIn) return false;
       const name = collectionName;
-      const { data, error }: any = await useFetch(`/collection/add/${name}`, {
+      const { data, error }: any = await useRemak(`/collection/add/${name}`, {
         baseURL: apiBaseUrl,
         method: 'POST',
         body: { docIds },
@@ -132,7 +132,7 @@ export const useCollectionStore = defineStore(
     ) => {
       if (!authStore.isSignedIn) return false;
 
-      const { data, error }: any = await useFetch(
+      const { data, error }: any = await useRemak(
         '/document/search/collection',
         {
           baseURL: apiBaseUrl,
@@ -158,7 +158,7 @@ export const useCollectionStore = defineStore(
     ) => {
       if (!authStore.isSignedIn) return false;
 
-      const { data, error }: any = await useFetch(`/collection/${name}`, {
+      const { data, error }: any = await useRemak(`/collection/${name}`, {
         baseURL: apiBaseUrl,
         method: 'PATCH',
         body: { newName, description },
@@ -177,7 +177,7 @@ export const useCollectionStore = defineStore(
     const deleteDocuments = async (removedDocIds: string[], name: string) => {
       if (!authStore.isSignedIn) return false;
 
-      const { data, error }: any = await useFetch(`/collection/${name}`, {
+      const { data, error }: any = await useRemak(`/collection/${name}`, {
         baseURL: apiBaseUrl,
         method: 'PATCH',
         body: { removedDocIds },
