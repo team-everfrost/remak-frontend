@@ -116,7 +116,7 @@
             class="flex flex-grow"
           >
             <NoItemBox
-              :discription="'등록된 자료가 없어요\n자료에서 컬렉션을 추가해보세요'"
+              :discription="'등록된 자료가 없어요\n자료에서 컬렉션을 추가해보세요!'"
             />
           </div>
           <div v-show="documents.length > 0" class="mt-9">
@@ -268,7 +268,7 @@ const initalLoad = async () => {
     isEndOfDocuments.value = true;
   }
 
-  if (result) {
+  if (result.length > 0) {
     lastUpdatedAt = result[result.length - 1].updatedAt;
     documents.value = cardParser(result);
   }

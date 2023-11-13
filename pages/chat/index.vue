@@ -100,6 +100,7 @@
                       <div :key="index" class="flex w-full justify-start">
                         <ChatAssistant
                           :text="message.message || ''"
+                          :documents="message.documents"
                           :has-error="message.hasError"
                         />
                       </div>

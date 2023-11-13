@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/vue';
 import { jwtDecode } from 'jwt-decode';
 
 export const useAuthStore = defineStore(
@@ -34,6 +35,13 @@ export const useAuthStore = defineStore(
 
       if (data.value && !error.value) {
         accessToken.value = data.value.data.accessToken;
+        const {
+          public: { sentry },
+        }: any = useRuntimeConfig();
+
+        if (!sentry.dsn || process.env.NODE_ENV === 'development') return true;
+        const decoded = jwtDecode(accessToken.value);
+        Sentry.setUser({ uid: decoded.aud as string });
         return true;
       }
       return false;

@@ -10,9 +10,9 @@ export type Conversation = {
   chatId: string;
   title: string;
   messages: {
-    type: 'user' | 'document' | 'assistant';
+    type: 'user' | 'assistant';
     message?: string;
-    document?: Document;
+    documents?: Document[];
     hasError?: boolean;
   }[];
 };
@@ -92,9 +92,15 @@ export const useChatStore = defineStore(
 
     const onParse = (event: ParsedEvent | ReconnectInterval) => {
       if (event.type === 'event') {
-        currentConversation.value.messages[
-          currentConversation.value.messages.length - 1
-        ].message += event.data;
+        if (event.event === 'chat') {
+          currentConversation.value.messages[
+            currentConversation.value.messages.length - 1
+          ].message += JSON.parse(event.data).text;
+        } else if (event.event === 'documents') {
+          currentConversation.value.messages[
+            currentConversation.value.messages.length - 1
+          ].documents = JSON.parse(event.data);
+        }
       }
     };
 
@@ -114,19 +120,23 @@ export const useChatStore = defineStore(
       currentConversation.value.messages.push({
         type: 'assistant',
         message: '',
+        documents: [],
+        hasError: false,
       });
 
-      const res = await fetch(
-        apiBaseUrl + '/chat/rag?query=' + encodeURIComponent(query),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${authStore.accessToken}`,
-          },
+      const res = await fetch(apiBaseUrl + '/chat/rag', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authStore.accessToken}`,
         },
-      );
+        body: JSON.stringify({
+          query,
+          context: '',
+        }),
+      });
 
-      if (res.status !== 200 || !res.body) {
+      if (res.status !== 201 || !res.body) {
         currentConversation.value.messages[
           currentConversation.value.messages.length - 1
         ].hasError = true;
