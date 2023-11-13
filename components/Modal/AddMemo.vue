@@ -71,6 +71,10 @@
 <script setup lang="ts">
 import { useAddStore } from '~/stores/add';
 
+const props = defineProps<{
+  text?: string;
+}>();
+
 const addStore = useAddStore();
 const memo = ref('');
 const textarea = ref<HTMLTextAreaElement | null>(null);
@@ -88,6 +92,8 @@ onMounted(() => {
   if (textarea.value) {
     textarea.value.focus();
     setResizeObserver();
+    textarea.value.value = props.text ? props.text : '';
+    inputTextarea();
   }
 });
 

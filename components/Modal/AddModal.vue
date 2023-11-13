@@ -36,6 +36,7 @@
 
                 <div v-else-if="existType === 2">
                   <ModalAddLink
+                    :url="url"
                     @change-component="handleChangeComponent"
                     @is-uploading="handleComponentWorking"
                   />
@@ -43,6 +44,7 @@
 
                 <div v-else-if="existType === 3">
                   <ModalAddFile
+                    :files="files"
                     @change-component="handleChangeComponent"
                     @is-uploading="handleComponentWorking"
                   />
@@ -50,6 +52,7 @@
 
                 <div v-else-if="existType === 4">
                   <ModalAddMemo
+                    :text="memo"
                     @change-component="handleChangeComponent"
                     @is-uploading="handleComponentWorking"
                   />
@@ -74,13 +77,19 @@ const documentStore = useDocumentStore();
 // Define the props
 const props = defineProps<{
   isOpen: boolean;
+  openType?: number;
+  url?: string;
+  files?: File[];
+  memo?: string;
 }>();
 
 watch(
   () => props.isOpen,
   (newIsOpen) => {
     if (newIsOpen) {
-      existType.value = 1;
+      if (props.openType) {
+        existType.value = props.openType;
+      } else existType.value = 1;
     }
   },
 );

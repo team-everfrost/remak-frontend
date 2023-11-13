@@ -21,11 +21,15 @@
 </template>
 
 <script setup lang="ts">
+const emit = defineEmits<(e: 'update:isOpen', value: boolean) => void>();
+
 const isModalOpen = ref(false);
 const openModal = () => {
   isModalOpen.value = true;
+  emit('update:isOpen', true);
 };
 const handleIsOpenUpdate = (value: boolean) => {
   isModalOpen.value = value;
+  emit('update:isOpen', value);
 };
 </script>

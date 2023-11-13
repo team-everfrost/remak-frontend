@@ -103,11 +103,11 @@
                     }}
                   </div>
                 </div>
-                <div class="ml-auto w-40 shrink-0 bg-[#F4F6F8] rounded-t-2xl">
+                <div class="ml-auto w-40 shrink-0 bg-[#F4F6F8] rounded-r-xl">
                   <img
                     v-if="document.type !== 'MEMO'"
                     sizes="100vw"
-                    class="object-cover h-full w-full mx-auto"
+                    class="object-cover h-full w-full mx-auto rounded-r-xl"
                     :src="document.thumbnailUrl || '/image/imageHolder.svg'"
                     :alt="document.title || 'image placeholder'"
                     placeholder="~/assets/imageHolder.svg"

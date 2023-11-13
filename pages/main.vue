@@ -2,6 +2,10 @@
   <div class="flex h-screen flex-col">
     <ModalAddModal
       :is-open="isModalOpen"
+      :open-type="addOpenType()"
+      :url="pastedUrl"
+      :files="pastedFiles"
+      :memo="pastedMemo"
       @update:is-open="handleIsOpenUpdate"
     />
     <ModalDocumentInCollection
@@ -22,7 +26,7 @@
       <TopBar />
     </div>
     <div v-show="!selectMode && topIntersection">
-      <TopBarApp />
+      <TopBarApp @update:is-open="handleTopbarModalOpenUpdate" />
     </div>
     <div
       v-show="!topIntersection"
@@ -284,11 +288,30 @@ const last30daysDocuments = ref([] as any[]);
 const olderDocuments = ref([] as any[]);
 
 const isModalOpen = ref(false);
+const isTopbarModalOpen = ref(false);
 const openModal = () => {
   isModalOpen.value = true;
 };
 const handleIsOpenUpdate = (value: boolean) => {
   isModalOpen.value = value;
+};
+
+const handleTopbarModalOpenUpdate = (value: boolean) => {
+  isTopbarModalOpen.value = value;
+};
+
+const isUploadListenerActive = ref(false);
+const isDragover = ref(false);
+const pasteType = ref('');
+const pastedUrl = ref('');
+const pastedFiles = ref([] as File[]);
+const pastedMemo = ref('');
+
+const addOpenType = () => {
+  if (pasteType.value === 'link') return 2;
+  if (pasteType.value === 'file') return 3;
+  if (pasteType.value === 'memo') return 4;
+  return 1;
 };
 
 const shouldFetch = computed(() => {
@@ -306,11 +329,13 @@ onActivated(() => {
   if (shouldUpdate.value || shouldFetch.value === 'cache') {
     initLoad();
   }
+  addUploadListeners();
 });
 
 onDeactivated(() => {
   clearInterval(todayLoadInterval);
   unsetObserver();
+  removeUploadListeners();
 });
 
 const setObserver = () => {
@@ -358,6 +383,99 @@ const setObserver = () => {
 const unsetObserver = () => {
   if (loadObserverTarget.value) loadObserver.value?.disconnect();
   if (updateBtn.value) updateObserver.value?.disconnect();
+};
+
+const updateDragover = (status: boolean) => (e: any) => {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'copy';
+  if (status === true) {
+    if (
+      !isModalOpen.value &&
+      !isTopbarModalOpen.value &&
+      !selectMode.value &&
+      !isCollectionModalOpen.value &&
+      !isDeleteModalOpen.value
+    ) {
+      pasteType.value = 'file';
+      openModal();
+      nextTick(() => {
+        pasteType.value = '';
+      });
+    }
+  }
+  isDragover.value = status;
+};
+
+const onPaste = (e: any) => {
+  e.preventDefault();
+  if (
+    !isModalOpen.value &&
+    !isTopbarModalOpen.value &&
+    !selectMode.value &&
+    !isCollectionModalOpen.value &&
+    !isDeleteModalOpen.value
+  ) {
+    pasteType.value = '';
+    pastedUrl.value = '';
+    pastedFiles.value = [];
+    pastedMemo.value = '';
+
+    const clipboardData = e.clipboardData || (window as any).clipboardData;
+
+    if (clipboardData?.items) {
+      const files: File[] = [];
+      for (const item of clipboardData.items) {
+        if (item.kind === 'file') {
+          const file = item.getAsFile();
+          if (!file) continue;
+          files.push(file);
+        }
+      }
+      if (files.length) {
+        pasteType.value = 'file';
+        pastedFiles.value = files;
+        openModal();
+        return;
+      }
+    }
+
+    const pastedText = clipboardData?.getData('text');
+    if (!pastedText) return;
+
+    const isUrl = /^(?:(?:https?):\/\/)?(?:[\S]+\.+[\S]+)(?:\/[^\s]*)?$/i.test(
+      pastedText,
+    );
+
+    if (isUrl) {
+      pasteType.value = 'link';
+      pastedUrl.value = pastedText;
+      openModal();
+    } else {
+      pasteType.value = 'memo';
+      pastedMemo.value = pastedText;
+      openModal();
+    }
+  }
+};
+
+const addUploadListeners = () => {
+  if (!isUploadListenerActive.value) {
+    // 드래그
+    window.addEventListener('dragover', updateDragover(true));
+    window.addEventListener('dragleave', updateDragover(false));
+    // 붙여넣기
+    window.addEventListener('paste', onPaste);
+    isUploadListenerActive.value = true;
+  }
+};
+
+const removeUploadListeners = () => {
+  if (isUploadListenerActive.value) {
+    window.removeEventListener('dragover', updateDragover(true));
+    window.removeEventListener('dragleave', updateDragover(false));
+    window.removeEventListener('paste', onPaste);
+    isUploadListenerActive.value = false;
+  }
 };
 
 const initLoad = async () => {
@@ -569,9 +687,5 @@ const openCollectionModal = () => {
 };
 const handleCollectionIsOpenUpdate = (newIsOpen: boolean) => {
   isCollectionModalOpen.value = newIsOpen;
-
-  if (!newIsOpen) {
-    setSelectMode(false);
-  }
 };
 </script>

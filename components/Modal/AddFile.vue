@@ -47,8 +47,11 @@
           type="file"
           multiple
           hidden
-          accept="image/*,application/pdf,.txt"
+          accept="image/*,application/pdf,text/*"
           @change="onFileChange"
+          @dragover.prevent
+          @dragleave.prevent
+          @drop.prevent
         />
         <div
           class="relative flex flex-shrink-0 flex-col items-center justify-start gap-4"
@@ -246,6 +249,10 @@
 <script setup lang="ts">
 import { useAddStore } from '~/stores/add';
 
+const props = defineProps<{
+  files?: File[];
+}>();
+
 const fileList = ref<any[]>([]);
 const fileInput = ref<HTMLInputElement>();
 const isDragover = ref(false);
@@ -374,11 +381,26 @@ const pageLeave = (e: any) => {
   return message;
 };
 
+const onPaste = (e: any) => {
+  const items = e.clipboardData.items;
+  if (!items) return;
+  const files: File[] = [];
+  for (const item of items) {
+    if (item.kind === 'file') {
+      const file = item.getAsFile();
+      if (!file) continue;
+      files.push(file);
+    }
+  }
+  handleFiles(files);
+};
+
 const addEventListeners = () => {
   if (!isListenerActive.value) {
     window.addEventListener('dragover', updateDragover(true));
     window.addEventListener('dragleave', updateDragover(false));
     window.addEventListener('drop', onFileDrop);
+    window.addEventListener('paste', onPaste);
     isListenerActive.value = true;
   }
 };
@@ -388,23 +410,17 @@ const removeEventListeners = () => {
     window.removeEventListener('dragover', updateDragover(true));
     window.removeEventListener('dragleave', updateDragover(false));
     window.removeEventListener('drop', onFileDrop);
+    window.removeEventListener('paste', onPaste);
     isListenerActive.value = false;
   }
 };
 
 onMounted(() => {
   addEventListeners();
-});
-
-onActivated(() => {
-  addEventListeners();
+  handleFiles(props.files);
 });
 
 onDeactivated(() => {
-  removeEventListeners();
-});
-
-onUnmounted(() => {
   removeEventListeners();
 });
 </script>
