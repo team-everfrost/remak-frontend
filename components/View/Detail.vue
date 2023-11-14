@@ -28,7 +28,11 @@
           </p>
           <div class="h-3 w-px bg-[#646f7c]"></div>
           <NuxtLink
-            :to="`/redirect?url=${encodeURIComponent(props.document.url)}`"
+            :to="
+              $props.document.url
+                ? `/redirect?url=${encodeURIComponent(props.document.url)}`
+                : ''
+            "
             target="_blank"
             rel="noopener noreferrer"
             class="flex gap-2 items-center"
@@ -173,7 +177,11 @@
         />
       </div>
       <NuxtLink
-        :to="`/redirect?url=${encodeURIComponent(props.document.url)}`"
+        :to="
+          $props.document.url
+            ? `/redirect?url=${encodeURIComponent(props.document.url)}`
+            : ''
+        "
         target="_blank"
         rel="noopener noreferrer"
         class="inline-block"
@@ -215,6 +223,22 @@
           v-dompurify-html="content"
           class="prose md:prose-lg lg:prose-xl max-w-none"
         ></div>
+      </div>
+      <div
+        v-if="
+          props.document.type === 'FILE' &&
+          props.document.title.slice(-3) === 'pdf'
+        "
+      >
+        <p class="mt-6 mb-4 text-left text-lg font-bold text-[#28323c]">본문</p>
+        <div v-if="signedUrl">
+          <ViewPdf :pdf-url="signedUrl" />
+        </div>
+        <div v-else>
+          <p class="text-center text-md font-medium text-[#111]">
+            PDF 파일을 불러오는 중이에요...
+          </p>
+        </div>
       </div>
       <div v-if="props.document.type === 'MEMO'" class="relative">
         <textarea
@@ -382,6 +406,7 @@ const hiddenTextarea = ref<HTMLTextAreaElement | null>(null);
 const updatedText = ref('');
 const textareaObserver = ref<ResizeObserver | null>(null);
 
+const signedUrl = ref<string>('');
 const progress = ref<number | null>(null);
 const downloadBtnText = ref('다운로드');
 
@@ -421,6 +446,12 @@ onMounted(() => {
   if (props.document.type === 'MEMO') {
     setResizeObserver();
   }
+
+  if (
+    props.document.type === 'FILE' &&
+    props.document.title.slice(-3) === 'pdf'
+  )
+    getSignedUrl();
 });
 
 onBeforeUnmount(() => {
@@ -566,16 +597,14 @@ const inputTextarea = () => {
   }
 };
 
-let signedUrl = '';
-
 // singedUrl 유효성 검사 (남은 시간 30분 이상)
 const isValidSignedUrl = () => {
   // X-Amz-Date 및 X-Amz-Expires 값 추출을 위한 정규 표현식
   const dateRegex = /X-Amz-Date=([\dT]*)Z/;
   const expiresRegex = /X-Amz-Expires=(\d+)/;
 
-  const dateMatch = dateRegex.exec(signedUrl);
-  const expiresMatch = expiresRegex.exec(signedUrl);
+  const dateMatch = dateRegex.exec(signedUrl.value);
+  const expiresMatch = expiresRegex.exec(signedUrl.value);
 
   if (dateMatch && expiresMatch) {
     const dateString = dateMatch[1];
@@ -606,11 +635,22 @@ const isValidSignedUrl = () => {
   }
 };
 
+const getSignedUrl = async () => {
+  if (!signedUrl || !isValidSignedUrl())
+    signedUrl.value = await documentStore.fetchFileDownloadUrl(
+      props.document.docId,
+    );
+
+  return signedUrl;
+};
+
 const openFile = async () => {
   if (!signedUrl || !isValidSignedUrl())
-    signedUrl = await documentStore.fetchFileDownloadUrl(props.document.docId);
+    signedUrl.value = await documentStore.fetchFileDownloadUrl(
+      props.document.docId,
+    );
 
-  window.open(signedUrl, '_blank');
+  window.open(signedUrl.value, '_blank');
 };
 
 const fileDownload = async () => {
@@ -618,11 +658,11 @@ const fileDownload = async () => {
 
   try {
     if (!signedUrl || !isValidSignedUrl())
-      signedUrl = await documentStore.fetchFileDownloadUrl(
+      signedUrl.value = await documentStore.fetchFileDownloadUrl(
         props.document.docId,
       );
 
-    const response = await fetch(signedUrl, {
+    const response = await fetch(signedUrl.value, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/octet-stream',

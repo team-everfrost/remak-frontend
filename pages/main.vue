@@ -388,6 +388,9 @@ const unsetObserver = () => {
 const updateDragover = (status: boolean) => (e: any) => {
   e.preventDefault();
   e.dataTransfer.dropEffect = 'copy';
+
+  if (!e.dataTransfer.types.includes('Files')) return;
+
   if (status === true) {
     if (
       !isModalOpen.value &&
@@ -458,11 +461,17 @@ const onPaste = (e: any) => {
   }
 };
 
+let dragOverHandler: any = null;
+let dragLeaveHandler: any = null;
+
 const addUploadListeners = () => {
   if (!isUploadListenerActive.value) {
+    dragOverHandler = updateDragover(true);
+    dragLeaveHandler = updateDragover(false);
+
     // 드래그
-    window.addEventListener('dragover', updateDragover(true));
-    window.addEventListener('dragleave', updateDragover(false));
+    window.addEventListener('dragover', dragOverHandler);
+    window.addEventListener('dragleave', dragLeaveHandler);
     // 붙여넣기
     window.addEventListener('paste', onPaste);
     isUploadListenerActive.value = true;
@@ -471,8 +480,8 @@ const addUploadListeners = () => {
 
 const removeUploadListeners = () => {
   if (isUploadListenerActive.value) {
-    window.removeEventListener('dragover', updateDragover(true));
-    window.removeEventListener('dragleave', updateDragover(false));
+    window.removeEventListener('dragover', dragOverHandler);
+    window.removeEventListener('dragleave', dragLeaveHandler);
     window.removeEventListener('paste', onPaste);
     isUploadListenerActive.value = false;
   }

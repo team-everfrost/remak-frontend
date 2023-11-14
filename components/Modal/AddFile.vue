@@ -59,6 +59,7 @@
           <img
             src="~/assets/icons/icon_add_file_without_border.svg"
             alt="파일 추가"
+            draggable="false"
             :class="fileList.length >= 10 ? 'grayscale' : ''"
           />
           <div
@@ -368,6 +369,9 @@ const updateDragover = (status: boolean) => (e: any) => {
   } else {
     e.dataTransfer.dropEffect = 'copy';
   }
+
+  if (!e.dataTransfer.types.includes('Files')) return;
+
   isDragover.value = status;
 };
 
@@ -395,10 +399,16 @@ const onPaste = (e: any) => {
   handleFiles(files);
 };
 
+let dragOverHandler: any = null;
+let dragLeaveHandler: any = null;
+
 const addEventListeners = () => {
   if (!isListenerActive.value) {
-    window.addEventListener('dragover', updateDragover(true));
-    window.addEventListener('dragleave', updateDragover(false));
+    dragOverHandler = updateDragover(true);
+    dragLeaveHandler = updateDragover(false);
+
+    window.addEventListener('dragover', dragOverHandler);
+    window.addEventListener('dragleave', dragLeaveHandler);
     window.addEventListener('drop', onFileDrop);
     window.addEventListener('paste', onPaste);
     isListenerActive.value = true;
@@ -407,8 +417,8 @@ const addEventListeners = () => {
 
 const removeEventListeners = () => {
   if (isListenerActive.value) {
-    window.removeEventListener('dragover', updateDragover(true));
-    window.removeEventListener('dragleave', updateDragover(false));
+    window.removeEventListener('dragover', dragOverHandler);
+    window.removeEventListener('dragleave', dragLeaveHandler);
     window.removeEventListener('drop', onFileDrop);
     window.removeEventListener('paste', onPaste);
     isListenerActive.value = false;
@@ -420,7 +430,7 @@ onMounted(() => {
   handleFiles(props.files);
 });
 
-onDeactivated(() => {
+onUnmounted(() => {
   removeEventListeners();
 });
 </script>
