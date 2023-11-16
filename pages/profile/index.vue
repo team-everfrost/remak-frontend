@@ -58,31 +58,7 @@
                 </p>
               </div>
             </div>
-            <div
-              class="w-full mt-auto mb-4 flex items-start justify-start gap-4"
-            >
-              <div class="flex gap-4 items-center mb-4">
-                <NuxtLink
-                  to="https://play.google.com/store/apps/details?id=com.everfrost.remak"
-                  target="_blank"
-                >
-                  <img
-                    class="h-[44px]"
-                    src="~/assets/googleplaybadge.png"
-                    alt="google play link"
-                  />
-                </NuxtLink>
-                <NuxtLink
-                  to="https://chrome.google.com/webstore/detail/remak/hjfblaonkfpphmjgomjmlnhedbmmllog"
-                  target="_blank"
-                >
-                  <img
-                    class="h-[37px]"
-                    src="~/assets/chromewebstorebadge.png"
-                    alt="chrome store link"
-                  />
-                </NuxtLink>
-              </div>
+            <div class="w-full mt-auto mb-4 flex items-start justify-between">
               <div>
                 <p class="flex-shrink-0 flex-grow-0 text-sm">
                   <NuxtLink
@@ -104,6 +80,28 @@
                 >
                   Copyright © 2023 Team Everfrost All rights reserved.
                 </p>
+              </div>
+              <div class="flex gap-4 items-center mb-4">
+                <NuxtLink
+                  to="https://play.google.com/store/apps/details?id=com.everfrost.remak"
+                  target="_blank"
+                >
+                  <img
+                    class="h-[44px]"
+                    src="~/assets/googleplaybadge.png"
+                    alt="google play link"
+                  />
+                </NuxtLink>
+                <NuxtLink
+                  to="https://chrome.google.com/webstore/detail/remak/hjfblaonkfpphmjgomjmlnhedbmmllog"
+                  target="_blank"
+                >
+                  <img
+                    class="h-[37px]"
+                    src="~/assets/chromewebstorebadge.png"
+                    alt="chrome store link"
+                  />
+                </NuxtLink>
               </div>
             </div>
           </div>
