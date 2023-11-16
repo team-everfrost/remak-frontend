@@ -78,6 +78,7 @@
           <div class="flex gap-4 items-center">
             <NuxtLink
               to="https://play.google.com/store/apps/details?id=com.everfrost.remak"
+              target="_blank"
             >
               <img
                 class="h-[58px]"
@@ -87,6 +88,7 @@
             </NuxtLink>
             <NuxtLink
               to="https://chrome.google.com/webstore/detail/remak/hjfblaonkfpphmjgomjmlnhedbmmllog"
+              target="_blank"
             >
               <img
                 class="h-[46px]"
