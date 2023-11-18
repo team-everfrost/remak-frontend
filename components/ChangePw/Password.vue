@@ -90,6 +90,7 @@ function isValidPassword(password: string): boolean {
 }
 
 const handleNextClick = () => {
+  if (!isValidPassword(password.value)) return;
   accountStore.setPassword(password.value);
 };
 </script>

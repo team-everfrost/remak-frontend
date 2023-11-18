@@ -24,7 +24,7 @@
           'border-gray-300 focus:outline-remak-blue': emailAvailable,
           'border-red-500 focus:outline-red-500': !emailAvailable,
         }"
-        @input="checkEmail"
+        @input="inputEvent"
         @keyup.enter="handleNextClick"
       />
       <div class="h-4">
@@ -72,7 +72,8 @@ const emailClass = computed(() => {
     : 'bg-gray-200 text-gray-500';
 });
 
-const checkEmail = () => {
+const inputEvent = () => {
+  emailAvailable.value = true;
   isValidEmail(email.value);
 };
 

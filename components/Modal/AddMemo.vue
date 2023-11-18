@@ -4,7 +4,7 @@
   >
     <div class="flex flex-row items-center justify-between pl-5 pr-4 pt-5">
       <p class="leading-18 text-lg font-bold text-[#1b1c1f] line-clamp-1">
-        {{ memo ? memo.split('\n')[0] : '메모' }}
+        {{ memo ? memo.split('\n')[0] : '메모 추가하기' }}
       </p>
       <button
         :disabled="isUploading"
@@ -38,6 +38,7 @@
       maxlength="1000000"
       class="ml-5 mr-5 mt-8 grow resize-none self-stretch overflow-auto rounded-xl border border-[#e6e8eb] bg-[#fefefe] p-4 outline-none"
       @input="inputTextarea"
+      @paste="pasteTextarea"
       @keydown.meta.s.prevent
       @keydown.ctrl.s.prevent
       @keydown.meta.s="handleClick"
@@ -123,6 +124,28 @@ const inputTextarea = () => {
     textarea.value.style.height = 'auto';
     textarea.value.style.height = textarea.value.scrollHeight + 5 + 'px';
   }
+};
+
+const pasteTextarea = (e: ClipboardEvent) => {
+  if (e.clipboardData) {
+    e.preventDefault();
+
+    // clipboardData가 있는지 확인
+    // 클립보드에서 텍스트 데이터를 가져옵니다.
+    const pastedText = e.clipboardData.getData('text');
+
+    // 기존 텍스트에 붙여넣기
+    if (textarea.value) {
+      const selectionStart = textarea.value.selectionStart;
+      const selectionEnd = textarea.value.selectionEnd;
+      const beforeText = textarea.value.value.substring(0, selectionStart);
+      const afterText = textarea.value.value.substring(selectionEnd);
+      textarea.value.value = beforeText + pastedText + afterText;
+      textarea.value.selectionStart = selectionStart + pastedText.length;
+      textarea.value.selectionEnd = selectionStart + pastedText.length;
+    }
+  }
+  inputTextarea();
 };
 
 const handleClick = async () => {

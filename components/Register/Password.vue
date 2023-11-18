@@ -93,6 +93,7 @@ const isValidPassword = computed(() => {
 });
 
 const handleNextClick = () => {
+  if (!isValidPassword.value) return;
   registerStore.setPassword(password.value);
 };
 </script>

@@ -24,22 +24,24 @@ const current = computed(() => {
 
 const handlePopState = () => {
   // registerPage 값을 감소시키고 필요한 경우 컴포넌트를 변경하는 로직
-  if (registerStore.registerPage > 1) {
+  if (registerStore.registerPage > 0) {
     registerStore.registerPage -= 1;
   } else {
     navigateTo('/');
   }
 };
 
-onMounted(() => {
+onActivated(() => {
   // 초기 상태를 푸시
   history.pushState({ page: registerStore.registerPage }, '');
 
   // popstate 이벤트 핸들러를 등록
   window.addEventListener('popstate', handlePopState);
+
+  registerStore.registerPage = 0;
 });
 
-onUnmounted(() => {
+onDeactivated(() => {
   // popstate 이벤트 핸들러를 해제
   window.removeEventListener('popstate', handlePopState);
 });

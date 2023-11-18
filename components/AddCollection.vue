@@ -58,17 +58,18 @@
                     >*</span
                   >
                 </p>
-                <textarea
+                <input
                   v-model="collectionName"
-                  class="flex h-full max-h-14 bg-[##FEFEFE] rounded-xl px-4 py-2 mt-3 items-center mx-4 resize-none outline-none border border-[#e6e8eb]"
+                  class="flex h-14 bg-[##FEFEFE] rounded-xl px-4 py-2 mt-3 items-center mx-4 resize-none outline-none border border-[#e6e8eb]"
                   placeholder="컬렉션 이름을 입력해주세요"
-                ></textarea>
+                />
                 <p class="text-sm font-medium text-left ml-4 mt-4">
                   컬렉션 설명
                 </p>
                 <textarea
                   v-model="collectionDescription"
-                  class="flex h-full max-h-20 bg-[##FEFEFE] rounded-xl px-4 py-2 mt-3 items-center mx-4 resize-none outline-none border border-[#e6e8eb]"
+                  rows="3"
+                  class="flex bg-[##FEFEFE] rounded-xl px-4 py-2 mt-3 items-center mx-4 resize-none outline-none border border-[#e6e8eb]"
                   placeholder="컬렉션 설명을 입력해주세요"
                 ></textarea>
                 <div class="flex-grow"></div>
@@ -79,7 +80,7 @@
                       ? 'bg-[#eee] text-[#C5C8CE]'
                       : 'bg-[#1F8CE6] text-white'
                   "
-                  class="flex mx-4 h-[52px] mt-28 justify-center items-center rounded-xl text-lg font-bold text-center mb-5"
+                  class="flex mx-4 mt-10 h-[52px] justify-center items-center rounded-xl text-lg font-bold text-center mb-5"
                   @click="handleClick"
                 >
                   생성하기
