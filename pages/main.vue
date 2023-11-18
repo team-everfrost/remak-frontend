@@ -507,7 +507,7 @@ const initLoad = async () => {
   isLoading.value = false;
   hasError.value = false;
 
-  if (shouldUpdate.value || shouldFetch.value) await cleanLoad();
+  if (shouldUpdate.value || shouldFetch.value === true) await cleanLoad();
 
   checkAutoRefresh();
 };

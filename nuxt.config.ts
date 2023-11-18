@@ -7,7 +7,13 @@ export default defineNuxtConfig({
     'highlight.js/styles/atom-one-dark-reasonable.css',
     'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css',
   ],
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true,
+
+    timeline: {
+      enabled: true,
+    },
+  },
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
