@@ -15,27 +15,27 @@
     "lintfix": "prettier --write --list-different . && npm run lint:js --fix"
   },
   "devDependencies": {
-    "@commitlint/cli": "^18.4.2",
+    "@commitlint/cli": "^18.4.3",
     "@nuxt/devtools": "latest",
     "@nuxt/test-utils": "^3.8.1",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "@nuxtjs/tailwindcss": "^6.9.5",
+    "@nuxtjs/tailwindcss": "^6.10.0",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
     "@sentry/vite-plugin": "^2.10.1",
     "@tailwindcss/typography": "^0.5.10",
-    "@types/node": "^20.9.1",
-    "@typescript-eslint/parser": "^6.11.0",
+    "@types/node": "^20.9.3",
+    "@typescript-eslint/parser": "^6.12.0",
     "@vueuse/core": "^10.6.1",
     "commitlint-config-git-commit-emoji": "^1.0.0",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "husky": "^8.0.3",
-    "nuxt": "^3.8.1",
+    "nuxt": "^3.8.2",
     "nuxt-headlessui": "^1.1.4",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.2"
   },
   "overrides": {
     "vue": "latest"
@@ -43,8 +43,8 @@
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
     "@pinia/nuxt": "^0.5.1",
-    "@sentry/integrations": "^7.80.1",
-    "@sentry/vue": "^7.80.1",
+    "@sentry/integrations": "^7.81.1",
+    "@sentry/vue": "^7.81.1",
     "@vueuse/nuxt": "^10.6.1",
     "@yeger/vue-masonry-wall": "^5.0.2",
     "axios": "^1.6.2",
